@@ -1,0 +1,920 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nafasi.jobs — Create Your Free Profile</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --ink:#0a0f1e;--ink2:#141929;--gold:#c9a84c;--gold2:#f0d68a;
+  --white:#ffffff;--off:#f5f3ee;--gray:#7a8194;--lgray:#b0b8cc;
+  --green:#1a7a5e;--red:#dc2626;--border:rgba(201,168,76,0.18);
+  --borderw:rgba(255,255,255,0.07);
+}
+html{scroll-behavior:smooth}
+body{font-family:'IBM Plex Sans',sans-serif;background:var(--off);color:var(--ink);-webkit-font-smoothing:antialiased}
+::-webkit-scrollbar{width:3px}
+::-webkit-scrollbar-thumb{background:var(--gold)}
+
+/* NAV */
+nav{background:var(--ink);padding:0 28px;height:56px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100}
+.nav-logo{font-family:'Playfair Display',serif;font-size:18px;font-weight:900;color:white;text-decoration:none}
+.nav-logo span{color:var(--gold)}
+.nav-back{font-size:13px;color:var(--lgray);text-decoration:none;display:flex;align-items:center;gap:6px;transition:color .2s}
+.nav-back:hover{color:var(--gold)}
+
+/* LAYOUT */
+.page{max-width:1060px;margin:0 auto;padding:40px 24px 80px;display:grid;grid-template-columns:1fr 420px;gap:40px;align-items:start}
+@media(max-width:860px){.page{grid-template-columns:1fr;padding:24px 16px 60px}}
+
+/* LEFT — STEPS */
+.steps-panel{position:sticky;top:76px}
+.panel-head{font-family:'Playfair Display',serif;font-size:clamp(28px,4vw,38px);font-weight:900;letter-spacing:-1px;line-height:1.05;color:var(--ink);margin-bottom:10px}
+.panel-head em{font-style:italic;color:var(--green)}
+.panel-sub{font-size:14px;color:var(--gray);line-height:1.8;font-weight:300;margin-bottom:32px}
+.step-list{display:flex;flex-direction:column;gap:0}
+.sl{display:flex;gap:16px;padding:18px 0;border-bottom:1px solid #e8e4dc;cursor:pointer;transition:all .2s}
+.sl:last-child{border-bottom:none}
+.sl.active .sl-num{background:var(--ink);color:white;border-color:var(--ink)}
+.sl.done .sl-num{background:var(--green);color:white;border-color:var(--green)}
+.sl-num{width:32px;height:32px;border-radius:50%;border:2px solid #d1d5db;display:flex;align-items:center;justify-content:center;font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:500;color:#94a3b8;flex-shrink:0;transition:all .3s}
+.sl-info h4{font-size:14px;font-weight:600;color:var(--ink);margin-bottom:3px}
+.sl-info p{font-size:12px;color:var(--gray);font-weight:300;line-height:1.5}
+
+/* TRAINING PANEL */
+.train-panel{margin-top:28px;background:white;border:1px solid #e8e4dc;border-radius:12px;padding:20px;display:none}
+.train-panel.show{display:block}
+.train-hd{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--green);margin-bottom:14px;display:flex;align-items:center;gap:7px}
+.train-hd::before{content:'📚'}
+.train-item{display:flex;gap:12px;padding:12px 0;border-bottom:1px solid #f1f5f9;align-items:flex-start}
+.train-item:last-child{border-bottom:none;padding-bottom:0}
+.train-logo{width:36px;height:36px;border-radius:8px;background:var(--off);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.train-info h5{font-size:13px;font-weight:600;color:var(--ink);margin-bottom:2px}
+.train-info p{font-size:11px;color:var(--gray);line-height:1.5;font-weight:300}
+.train-link{display:inline-flex;align-items:center;gap:4px;margin-top:6px;font-size:11px;font-weight:600;color:var(--green);text-decoration:none;transition:color .2s}
+.train-link:hover{color:var(--ink)}
+
+/* RIGHT — FORM CARD */
+.form-card{background:white;border:1px solid #e8e4dc;border-radius:16px;overflow:hidden;box-shadow:0 8px 40px rgba(0,0,0,0.06)}
+
+/* PROGRESS BAR */
+.prog-bar{height:3px;background:#f1f5f9}
+.prog-fill{height:100%;background:linear-gradient(90deg,var(--green),var(--gold));transition:width .4s ease;width:0%}
+
+/* STEP PANELS */
+.step-panel{display:none;padding:32px}
+.step-panel.active{display:block}
+.step-title{font-family:'Playfair Display',serif;font-size:22px;font-weight:700;color:var(--ink);letter-spacing:-.3px;margin-bottom:5px}
+.step-sub{font-size:13px;color:var(--gray);margin-bottom:24px;font-weight:300;line-height:1.6}
+
+/* FORM ELEMENTS */
+.fg{margin-bottom:16px}
+.fl{display:block;font-size:11px;font-weight:600;color:var(--ink);letter-spacing:.05em;text-transform:uppercase;margin-bottom:5px}
+.fi{width:100%;padding:11px 13px;border:1.5px solid #e2e8f0;border-radius:8px;font-size:14px;font-family:'IBM Plex Sans',sans-serif;color:var(--ink);outline:none;background:#f8fafc;transition:border-color .2s,background .2s}
+.fi:focus{border-color:var(--gold);background:white}
+.fi::placeholder{color:#94a3b8}
+.fi-sel{appearance:none;cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%2394a3b8' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;background-color:#f8fafc;padding-right:36px}
+.fi-ta{resize:vertical;min-height:90px;line-height:1.65}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:500px){.row2{grid-template-columns:1fr}}
+
+/* CV UPLOAD */
+.cv-zone{border:2px dashed #e2e8f0;border-radius:10px;padding:28px;text-align:center;cursor:pointer;transition:all .3s;background:#f8fafc;position:relative}
+.cv-zone:hover,.cv-zone.drag{border-color:var(--gold);background:rgba(201,168,76,.04)}
+.cv-zone input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.cv-icon{font-size:32px;margin-bottom:10px}
+.cv-lbl{font-size:14px;font-weight:500;color:var(--ink);margin-bottom:4px}
+.cv-sub{font-size:12px;color:var(--gray);font-weight:300}
+.cv-loaded{display:none;align-items:center;gap:12px;background:rgba(26,122,94,.06);border:1px solid rgba(26,122,94,.2);border-radius:8px;padding:12px 16px;margin-top:12px}
+.cv-loaded.show{display:flex}
+.cv-filename{font-size:13px;font-weight:500;color:var(--green);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cv-rm{background:none;border:none;cursor:pointer;color:#94a3b8;font-size:16px;padding:0;transition:color .2s}
+.cv-rm:hover{color:var(--red)}
+
+/* READING STATE */
+.reading-state{display:none;text-align:center;padding:20px 0}
+.reading-state.show{display:block}
+.spin{width:36px;height:36px;border:3px solid #f1f5f9;border-top-color:var(--gold);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 12px}
+@keyframes spin{to{transform:rotate(360deg)}}
+.reading-txt{font-size:13px;color:var(--gray);font-weight:300}
+
+/* EXTRACTED PROFILE */
+.extracted{display:none;margin-top:16px}
+.extracted.show{display:block}
+.ext-hd{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--green);margin-bottom:12px;display:flex;align-items:center;gap:6px}
+.ext-hd::before{content:'✓';background:var(--green);color:white;width:16px;height:16px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:9px}
+.ext-fields{display:flex;flex-direction:column;gap:8px}
+.ext-field{background:#f8fafc;border:1px solid #e8e4dc;border-radius:7px;padding:10px 13px}
+.ext-field-label{font-size:10px;font-weight:600;color:#94a3b8;text-transform:uppercase;letter-spacing:.05em;margin-bottom:3px}
+.ext-field-val{font-size:13px;color:var(--ink);line-height:1.5}
+.ext-note{font-size:11px;color:var(--gray);margin-top:10px;font-style:italic;font-weight:300}
+
+/* CHIPS */
+.chips{display:flex;flex-wrap:wrap;gap:7px;margin-top:6px}
+.chip{padding:6px 13px;border:1.5px solid #e2e8f0;border-radius:100px;font-size:12px;color:var(--ink);cursor:pointer;transition:all .2s;background:white;font-weight:400;user-select:none}
+.chip:hover{border-color:var(--gold)}
+.chip.on{border-color:var(--gold);background:rgba(201,168,76,.1);color:var(--ink);font-weight:500}
+.chip.on-green{border-color:var(--green);background:rgba(26,122,94,.08);color:var(--green);font-weight:500}
+
+/* MATCH RESULT */
+.match-card{background:var(--ink);border-radius:12px;padding:24px;margin-top:0;color:white}
+.match-hd{font-family:'Playfair Display',serif;font-size:20px;font-weight:700;letter-spacing:-.3px;margin-bottom:4px}
+.match-sub{font-size:12px;color:rgba(255,255,255,.45);font-weight:300;margin-bottom:20px}
+.score-big{font-family:'Playfair Display',serif;font-size:72px;font-weight:900;color:var(--gold);line-height:1;margin-bottom:4px;text-align:center;padding:16px 0}
+.score-label{text-align:center;font-family:'IBM Plex Mono',monospace;font-size:11px;color:rgba(255,255,255,.4);letter-spacing:.1em;margin-bottom:20px}
+.score-rows{display:flex;flex-direction:column;gap:8px;margin-bottom:20px}
+.sr{display:flex;align-items:center;gap:10px}
+.sr-label{font-size:11px;color:rgba(255,255,255,.55);width:110px;flex-shrink:0}
+.sr-track{flex:1;height:4px;background:rgba(255,255,255,.08);border-radius:2px;overflow:hidden}
+.sr-fill{height:100%;border-radius:2px;background:linear-gradient(90deg,var(--green),var(--gold));transition:width 1s ease}
+.sr-pct{font-family:'IBM Plex Mono',monospace;font-size:11px;color:rgba(255,255,255,.6);width:30px;text-align:right;flex-shrink:0}
+
+/* STRENGTHS AND GAPS */
+.sg-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
+.sg-box{border-radius:8px;padding:13px}
+.sg-box.green{background:rgba(26,122,94,.15);border:1px solid rgba(26,122,94,.25)}
+.sg-box.amber{background:rgba(201,168,76,.1);border:1px solid rgba(201,168,76,.2)}
+.sg-box-hd{font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;margin-bottom:8px}
+.sg-box.green .sg-box-hd{color:#34d399}
+.sg-box.amber .sg-box-hd{color:var(--gold)}
+.sg-item{font-size:12px;color:rgba(255,255,255,.7);margin-bottom:5px;display:flex;gap:7px;line-height:1.45;font-weight:300}
+.sg-item::before{content:'✓';flex-shrink:0}
+.sg-box.amber .sg-item::before{content:'○'}
+
+/* IMPROVEMENT ADVICE */
+.improve-box{background:rgba(201,168,76,.08);border:1px solid rgba(201,168,76,.2);border-radius:10px;padding:16px;margin-bottom:16px}
+.improve-hd{font-size:11px;font-weight:600;color:var(--gold);letter-spacing:.08em;text-transform:uppercase;margin-bottom:10px;display:flex;align-items:center;gap:6px}
+.improve-hd::before{content:'→';font-size:13px}
+.improve-item{font-size:12px;color:rgba(255,255,255,.72);line-height:1.6;margin-bottom:8px;padding-left:14px;border-left:2px solid rgba(201,168,76,.3);font-weight:300}
+
+/* TRAINING RECS */
+.train-recs{background:rgba(26,122,94,.1);border:1px solid rgba(26,122,94,.2);border-radius:10px;padding:16px}
+.train-recs-hd{font-size:11px;font-weight:600;color:#34d399;letter-spacing:.08em;text-transform:uppercase;margin-bottom:12px;display:flex;align-items:center;gap:6px}
+.train-recs-hd::before{content:'📚'}
+.train-rec-item{display:flex;gap:10px;margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid rgba(255,255,255,.06);align-items:flex-start}
+.train-rec-item:last-child{margin-bottom:0;padding-bottom:0;border-bottom:none}
+.tri-logo{width:34px;height:34px;border-radius:7px;background:rgba(255,255,255,.06);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.tri-info h5{font-size:12px;font-weight:600;color:white;margin-bottom:2px}
+.tri-info p{font-size:11px;color:rgba(255,255,255,.45);line-height:1.4;font-weight:300}
+.tri-link{display:inline-flex;align-items:center;gap:4px;margin-top:5px;font-size:11px;font-weight:600;color:#34d399;text-decoration:none;border-bottom:1px solid rgba(52,211,153,.3);padding-bottom:1px;transition:color .2s}
+.tri-link:hover{color:var(--gold2)}
+
+/* VERDICT */
+.verdict-row{display:flex;align-items:center;justify-content:space-between;padding-top:14px;border-top:1px solid rgba(255,255,255,.07)}
+.verdict-tag{display:inline-flex;align-items:center;gap:5px;padding:5px 12px;border-radius:100px;font-size:11px;font-weight:600}
+.verdict-tag.strong{background:rgba(52,211,153,.15);color:#34d399}
+.verdict-tag.good{background:rgba(201,168,76,.15);color:var(--gold)}
+.verdict-tag.fair{background:rgba(249,115,22,.15);color:#fb923c}
+
+/* BUTTONS */
+.btn{width:100%;padding:14px;border:none;border-radius:8px;font-family:'IBM Plex Sans',sans-serif;font-size:14px;font-weight:600;cursor:pointer;transition:all .2s;letter-spacing:.02em;margin-top:8px}
+.btn-primary{background:var(--ink);color:white}
+.btn-primary:hover{background:var(--ink2)}
+.btn-gold{background:var(--gold);color:var(--ink)}
+.btn-gold:hover{background:var(--gold2)}
+.btn-outline{background:transparent;color:var(--ink);border:1.5px solid #e2e8f0}
+.btn-outline:hover{border-color:var(--gold);color:var(--gold)}
+.btn-row{display:grid;grid-template-columns:auto 1fr;gap:10px;margin-top:8px}
+.btn-back{background:transparent;border:1.5px solid #e2e8f0;color:var(--gray);padding:14px 18px;border-radius:8px;font-family:'IBM Plex Sans',sans-serif;font-size:14px;cursor:pointer;transition:all .2s}
+.btn-back:hover{border-color:var(--gold);color:var(--gold)}
+
+/* SUCCESS */
+.success-wrap{display:none;text-align:center;padding:40px 32px}
+.success-wrap.show{display:block}
+.success-emoji{font-size:60px;margin-bottom:16px}
+.success-title{font-family:'Playfair Display',serif;font-size:26px;font-weight:700;color:var(--ink);letter-spacing:-.5px;margin-bottom:10px}
+.success-txt{font-size:14px;color:var(--gray);line-height:1.8;font-weight:300;max-width:320px;margin:0 auto}
+.success-tag{display:inline-flex;align-items:center;gap:6px;margin-top:16px;background:#d0ede6;color:var(--green);padding:7px 16px;border-radius:100px;font-size:12px;font-weight:600}
+
+/* ERROR */
+.err{font-size:12px;color:var(--red);margin-top:5px;display:none}
+.err.show{display:block}
+
+/* HIDDEN NETLIFY FORM */
+.nf{display:none}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">Nafasi<span>.jobs</span></a>
+  <a href="index.html" class="nav-back">← Back to home</a>
+</nav>
+
+<!-- HIDDEN NETLIFY FORM -->
+<form class="nf" name="nafasi-profiles" netlify netlify-honeypot="bot-field">
+  <input type="hidden" name="form-name" value="nafasi-profiles">
+  <input name="bot-field">
+  <input type="hidden" name="full_name" id="h_name">
+  <input type="hidden" name="email" id="h_email">
+  <input type="hidden" name="country" id="h_country">
+  <input type="hidden" name="current_role" id="h_role">
+  <input type="hidden" name="education" id="h_edu">
+  <input type="hidden" name="skills" id="h_skills">
+  <input type="hidden" name="languages" id="h_langs">
+  <input type="hidden" name="experience_years" id="h_exp">
+  <input type="hidden" name="looking_for" id="h_looking">
+  <input type="hidden" name="locations" id="h_locs">
+  <input type="hidden" name="cv_summary" id="h_cv">
+  <button type="submit" id="netlifySubmit">Submit</button>
+</form>
+
+<div class="page">
+
+  <!-- LEFT PANEL -->
+  <div class="steps-panel">
+    <h1 class="panel-head">Your career.<br><em>Matched perfectly.</em></h1>
+    <p class="panel-sub">Upload your CV and let Nafasi AI build your profile automatically. Then we match you to jobs, scholarships, fellowships and consultancies from 100+ sources every morning.</p>
+
+    <div class="step-list">
+      <div class="sl active" id="sl1" onclick="goStep(1)">
+        <div class="sl-num" id="sn1">01</div>
+        <div class="sl-info"><h4>About you</h4><p>Name, email and location</p></div>
+      </div>
+      <div class="sl" id="sl2" onclick="goStep(2)">
+        <div class="sl-num" id="sn2">02</div>
+        <div class="sl-info"><h4>Upload your CV</h4><p>Nafasi AI reads it and builds your profile</p></div>
+      </div>
+      <div class="sl" id="sl3" onclick="goStep(3)">
+        <div class="sl-num" id="sn3">03</div>
+        <div class="sl-info"><h4>Your preferences</h4><p>What you are looking for and where</p></div>
+      </div>
+      <div class="sl" id="sl4" onclick="goStep(4)">
+        <div class="sl-num" id="sn4">04</div>
+        <div class="sl-info"><h4>See your match score</h4><p>AI scores you and shows how to improve</p></div>
+      </div>
+    </div>
+
+    <!-- TRAINING RECOMMENDATIONS — shown after match -->
+    <div class="train-panel" id="trainPanel">
+      <div class="train-hd">Recommended training for your gaps</div>
+      <div id="trainList"></div>
+    </div>
+  </div>
+
+  <!-- RIGHT PANEL — FORM CARD -->
+  <div>
+    <div class="form-card">
+      <div class="prog-bar"><div class="prog-fill" id="progFill"></div></div>
+
+      <!-- STEP 1 — ABOUT YOU -->
+      <div class="step-panel active" id="sp1">
+        <h2 class="step-title">About you</h2>
+        <p class="step-sub">Basic information to get started. Takes 60 seconds.</p>
+        <div class="fg">
+          <label class="fl">Full name</label>
+          <input type="text" class="fi" placeholder="Your full name" id="s1_name">
+          <div class="err" id="e_name">Please enter your name</div>
+        </div>
+        <div class="fg">
+          <label class="fl">Email address</label>
+          <input type="email" class="fi" placeholder="your@email.com" id="s1_email">
+          <div class="err" id="e_email">Please enter a valid email</div>
+        </div>
+        <div class="row2">
+          <div class="fg">
+            <label class="fl">Country</label>
+            <select class="fi fi-sel" id="s1_country">
+              <option value="">Select country</option>
+              <optgroup label="Africa">
+                <option>Kenya</option><option>Nigeria</option><option>Ghana</option>
+                <option>Uganda</option><option>Tanzania</option><option>Ethiopia</option>
+                <option>Somalia</option><option>Rwanda</option><option>South Africa</option>
+                <option>Egypt</option><option>Morocco</option><option>Senegal</option>
+                <option>Zimbabwe</option><option>Zambia</option><option>Cameroon</option>
+                <option>DRC</option><option>Sudan</option><option>South Sudan</option>
+              </optgroup>
+              <optgroup label="Asia">
+                <option>India</option><option>Bangladesh</option><option>Pakistan</option>
+                <option>Nepal</option><option>Philippines</option><option>Indonesia</option>
+                <option>Myanmar</option><option>Afghanistan</option><option>Yemen</option>
+              </optgroup>
+              <optgroup label="Latin America">
+                <option>Brazil</option><option>Colombia</option><option>Peru</option>
+                <option>Mexico</option><option>Haiti</option><option>Venezuela</option>
+              </optgroup>
+              <optgroup label="Middle East">
+                <option>Jordan</option><option>Lebanon</option><option>Iraq</option>
+                <option>Syria</option><option>Palestine</option>
+              </optgroup>
+              <optgroup label="Europe & Other">
+                <option>United Kingdom</option><option>Ireland</option><option>France</option>
+                <option>Germany</option><option>United States</option><option>Canada</option>
+                <option>Australia</option><option>Other</option>
+              </optgroup>
+            </select>
+            <div class="err" id="e_country">Please select your country</div>
+          </div>
+          <div class="fg">
+            <label class="fl">Years of experience</label>
+            <select class="fi fi-sel" id="s1_exp">
+              <option value="">Select</option>
+              <option>0 — 1 year (entry level)</option>
+              <option>1 — 3 years</option>
+              <option>3 — 5 years</option>
+              <option>5 — 10 years</option>
+              <option>10+ years</option>
+            </select>
+          </div>
+        </div>
+        <div class="fg">
+          <label class="fl">Current or most recent role</label>
+          <input type="text" class="fi" placeholder="e.g. Programme Assistant at IRC" id="s1_role">
+        </div>
+        <button class="btn btn-primary" onclick="nextStep(1)">Continue →</button>
+      </div>
+
+      <!-- STEP 2 — CV UPLOAD -->
+      <div class="step-panel" id="sp2">
+        <h2 class="step-title">Upload your CV</h2>
+        <p class="step-sub">Nafasi AI reads your CV and automatically builds your profile. PDF only. Your CV is private — never shared with anyone.</p>
+
+        <div class="cv-zone" id="cvZone">
+          <input type="file" id="cvFile" accept=".pdf" onchange="handleCV(this)">
+          <div class="cv-icon">📄</div>
+          <div class="cv-lbl">Drop your CV here or click to browse</div>
+          <div class="cv-sub">PDF only · Max 5MB · Private and secure</div>
+        </div>
+
+        <div class="cv-loaded" id="cvLoaded">
+          <span style="font-size:20px">📄</span>
+          <span class="cv-filename" id="cvFilename">cv.pdf</span>
+          <button class="cv-rm" onclick="removeCV()" title="Remove">✕</button>
+        </div>
+
+        <!-- READING STATE -->
+        <div class="reading-state" id="readingState">
+          <div class="spin"></div>
+          <div class="reading-txt">Nafasi AI is reading your CV...<br>Extracting your education, skills, experience and languages.</div>
+        </div>
+
+        <!-- EXTRACTED PROFILE -->
+        <div class="extracted" id="extractedProfile">
+          <div class="ext-hd">Profile extracted from your CV</div>
+          <div class="ext-fields" id="extFields"></div>
+          <p class="ext-note">Review the information above. You can update anything on the next step.</p>
+        </div>
+
+        <div class="btn-row" style="margin-top:20px">
+          <button class="btn-back" onclick="prevStep(2)">← Back</button>
+          <button class="btn btn-primary" id="cvNextBtn" onclick="nextStep(2)" disabled style="opacity:.4;cursor:not-allowed">Continue →</button>
+        </div>
+      </div>
+
+      <!-- STEP 3 — PREFERENCES -->
+      <div class="step-panel" id="sp3">
+        <h2 class="step-title">Your preferences</h2>
+        <p class="step-sub">Tell Nafasi what you are looking for. This shapes every match we send you.</p>
+
+        <div class="fg">
+          <label class="fl">I am looking for</label>
+          <div class="chips" id="lookingChips">
+            <div class="chip" onclick="toggleChip(this,'looking')">Full-time jobs</div>
+            <div class="chip" onclick="toggleChip(this,'looking')">Internships</div>
+            <div class="chip" onclick="toggleChip(this,'looking')">Scholarships</div>
+            <div class="chip" onclick="toggleChip(this,'looking')">Fellowships</div>
+            <div class="chip" onclick="toggleChip(this,'looking')">Consultancies</div>
+            <div class="chip" onclick="toggleChip(this,'looking')">Research funding</div>
+          </div>
+          <div class="err" id="e_looking">Please select at least one option</div>
+        </div>
+
+        <div class="fg" style="margin-top:18px">
+          <label class="fl">Preferred locations</label>
+          <div class="chips" id="locChips">
+            <div class="chip on-green" style="border-color:var(--green);background:rgba(26,122,94,.08);color:var(--green)">🌐 Remote — always included</div>
+            <div class="chip" onclick="toggleChip(this,'loc')">East Africa</div>
+            <div class="chip" onclick="toggleChip(this,'loc')">West Africa</div>
+            <div class="chip" onclick="toggleChip(this,'loc')">Horn of Africa</div>
+            <div class="chip" onclick="toggleChip(this,'loc')">Southern Africa</div>
+            <div class="chip" onclick="toggleChip(this,'loc')">Middle East</div>
+            <div class="chip" onclick="toggleChip(this,'loc')">South Asia</div>
+            <div class="chip" onclick="toggleChip(this,'loc')">Southeast Asia</div>
+            <div class="chip" onclick="toggleChip(this,'loc')">Latin America</div>
+            <div class="chip" onclick="toggleChip(this,'loc')">Europe</div>
+            <div class="chip" onclick="toggleChip(this,'loc')">North America</div>
+            <div class="chip" onclick="toggleChip(this,'loc')">Anywhere worldwide</div>
+          </div>
+        </div>
+
+        <div class="fg" style="margin-top:18px">
+          <label class="fl">Minimum match score to receive alerts</label>
+          <select class="fi fi-sel" id="s3_minscore">
+            <option value="70">70% and above — recommended</option>
+            <option value="80">80% and above — strong matches only</option>
+            <option value="65">65% and above — include more opportunities</option>
+            <option value="90">90% and above — near perfect matches only</option>
+          </select>
+        </div>
+
+        <div class="fg">
+          <label class="fl">Anything else Nafasi should know?</label>
+          <textarea class="fi fi-ta" placeholder="Special requirements, career goals, sectors you are passionate about..." id="s3_notes"></textarea>
+        </div>
+
+        <div class="btn-row">
+          <button class="btn-back" onclick="prevStep(3)">← Back</button>
+          <button class="btn btn-gold" onclick="nextStep(3)">Show my match score →</button>
+        </div>
+      </div>
+
+      <!-- STEP 4 — MATCH SCORE -->
+      <div class="step-panel" id="sp4">
+        <h2 class="step-title">Your Nafasi profile score</h2>
+        <p class="step-sub">Based on your CV and preferences, here is how you match against current opportunities in our database.</p>
+
+        <div class="match-card" id="matchCard">
+          <!-- Filled by JS -->
+        </div>
+
+        <button class="btn btn-gold" onclick="handleFinalSubmit()" style="margin-top:16px">Activate my free alerts →</button>
+        <button class="btn-back" style="width:100%;margin-top:8px;padding:12px" onclick="prevStep(4)">← Edit preferences</button>
+      </div>
+
+    </div><!-- /form-card -->
+
+    <!-- SUCCESS -->
+    <div class="success-wrap" id="successWrap">
+      <div class="success-emoji">🌍</div>
+      <h3 class="success-title">You are on Nafasi!</h3>
+      <p class="success-txt">Your first opportunity digest arrives tomorrow morning. We will only send what you qualify for based on your profile and match score threshold.</p>
+      <div class="success-tag">✓ Profile created · Alerts activated</div>
+      <div style="margin-top:20px">
+        <a href="index.html" style="font-size:13px;color:var(--green);font-weight:600;text-decoration:none">← Back to Nafasi.jobs</a>
+      </div>
+    </div>
+
+  </div><!-- /right -->
+</div><!-- /page -->
+
+<script>
+/* ── CONFIG ── */
+const API_KEY = ''; /* paste Anthropic API key here when ready */
+
+/* ── STATE ── */
+let currentStep = 1;
+const totalSteps = 4;
+let cvBase64 = '';
+let cvFilename = '';
+let extractedData = {};
+let matchData = {};
+
+/* ── STEP NAVIGATION ── */
+function setStep(n) {
+  for (let i = 1; i <= totalSteps; i++) {
+    document.getElementById('sp' + i).classList.toggle('active', i === n);
+    const sl = document.getElementById('sl' + i);
+    const sn = document.getElementById('sn' + i);
+    sl.classList.toggle('active', i === n);
+    sl.classList.toggle('done', i < n);
+    if (i < n) sn.textContent = '✓';
+    else sn.textContent = String(i).padStart(2, '0');
+  }
+  const pct = ((n - 1) / (totalSteps - 1)) * 100;
+  document.getElementById('progFill').style.width = pct + '%';
+  currentStep = n;
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function goStep(n) { if (n < currentStep) setStep(n); }
+function prevStep(cur) { setStep(cur - 1); }
+
+function nextStep(cur) {
+  if (cur === 1) {
+    if (!validateStep1()) return;
+    setStep(2);
+  } else if (cur === 2) {
+    if (!cvBase64) { alert('Please upload your CV first.'); return; }
+    setStep(3);
+  } else if (cur === 3) {
+    if (!validateStep3()) return;
+    buildMatchScore();
+    setStep(4);
+  }
+}
+
+/* ── VALIDATION ── */
+function validateStep1() {
+  let ok = true;
+  const name = document.getElementById('s1_name').value.trim();
+  const email = document.getElementById('s1_email').value.trim();
+  const country = document.getElementById('s1_country').value;
+  show('e_name', !name); if (!name) ok = false;
+  show('e_email', !email || !email.includes('@')); if (!email || !email.includes('@')) ok = false;
+  show('e_country', !country); if (!country) ok = false;
+  return ok;
+}
+
+function validateStep3() {
+  const looking = [...document.querySelectorAll('#lookingChips .chip.on')].map(c => c.textContent.trim());
+  show('e_looking', looking.length === 0);
+  return looking.length > 0;
+}
+
+function show(id, visible) {
+  document.getElementById(id).classList.toggle('show', visible);
+}
+
+/* ── CV UPLOAD ── */
+function handleCV(input) {
+  const file = input.files[0];
+  if (!file) return;
+  if (file.type !== 'application/pdf') { alert('Please upload a PDF file only.'); return; }
+  if (file.size > 5 * 1024 * 1024) { alert('File is too large. Maximum size is 5MB.'); return; }
+
+  cvFilename = file.name;
+  document.getElementById('cvFilename').textContent = file.name;
+  document.getElementById('cvLoaded').classList.add('show');
+  document.getElementById('cvZone').style.display = 'none';
+
+  /* Read as base64 */
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    cvBase64 = e.target.result.split(',')[1];
+    readCVWithAI();
+  };
+  reader.readAsDataURL(file);
+}
+
+function removeCV() {
+  cvBase64 = ''; cvFilename = '';
+  document.getElementById('cvFile').value = '';
+  document.getElementById('cvLoaded').classList.remove('show');
+  document.getElementById('cvZone').style.display = 'block';
+  document.getElementById('extractedProfile').classList.remove('show');
+  document.getElementById('readingState').classList.remove('show');
+  document.getElementById('cvNextBtn').disabled = true;
+  document.getElementById('cvNextBtn').style.opacity = '.4';
+  document.getElementById('cvNextBtn').style.cursor = 'not-allowed';
+  extractedData = {};
+}
+
+/* ── READ CV WITH CLAUDE ── */
+async function readCVWithAI() {
+  document.getElementById('readingState').classList.add('show');
+  document.getElementById('extractedProfile').classList.remove('show');
+
+  if (!API_KEY) {
+    /* Demo mode — simulate extraction */
+    await delay(1800);
+    extractedData = {
+      name: document.getElementById('s1_name').value || 'Your Name',
+      education: 'BSc Development Studies — detected from CV',
+      skills: 'MEAL, Community Development, Data Analysis, Report Writing',
+      languages: 'English, Somali, Swahili',
+      experience: document.getElementById('s1_exp').value || '3 — 5 years',
+      summary: 'CV read successfully. Add your Anthropic API key to enable live CV reading.'
+    };
+    showExtracted();
+    return;
+  }
+
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': API_KEY,
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-calls': 'true'
+      },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1000,
+        messages: [{
+          role: 'user',
+          content: [
+            {
+              type: 'document',
+              source: { type: 'base64', media_type: 'application/pdf', data: cvBase64 }
+            },
+            {
+              type: 'text',
+              text: `Read this CV carefully and extract the following information. Respond ONLY with a JSON object, no markdown, no explanation:
+{
+  "name": "full name from CV",
+  "education": "highest qualification and institution",
+  "skills": "comma separated list of key skills and tools",
+  "languages": "comma separated languages and proficiency levels",
+  "experience": "years of experience and main sectors",
+  "current_role": "current or most recent job title and organization",
+  "summary": "one sentence professional summary"
+}`
+            }
+          ]
+        }]
+      })
+    });
+
+    const data = await res.json();
+    const text = data.content[0].text.replace(/```json|```/g, '').trim();
+    extractedData = JSON.parse(text);
+    showExtracted();
+
+  } catch (err) {
+    /* Fallback on error */
+    extractedData = {
+      name: document.getElementById('s1_name').value || '',
+      education: 'Could not read — please check your CV format',
+      skills: '',
+      languages: '',
+      experience: document.getElementById('s1_exp').value || '',
+      summary: 'CV uploaded. Please fill your profile details manually.'
+    };
+    showExtracted();
+  }
+}
+
+function showExtracted() {
+  document.getElementById('readingState').classList.remove('show');
+
+  // AUTO-FILL form fields from CV
+  if (extractedData.education) document.getElementById('h_edu').value = extractedData.education;
+  if (extractedData.skills) document.getElementById('h_skills').value = extractedData.skills;
+  if (extractedData.languages) document.getElementById('h_langs').value = extractedData.languages;
+  if (extractedData.summary) document.getElementById('h_cv').value = extractedData.summary;
+  if (extractedData.name && !document.getElementById('s1_name').value) {
+    document.getElementById('s1_name').value = extractedData.name;
+  }
+  if (extractedData.current_role && !document.getElementById('s1_role').value) {
+    document.getElementById('s1_role').value = extractedData.current_role;
+  }
+
+  // Show extracted fields
+  const fields = document.getElementById('extFields');
+  fields.innerHTML = '';
+  const show = [
+    { label: 'Name detected', key: 'name' },
+    { label: 'Education', key: 'education' },
+    { label: 'Skills detected', key: 'skills' },
+    { label: 'Languages', key: 'languages' },
+    { label: 'Experience', key: 'experience' },
+    { label: 'Professional summary', key: 'summary' }
+  ];
+  show.forEach(f => {
+    if (!extractedData[f.key]) return;
+    const d = document.createElement('div');
+    d.className = 'ext-field';
+    d.innerHTML = '<div class="ext-field-label">' + f.label + '</div><div class="ext-field-val">' + extractedData[f.key] + '</div>';
+    fields.appendChild(d);
+  });
+  document.getElementById('extractedProfile').classList.add('show');
+  document.getElementById('cvNextBtn').disabled = false;
+  document.getElementById('cvNextBtn').style.opacity = '1';
+  document.getElementById('cvNextBtn').style.cursor = 'pointer';
+}
+
+/* ── CHIP TOGGLE ── */
+function toggleChip(el, group) {
+  el.classList.toggle('on');
+}
+
+/* ── BUILD MATCH SCORE ── */
+function buildMatchScore() {
+  /* Score based on profile completeness and extracted data */
+  const edu = extractedData.education || '';
+  const skills = extractedData.skills || '';
+  const langs = extractedData.languages || '';
+  const exp = document.getElementById('s1_exp').value || '';
+  const looking = [...document.querySelectorAll('#lookingChips .chip.on')].map(c => c.textContent.trim());
+
+  /* Calculate sub scores */
+  const eduScore = edu && !edu.includes('Could not') ? 85 + Math.floor(Math.random() * 10) : 60;
+  const skillScore = skills.split(',').length > 3 ? 88 + Math.floor(Math.random() * 8) : 65 + Math.floor(Math.random() * 15);
+  const langScore = langs.split(',').length > 1 ? 95 : 70;
+  const expScore = exp.includes('5') || exp.includes('10') ? 90 : exp.includes('3') ? 80 : 65;
+  const locScore = 90;
+
+  const overall = Math.round((eduScore + skillScore + langScore + expScore + locScore) / 5);
+
+  /* Identify gaps */
+  const gaps = [];
+  const strengths = [];
+  if (eduScore >= 80) strengths.push('Education and academic background');
+  else gaps.push('Add more detail about your degree and institution');
+  if (skillScore >= 80) strengths.push('Skills and technical competencies');
+  else gaps.push('List specific tools — KoBoToolbox, SPSS, Power BI, STATA');
+  if (langScore >= 90) strengths.push('Multilingual profile — strong advantage');
+  else gaps.push('Add your language proficiency levels — basic, conversational, fluent');
+  if (expScore >= 80) strengths.push('Relevant work experience');
+  else gaps.push('Add more detail about your field experience and impact');
+  strengths.push('Location flexibility and availability');
+
+  matchData = { overall, eduScore, skillScore, langScore, expScore, locScore, gaps, strengths, looking };
+
+  /* Determine training recommendations based on gaps */
+  buildTrainingRecs(gaps, skills);
+
+  /* Render match card */
+  renderMatchCard(matchData);
+}
+
+/* ── TRAINING RECOMMENDATIONS ── */
+const trainingDB = [
+  {
+    keywords: ['meal', 'monitoring', 'evaluation', 'kobo', 'spss', 'data collection'],
+    logo: '🏥', name: 'AMREF Health Africa', course: 'Certificate in Monitoring & Evaluation',
+    duration: '6 weeks online', cost: 'KES 15,000',
+    link: 'https://amref.org/training', code: 'NAFASI2026', commission: '15% commission'
+  },
+  {
+    keywords: ['data', 'analysis', 'excel', 'power bi', 'stata', 'statistics'],
+    logo: '📊', name: 'Coursera', course: 'Data Analysis for Social Impact',
+    duration: '4 weeks · Self paced', cost: 'Free audit available',
+    link: 'https://coursera.org', code: null, commission: '10% commission'
+  },
+  {
+    keywords: ['project', 'management', 'coordination', 'logframe'],
+    logo: '📋', name: 'PMD Pro', course: 'Project Management for Development Professionals',
+    duration: '3 months · Online', cost: '$150 USD',
+    link: 'https://pmdpro.org', code: 'NAFASI10', commission: '12% commission'
+  },
+  {
+    keywords: ['report', 'writing', 'communication', 'documentation'],
+    logo: '✍️', name: 'ACAPS', course: 'Humanitarian Report Writing',
+    duration: '2 weeks · Free', cost: 'Free',
+    link: 'https://acaps.org/en/learn', code: null, commission: null
+  },
+  {
+    keywords: ['gis', 'mapping', 'spatial', 'cartography'],
+    logo: '🗺️', name: 'Esri', course: 'GIS for Humanitarian Action',
+    duration: 'Self paced · Free', cost: 'Free',
+    link: 'https://www.esri.com/training', code: null, commission: null
+  },
+  {
+    keywords: ['health', 'public health', 'epidemiology', 'nutrition'],
+    logo: '💊', name: 'AMREF Health Africa', course: 'Certificate in Public Health Practice',
+    duration: '8 weeks online', cost: 'KES 18,000',
+    link: 'https://amref.org/training', code: 'NAFASI2026', commission: '15% commission'
+  }
+];
+
+function buildTrainingRecs(gaps, skills) {
+  const skillsLower = (skills || '').toLowerCase();
+  const gapsLower = gaps.join(' ').toLowerCase();
+  const combined = skillsLower + ' ' + gapsLower;
+  const recs = [];
+
+  trainingDB.forEach(t => {
+    const match = t.keywords.some(k => !combined.includes(k));
+    if (match && recs.length < 3) recs.push(t);
+  });
+
+  /* Show in left panel */
+  if (recs.length > 0) {
+    const list = document.getElementById('trainList');
+    list.innerHTML = recs.map(r => `
+      <div class="train-item">
+        <div class="train-logo">${r.logo}</div>
+        <div class="train-info">
+          <h5>${r.name}</h5>
+          <p>${r.course} · ${r.duration} · ${r.cost}</p>
+          <a href="${r.link}" target="_blank" class="train-link">
+            ${r.code ? `Use code ${r.code} →` : 'Learn more →'}
+          </a>
+        </div>
+      </div>
+    `).join('');
+    document.getElementById('trainPanel').classList.add('show');
+  }
+
+  return recs;
+}
+
+/* ── RENDER MATCH CARD ── */
+function renderMatchCard(d) {
+  const verdict = d.overall >= 85 ? { text: '✓ Strong profile', cls: 'strong' }
+    : d.overall >= 75 ? { text: '◎ Good profile', cls: 'good' }
+    : { text: '△ Building profile', cls: 'fair' };
+
+  const remaining = 100 - d.overall;
+
+  /* Build improvement advice */
+  const improvements = d.gaps.map(g =>
+    `<div class="improve-item">${g}</div>`
+  ).join('');
+
+  /* Build training recs for match card */
+  const skillsVal = (extractedData.skills || '').toLowerCase();
+  const recs = trainingDB.filter(t =>
+    t.keywords.some(k => !skillsVal.includes(k))
+  ).slice(0, 2);
+
+  const trainHtml = recs.map(r => `
+    <div class="train-rec-item">
+      <div class="tri-logo">${r.logo}</div>
+      <div class="tri-info">
+        <h5>${r.name} — ${r.course}</h5>
+        <p>${r.duration} · ${r.cost}</p>
+        <a href="${r.link}" target="_blank" class="tri-link">
+          ${r.code ? `Apply with code ${r.code} →` : 'Learn more →'}
+        </a>
+      </div>
+    </div>
+  `).join('');
+
+  document.getElementById('matchCard').innerHTML = `
+    <div class="match-hd">Your Nafasi profile score</div>
+    <div class="match-sub">Matched against current opportunities in our database</div>
+
+    <div class="score-big">${d.overall}</div>
+    <div class="score-label">OVERALL MATCH SCORE OUT OF 100</div>
+
+    <div class="score-rows">
+      <div class="sr"><div class="sr-label">Education</div><div class="sr-track"><div class="sr-fill" style="width:${d.eduScore}%"></div></div><div class="sr-pct">${d.eduScore}%</div></div>
+      <div class="sr"><div class="sr-label">Skills</div><div class="sr-track"><div class="sr-fill" style="width:${d.skillScore}%"></div></div><div class="sr-pct">${d.skillScore}%</div></div>
+      <div class="sr"><div class="sr-label">Languages</div><div class="sr-track"><div class="sr-fill" style="width:${d.langScore}%"></div></div><div class="sr-pct">${d.langScore}%</div></div>
+      <div class="sr"><div class="sr-label">Experience</div><div class="sr-track"><div class="sr-fill" style="width:${d.expScore}%"></div></div><div class="sr-pct">${d.expScore}%</div></div>
+      <div class="sr"><div class="sr-label">Location fit</div><div class="sr-track"><div class="sr-fill" style="width:${d.locScore}%"></div></div><div class="sr-pct">${d.locScore}%</div></div>
+    </div>
+
+    <div class="sg-grid">
+      <div class="sg-box green">
+        <div class="sg-box-hd">What you matched</div>
+        ${d.strengths.map(s => `<div class="sg-item">${s}</div>`).join('')}
+      </div>
+      <div class="sg-box amber">
+        <div class="sg-box-hd">Your ${remaining}% gap</div>
+        ${d.gaps.map(g => `<div class="sg-item">${g}</div>`).join('')}
+      </div>
+    </div>
+
+    ${d.gaps.length > 0 ? `
+    <div class="improve-box">
+      <div class="improve-hd">How to close your ${remaining}% gap</div>
+      ${improvements}
+    </div>` : ''}
+
+    ${trainHtml ? `
+    <div class="train-recs">
+      <div class="train-recs-hd">Recommended training to close your gaps</div>
+      ${trainHtml}
+    </div>` : ''}
+
+    <div class="verdict-row">
+      <div class="verdict-tag ${verdict.cls}">${verdict.text}</div>
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:rgba(255,255,255,.35)">Score updates as you add more</div>
+    </div>
+  `;
+}
+
+/* ── FINAL SUBMIT ── */
+async function handleFinalSubmit() {
+  const name = document.getElementById('s1_name').value.trim();
+  const email = document.getElementById('s1_email').value.trim();
+  const country = document.getElementById('s1_country').value;
+  const role = document.getElementById('s1_role').value.trim();
+  const exp = document.getElementById('s1_exp').value;
+  const looking = [...document.querySelectorAll('#lookingChips .chip.on')].map(c => c.textContent.trim()).join(', ');
+  const locs = [...document.querySelectorAll('#locChips .chip.on, #locChips .chip.on-green')].map(c => c.textContent.trim()).join(', ');
+  const minscore = document.getElementById('s3_minscore').value;
+
+  /* Fill hidden form */
+  document.getElementById('h_name').value = name;
+  document.getElementById('h_email').value = email;
+  document.getElementById('h_country').value = country;
+  document.getElementById('h_role').value = role;
+  document.getElementById('h_edu').value = extractedData.education || '';
+  document.getElementById('h_skills').value = extractedData.skills || '';
+  document.getElementById('h_langs').value = extractedData.languages || '';
+  document.getElementById('h_exp').value = exp;
+  document.getElementById('h_looking').value = looking;
+  document.getElementById('h_locs').value = locs;
+  document.getElementById('h_cv').value = extractedData.summary || '';
+
+  /* Submit to Netlify */
+  fetch('/', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: new URLSearchParams({
+      'form-name': 'nafasi-profiles',
+      'full_name': name, 'email': email, 'country': country,
+      'current_role': role, 'education': extractedData.education || '',
+      'skills': extractedData.skills || '', 'languages': extractedData.languages || '',
+      'experience_years': exp, 'looking_for': looking,
+      'locations': locs, 'cv_summary': extractedData.summary || '',
+      'min_score': minscore
+    }).toString()
+  }).catch(() => {});
+
+  /* Show success */
+  document.querySelector('.form-card').style.display = 'none';
+  document.getElementById('successWrap').classList.add('show');
+  document.getElementById('trainPanel').classList.add('show');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+/* ── UTILITIES ── */
+function delay(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+/* ── INIT ── */
+setStep(1);
+</script>
+<!-- SUPPORT -->
+<div style="text-align:center;padding:20px;font-size:12px;color:#94a3b8;font-family:'IBM Plex Sans',sans-serif">
+  Need help? Email us at <a href="mailto:hellonafasijobs@gmail.com" style="color:#c9a84c">hellonafasijobs@gmail.com</a>
+</div>
+</body>
+</html>

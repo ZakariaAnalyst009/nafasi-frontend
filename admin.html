@@ -1,0 +1,1089 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nafasi.jobs — Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --ink:#0a0f1e;--ink2:#141929;--ink3:#1e2640;
+  --gold:#c9a84c;--gold2:#f0d68a;
+  --white:#fff;--off:#f5f3ee;
+  --gray:#7a8194;--lgray:#b0b8cc;
+  --green:#1a7a5e;--green2:#d0ede6;
+  --blue:#1e40af;--blue2:#dbeafe;
+  --red:#dc2626;--red2:#fee2e2;
+  --amber:#d97706;--amber2:#fef3c7;
+  --purple:#7c3aed;--purple2:#ede9fe;
+  --border:rgba(201,168,76,0.15);
+  --borderw:rgba(255,255,255,0.08);
+  --sb:220px;
+}
+html{scroll-behavior:smooth}
+body{font-family:'IBM Plex Sans',sans-serif;background:var(--ink2);color:var(--white);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+::-webkit-scrollbar{width:3px}
+::-webkit-scrollbar-thumb{background:var(--gold)}
+
+/* ── LOGIN GATE ── */
+.login-gate{position:fixed;inset:0;background:var(--ink);display:flex;align-items:center;justify-content:center;z-index:999}
+.login-box{background:var(--ink2);border:1px solid var(--border);border-radius:16px;padding:40px;width:340px;text-align:center}
+.login-logo{font-family:'Playfair Display',serif;font-size:24px;font-weight:900;color:white;margin-bottom:6px}
+.login-logo span{color:var(--gold)}
+.login-sub{font-size:12px;color:var(--gray);margin-bottom:28px;font-weight:300}
+.login-inp{width:100%;padding:12px 14px;background:rgba(255,255,255,.05);border:1.5px solid var(--borderw);border-radius:8px;color:white;font-size:14px;font-family:'IBM Plex Sans',sans-serif;outline:none;margin-bottom:12px;transition:border-color .2s}
+.login-inp:focus{border-color:var(--gold)}
+.login-inp::placeholder{color:rgba(255,255,255,.2)}
+.login-btn{width:100%;background:var(--gold);color:var(--ink);border:none;padding:12px;border-radius:8px;font-family:'IBM Plex Sans',sans-serif;font-size:14px;font-weight:700;cursor:pointer;transition:background .2s}
+.login-btn:hover{background:var(--gold2)}
+.login-err{font-size:12px;color:#f87171;margin-top:8px;display:none}
+
+/* ── SIDEBAR ── */
+.sidebar{position:fixed;top:0;left:0;bottom:0;width:var(--sb);background:var(--ink);border-right:1px solid var(--border);display:flex;flex-direction:column;z-index:50;overflow-y:auto}
+.sb-logo{padding:20px 18px;border-bottom:1px solid var(--border)}
+.sb-logo-text{font-family:'Playfair Display',serif;font-size:17px;font-weight:900;color:white}
+.sb-logo-text span{color:var(--gold)}
+.sb-logo-badge{display:inline-block;background:rgba(201,168,76,.15);border:1px solid rgba(201,168,76,.25);color:var(--gold);font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;padding:2px 8px;border-radius:100px;margin-top:4px}
+.sb-nav{flex:1;padding:12px 0}
+.sb-group{font-family:'IBM Plex Mono',monospace;font-size:9px;color:rgba(255,255,255,.2);letter-spacing:.15em;text-transform:uppercase;padding:12px 18px 6px}
+.sb-item{display:flex;align-items:center;gap:10px;padding:9px 18px;font-size:13px;color:var(--lgray);cursor:pointer;transition:all .2s;border-left:2px solid transparent;position:relative}
+.sb-item:hover{color:white;background:rgba(255,255,255,.03);border-left-color:rgba(201,168,76,.3)}
+.sb-item.active{color:white;background:rgba(201,168,76,.07);border-left-color:var(--gold)}
+.sb-item .ico{font-size:14px;width:18px;text-align:center;flex-shrink:0}
+.sb-count{position:absolute;right:14px;background:var(--gold);color:var(--ink);font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:700;padding:1px 6px;border-radius:100px}
+.sb-count.red{background:var(--red);color:white}
+.sb-count.green{background:var(--green);color:white}
+.sb-footer{padding:14px 18px;border-top:1px solid var(--border)}
+.sb-admin{font-size:12px;color:var(--gray);font-weight:300}
+.sb-admin strong{color:var(--gold);font-weight:500}
+.sb-logout{font-size:11px;color:var(--gray);cursor:pointer;margin-top:4px;transition:color .2s;background:none;border:none;font-family:'IBM Plex Sans',sans-serif;padding:0}
+.sb-logout:hover{color:var(--red)}
+
+/* ── MAIN ── */
+.main{margin-left:var(--sb);min-height:100vh;display:flex;flex-direction:column}
+.topbar{background:var(--ink);border-bottom:1px solid var(--border);padding:0 28px;height:52px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:40}
+.topbar-left{display:flex;align-items:center;gap:12px}
+.topbar-title{font-family:'Playfair Display',serif;font-size:15px;font-weight:700;color:white;letter-spacing:-.3px}
+.topbar-right{display:flex;align-items:center;gap:10px}
+.tb-btn{padding:6px 14px;border-radius:6px;font-size:12px;font-weight:600;cursor:pointer;font-family:'IBM Plex Sans',sans-serif;border:none;transition:all .2s}
+.tb-btn-gold{background:var(--gold);color:var(--ink)}
+.tb-btn-gold:hover{background:var(--gold2)}
+.tb-btn-outline{background:transparent;border:1px solid var(--borderw);color:var(--lgray)}
+.tb-btn-outline:hover{border-color:var(--gold);color:var(--gold)}
+.tb-date{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--gray)}
+
+/* ── CONTENT ── */
+.content{flex:1;padding:24px 28px}
+.panel{display:none}
+.panel.active{display:block}
+
+/* ── STATS GRID ── */
+.stats-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:22px}
+.stat{background:rgba(255,255,255,.04);border:1px solid var(--borderw);border-radius:10px;padding:16px 18px;position:relative;overflow:hidden}
+.stat::before{content:'';position:absolute;top:0;left:0;right:0;height:2px}
+.stat.gold::before{background:var(--gold)}
+.stat.green::before{background:var(--green)}
+.stat.blue::before{background:#5b9cf6}
+.stat.purple::before{background:#a78bfa}
+.stat.red::before{background:var(--red)}
+.stat-n{font-family:'Playfair Display',serif;font-size:30px;font-weight:900;color:white;line-height:1}
+.stat-l{font-size:11px;color:var(--gray);margin-top:4px;font-weight:300}
+.stat-ch{font-family:'IBM Plex Mono',monospace;font-size:10px;margin-top:8px}
+.stat-ch.up{color:#34d399}
+.stat-ch.down{color:#f87171}
+.stat-ch.neutral{color:var(--gray)}
+
+/* ── SECTION HEADER ── */
+.sec-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.sec-title{font-family:'Playfair Display',serif;font-size:16px;font-weight:700;color:white;letter-spacing:-.3px}
+.sec-sub{font-size:11px;color:var(--gray);margin-top:2px;font-weight:300}
+.sec-actions{display:flex;gap:8px}
+
+/* ── SEARCH + FILTER ── */
+.search-bar{display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap}
+.search-inp{flex:1;min-width:200px;padding:9px 13px;background:rgba(255,255,255,.05);border:1px solid var(--borderw);border-radius:7px;color:white;font-size:13px;font-family:'IBM Plex Sans',sans-serif;outline:none;transition:border-color .2s}
+.search-inp:focus{border-color:var(--gold)}
+.search-inp::placeholder{color:rgba(255,255,255,.2)}
+.filter-sel{padding:9px 12px;background:rgba(255,255,255,.05);border:1px solid var(--borderw);border-radius:7px;color:var(--lgray);font-size:12px;font-family:'IBM Plex Sans',sans-serif;outline:none;cursor:pointer;transition:border-color .2s;appearance:none;padding-right:28px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%237a8194' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center}
+.filter-sel:focus{border-color:var(--gold)}
+
+/* ── TABLE ── */
+.tbl-wrap{background:rgba(255,255,255,.03);border:1px solid var(--borderw);border-radius:10px;overflow:hidden;margin-bottom:20px}
+.tbl{width:100%;border-collapse:collapse}
+.tbl th{padding:10px 14px;text-align:left;font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--gray);letter-spacing:.1em;text-transform:uppercase;border-bottom:1px solid var(--borderw);font-weight:400;white-space:nowrap}
+.tbl td{padding:11px 14px;font-size:12px;color:rgba(255,255,255,.8);border-bottom:1px solid rgba(255,255,255,.04);vertical-align:middle}
+.tbl tr:last-child td{border-bottom:none}
+.tbl tr:hover td{background:rgba(255,255,255,.02)}
+.tbl-actions{display:flex;gap:6px}
+.tbl-btn{padding:4px 10px;border-radius:4px;font-size:11px;font-weight:600;cursor:pointer;border:none;font-family:'IBM Plex Sans',sans-serif;transition:all .2s}
+.tbl-btn-gold{background:rgba(201,168,76,.15);color:var(--gold)}
+.tbl-btn-gold:hover{background:rgba(201,168,76,.25)}
+.tbl-btn-green{background:rgba(26,122,94,.15);color:#34d399}
+.tbl-btn-green:hover{background:rgba(26,122,94,.25)}
+.tbl-btn-red{background:rgba(220,38,38,.15);color:#f87171}
+.tbl-btn-red:hover{background:rgba(220,38,38,.25)}
+.tbl-btn-blue{background:rgba(91,156,246,.15);color:#5b9cf6}
+.tbl-btn-blue:hover{background:rgba(91,156,246,.25)}
+
+/* ── BADGES ── */
+.badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:100px;font-size:10px;font-weight:600;font-family:'IBM Plex Mono',monospace}
+.badge-job{background:rgba(201,168,76,.15);color:var(--gold)}
+.badge-sch{background:rgba(91,156,246,.15);color:#5b9cf6}
+.badge-fel{background:rgba(52,211,153,.15);color:#34d399}
+.badge-int{background:rgba(167,139,250,.15);color:#a78bfa}
+.badge-con{background:rgba(249,115,22,.15);color:#fb923c}
+.badge-res{background:rgba(236,72,153,.15);color:#f472b6}
+.badge-active{background:rgba(52,211,153,.12);color:#34d399}
+.badge-inactive{background:rgba(255,255,255,.06);color:var(--gray)}
+.badge-flagged{background:rgba(201,168,76,.15);color:var(--gold)}
+.badge-referred{background:rgba(26,122,94,.15);color:#34d399}
+.badge-placed{background:rgba(52,211,153,.2);color:#34d399;border:1px solid rgba(52,211,153,.3)}
+
+/* ── SCORE BAR ── */
+.mini-score{display:flex;align-items:center;gap:8px}
+.mini-bar{width:60px;height:4px;background:rgba(255,255,255,.08);border-radius:2px;overflow:hidden;flex-shrink:0}
+.mini-fill{height:100%;border-radius:2px;background:linear-gradient(90deg,var(--green),var(--gold))}
+.mini-num{font-family:'IBM Plex Mono',monospace;font-size:11px;color:white;font-weight:500}
+
+/* ── CHART AREA ── */
+.chart-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:20px}
+.chart-box{background:rgba(255,255,255,.03);border:1px solid var(--borderw);border-radius:10px;padding:20px}
+.chart-title{font-size:13px;font-weight:600;color:white;margin-bottom:16px}
+.bar-chart{display:flex;flex-direction:column;gap:8px}
+.bar-row{display:flex;align-items:center;gap:10px}
+.bar-label{font-size:11px;color:var(--gray);width:140px;flex-shrink:0;font-weight:300}
+.bar-track{flex:1;height:8px;background:rgba(255,255,255,.06);border-radius:4px;overflow:hidden}
+.bar-fill{height:100%;border-radius:4px;background:linear-gradient(90deg,var(--green),var(--gold))}
+.bar-val{font-family:'IBM Plex Mono',monospace;font-size:11px;color:white;width:28px;text-align:right;flex-shrink:0}
+.donut-wrap{display:flex;gap:16px;align-items:center}
+.donut-legend{display:flex;flex-direction:column;gap:8px;flex:1}
+.donut-item{display:flex;align-items:center;gap:8px;font-size:12px;color:rgba(255,255,255,.7)}
+.donut-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.donut-pct{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--gold);margin-left:auto}
+
+/* ── REFERRAL CARDS ── */
+.referral-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px}
+.ref-card{background:rgba(255,255,255,.03);border:1px solid var(--borderw);border-radius:10px;padding:18px;border-top:3px solid var(--gold)}
+.ref-card.placed{border-top-color:var(--green)}
+.ref-name{font-size:14px;font-weight:600;color:white;margin-bottom:3px}
+.ref-role{font-size:11px;color:var(--gray);margin-bottom:10px;font-weight:300}
+.ref-score{font-family:'Playfair Display',serif;font-size:28px;font-weight:900;color:var(--gold);margin-bottom:4px}
+.ref-org{font-size:12px;color:rgba(255,255,255,.6)}
+.ref-actions{display:flex;gap:6px;margin-top:12px}
+.ref-btn{flex:1;padding:7px;border-radius:6px;font-size:11px;font-weight:600;cursor:pointer;border:none;font-family:'IBM Plex Sans',sans-serif;transition:all .2s;text-align:center}
+.ref-contact{background:rgba(201,168,76,.15);color:var(--gold)}
+.ref-contact:hover{background:rgba(201,168,76,.25)}
+.ref-placed{background:rgba(52,211,153,.15);color:#34d399}
+.ref-placed:hover{background:rgba(52,211,153,.25)}
+
+/* ── AFFILIATE TABLE ── */
+.aff-row{display:grid;grid-template-columns:200px 80px 80px 100px 1fr;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid rgba(255,255,255,.05)}
+.aff-row:last-child{border-bottom:none}
+.aff-name{font-size:13px;font-weight:500;color:white}
+.aff-clicks{font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--gold)}
+.aff-conv{font-family:'IBM Plex Mono',monospace;font-size:13px;color:#34d399}
+.aff-earn{font-family:'Playfair Display',serif;font-size:15px;font-weight:700;color:white}
+.aff-bar{height:4px;background:rgba(255,255,255,.06);border-radius:2px;overflow:hidden}
+.aff-bar-fill{height:100%;border-radius:2px;background:linear-gradient(90deg,var(--green),var(--gold))}
+
+/* ── LOG ── */
+.log-item{display:flex;gap:12px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.04);align-items:flex-start}
+.log-item:last-child{border-bottom:none}
+.log-time{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--gray);white-space:nowrap;margin-top:2px;flex-shrink:0;width:70px}
+.log-icon{font-size:14px;flex-shrink:0;width:20px;text-align:center}
+.log-text{font-size:12px;color:rgba(255,255,255,.7);line-height:1.5}
+.log-text strong{color:white;font-weight:500}
+
+/* ── SCRAPER STATUS ── */
+.scraper-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:20px}
+.src-item{background:rgba(255,255,255,.03);border:1px solid var(--borderw);border-radius:8px;padding:12px;display:flex;align-items:center;gap:10px}
+.src-status{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.src-ok{background:#34d399}
+.src-fail{background:#f87171}
+.src-warn{background:var(--gold)}
+.src-name{font-size:11px;color:rgba(255,255,255,.7);flex:1}
+.src-count{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--gray)}
+
+/* ── MODAL ── */
+.modal-overlay{position:fixed;inset:0;background:rgba(10,15,30,.8);z-index:200;display:none;align-items:center;justify-content:center;backdrop-filter:blur(4px)}
+.modal-overlay.show{display:flex}
+.modal{background:var(--ink2);border:1px solid var(--border);border-radius:14px;padding:28px;width:min(500px,90vw);max-height:80vh;overflow-y:auto}
+.modal-title{font-family:'Playfair Display',serif;font-size:18px;font-weight:700;color:white;margin-bottom:16px}
+.modal-close{float:right;background:none;border:none;color:var(--gray);cursor:pointer;font-size:18px;padding:0;transition:color .2s}
+.modal-close:hover{color:white}
+.modal-field{margin-bottom:14px}
+.modal-label{font-size:11px;font-weight:600;color:var(--gray);text-transform:uppercase;letter-spacing:.05em;margin-bottom:5px;display:block}
+.modal-inp{width:100%;padding:10px 13px;background:rgba(255,255,255,.05);border:1.5px solid var(--borderw);border-radius:7px;color:white;font-size:13px;font-family:'IBM Plex Sans',sans-serif;outline:none;transition:border-color .2s}
+.modal-inp:focus{border-color:var(--gold)}
+.modal-inp::placeholder{color:rgba(255,255,255,.2)}
+.modal-ta{resize:vertical;min-height:80px;line-height:1.6}
+.modal-actions{display:flex;gap:10px;margin-top:20px}
+.modal-btn{flex:1;padding:11px;border-radius:7px;font-family:'IBM Plex Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;border:none;transition:all .2s}
+.modal-save{background:var(--gold);color:var(--ink)}
+.modal-save:hover{background:var(--gold2)}
+.modal-cancel{background:rgba(255,255,255,.06);color:var(--lgray)}
+.modal-cancel:hover{background:rgba(255,255,255,.1)}
+
+/* ── EMPTY ── */
+.empty{text-align:center;padding:48px 20px;color:var(--gray)}
+.empty-icon{font-size:40px;margin-bottom:12px;opacity:.4}
+.empty-txt{font-size:13px;font-weight:300}
+
+@media(max-width:900px){
+  :root{--sb:0px}
+  .sidebar{display:none}
+  .stats-grid{grid-template-columns:repeat(2,1fr)}
+  .chart-row{grid-template-columns:1fr}
+  .referral-grid{grid-template-columns:1fr}
+  .scraper-grid{grid-template-columns:repeat(2,1fr)}
+}
+</style>
+</head>
+<body>
+
+<!-- LOGIN GATE -->
+<div class="login-gate" id="loginGate">
+  <div class="login-box">
+    <div class="login-logo">Nafasi<span>.jobs</span></div>
+    <div class="login-sub">Admin Dashboard — Authorized access only</div>
+    <input type="text" class="login-inp" placeholder="Admin username" id="loginUser">
+    <input type="password" class="login-inp" placeholder="Password" id="loginPass" onkeypress="if(event.key==='Enter')doLogin()">
+    <button class="login-btn" onclick="doLogin()">Sign in →</button>
+    <div class="login-err" id="loginErr">Incorrect credentials</div>
+  </div>
+</div>
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="sb-logo">
+    <div class="sb-logo-text">Nafasi<span>.jobs</span></div>
+    <div class="sb-logo-badge">Admin</div>
+  </div>
+  <nav class="sb-nav">
+    <div class="sb-group">Overview</div>
+    <div class="sb-item active" onclick="show('overview',this)"><span class="ico">📊</span> Dashboard</div>
+    <div class="sb-item" onclick="show('scraper',this)"><span class="ico">🕷️</span> Scraper status</div>
+    <div class="sb-group">People</div>
+    <div class="sb-item" onclick="show('users',this)"><span class="ico">👥</span> Users <span class="sb-count" id="userCount">0</span></div>
+    <div class="sb-item" onclick="show('referrals',this)"><span class="ico">⭐</span> Referrals <span class="sb-count green" id="refCount">0</span></div>
+    <div class="sb-group">Content</div>
+    <div class="sb-item" onclick="show('opportunities',this)"><span class="ico">🌍</span> Opportunities <span class="sb-count" id="oppCount">0</span></div>
+    <div class="sb-item" onclick="show('matches',this)"><span class="ico">🎯</span> Matches sent <span class="sb-count" id="matchCount">0</span></div>
+    <div class="sb-group">Revenue</div>
+    <div class="sb-item" onclick="show('affiliate',this)"><span class="ico">💰</span> Affiliate links</div>
+    <div class="sb-item" onclick="show('revenue',this)"><span class="ico">📈</span> Revenue</div>
+    <div class="sb-group">System</div>
+    <div class="sb-item" onclick="show('logs',this)"><span class="ico">📋</span> Activity log</div>
+    <div class="sb-item" onclick="show('settings',this)"><span class="ico">⚙️</span> Settings</div>
+  </nav>
+  <div class="sb-footer">
+    <div class="sb-admin">Signed in as <strong id="adminName">admin</strong></div>
+    <button class="sb-logout" onclick="doLogout()">Sign out</button>
+    <a href="mailto:hellonafasijobs@gmail.com" style="font-size:10px;color:var(--gray);margin-top:6px;display:block">hellonafasijobs@gmail.com</a>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<main class="main">
+  <div class="topbar">
+    <div class="topbar-left">
+      <div class="topbar-title" id="topbarTitle">Dashboard</div>
+    </div>
+    <div class="topbar-right">
+      <div class="tb-date" id="tbDate"></div>
+      <button class="tb-btn tb-btn-outline" onclick="runScraper()">▶ Run scraper</button>
+      <button class="tb-btn tb-btn-gold" onclick="show('referrals',null)">⭐ Flag candidate</button>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <!-- ── OVERVIEW PANEL ── -->
+    <div class="panel active" id="panel-overview">
+      <div class="stats-grid">
+        <div class="stat gold">
+          <div class="stat-n" id="ov-users">0</div>
+          <div class="stat-l">Total users</div>
+          <div class="stat-ch up" id="ov-users-ch">↑ Loading...</div>
+        </div>
+        <div class="stat green">
+          <div class="stat-n" id="ov-opps">0</div>
+          <div class="stat-l">Opportunities today</div>
+          <div class="stat-ch neutral" id="ov-opps-ch">From 101 sources</div>
+        </div>
+        <div class="stat blue">
+          <div class="stat-n" id="ov-matches">0</div>
+          <div class="stat-l">Matches sent today</div>
+          <div class="stat-ch up">↑ Via daily digest</div>
+        </div>
+        <div class="stat purple">
+          <div class="stat-n" id="ov-refs">0</div>
+          <div class="stat-l">Active referrals</div>
+          <div class="stat-ch neutral">High scorers flagged</div>
+        </div>
+        <div class="stat gold">
+          <div class="stat-n" id="ov-revenue">$0</div>
+          <div class="stat-l">Affiliate revenue</div>
+          <div class="stat-ch up">↑ This month</div>
+        </div>
+      </div>
+
+      <div class="chart-row">
+        <div class="chart-box">
+          <div class="chart-title">Opportunities by type — today</div>
+          <div class="bar-chart" id="typeChart"></div>
+        </div>
+        <div class="chart-box">
+          <div class="chart-title">Users by country — top 6</div>
+          <div class="bar-chart" id="countryChart"></div>
+        </div>
+      </div>
+
+      <div class="chart-row">
+        <div class="chart-box">
+          <div class="chart-title">Recent activity</div>
+          <div id="recentLog"></div>
+        </div>
+        <div class="chart-box">
+          <div class="chart-title">Top match scores today</div>
+          <div id="topScores"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── SCRAPER STATUS PANEL ── -->
+    <div class="panel" id="panel-scraper">
+      <div class="sec-hd" style="margin-bottom:16px">
+        <div>
+          <div class="sec-title">Scraper status — 101 sources</div>
+          <div class="sec-sub" id="scraperLastRun">Last run: Loading...</div>
+        </div>
+        <div class="sec-actions">
+          <button class="tb-btn tb-btn-outline" onclick="refreshScraper()">↻ Refresh</button>
+          <button class="tb-btn tb-btn-gold" onclick="runScraper()">▶ Run now</button>
+        </div>
+      </div>
+      <div class="scraper-grid" id="scraperGrid"></div>
+    </div>
+
+    <!-- ── USERS PANEL ── -->
+    <div class="panel" id="panel-users">
+      <div class="sec-hd" style="margin-bottom:14px">
+        <div>
+          <div class="sec-title">All users</div>
+          <div class="sec-sub">Everyone registered on Nafasi.jobs</div>
+        </div>
+        <div class="sec-actions">
+          <button class="tb-btn tb-btn-outline" onclick="exportUsers()">↓ Export CSV</button>
+          <button class="tb-btn tb-btn-gold" onclick="openModal('addUser')">+ Add user</button>
+        </div>
+      </div>
+      <div class="search-bar">
+        <input class="search-inp" placeholder="Search by name, email or country..." oninput="filterUsers(this.value)" id="userSearch">
+        <select class="filter-sel" onchange="filterUsersByCountry(this.value)">
+          <option value="">All countries</option>
+          <option>Kenya</option><option>Nigeria</option><option>Uganda</option>
+          <option>Ethiopia</option><option>Somalia</option><option>Ghana</option>
+          <option>Tanzania</option><option>Rwanda</option><option>Other</option>
+        </select>
+        <select class="filter-sel" onchange="filterUsersByScore(this.value)">
+          <option value="">All scores</option>
+          <option value="90">90+ Strong</option>
+          <option value="75">75+ Good</option>
+          <option value="65">65+ Fair</option>
+        </select>
+      </div>
+      <div class="tbl-wrap">
+        <table class="tbl">
+          <thead>
+            <tr>
+              <th>Name</th><th>Email</th><th>Country</th><th>Score</th>
+              <th>Looking for</th><th>Joined</th><th>Status</th><th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="usersBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ── REFERRALS PANEL ── -->
+    <div class="panel" id="panel-referrals">
+      <div class="sec-hd" style="margin-bottom:16px">
+        <div>
+          <div class="sec-title">Referral agency</div>
+          <div class="sec-sub">High scoring candidates you can refer to organizations for a placement fee</div>
+        </div>
+        <button class="tb-btn tb-btn-gold" onclick="openModal('flagCandidate')">+ Flag candidate</button>
+      </div>
+
+      <div class="stats-grid" style="grid-template-columns:repeat(4,1fr);margin-bottom:20px">
+        <div class="stat gold"><div class="stat-n" id="ref-flagged">0</div><div class="stat-l">Flagged candidates</div></div>
+        <div class="stat blue"><div class="stat-n" id="ref-contacted">0</div><div class="stat-l">Orgs contacted</div></div>
+        <div class="stat green"><div class="stat-n" id="ref-placed">0</div><div class="stat-l">Placed</div></div>
+        <div class="stat purple"><div class="stat-n" id="ref-revenue">$0</div><div class="stat-l">Placement revenue</div></div>
+      </div>
+
+      <div class="referral-grid" id="referralGrid"></div>
+
+      <div class="sec-title" style="margin-bottom:14px">Placement history</div>
+      <div class="tbl-wrap">
+        <table class="tbl">
+          <thead>
+            <tr><th>Candidate</th><th>Organization</th><th>Role</th><th>Score</th><th>Status</th><th>Fee</th><th>Date</th></tr>
+          </thead>
+          <tbody id="placementsBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ── OPPORTUNITIES PANEL ── -->
+    <div class="panel" id="panel-opportunities">
+      <div class="sec-hd" style="margin-bottom:14px">
+        <div>
+          <div class="sec-title">All opportunities</div>
+          <div class="sec-sub">Scraped from 101 sources — updated daily</div>
+        </div>
+        <div class="sec-actions">
+          <button class="tb-btn tb-btn-outline" onclick="exportOpps()">↓ Export</button>
+          <button class="tb-btn tb-btn-gold" onclick="openModal('addOpp')">+ Add manually</button>
+        </div>
+      </div>
+      <div class="search-bar">
+        <input class="search-inp" placeholder="Search by title, organization or source..." oninput="filterOpps(this.value)">
+        <select class="filter-sel" onchange="filterOppsByType(this.value)">
+          <option value="">All types</option>
+          <option>Job</option><option>Scholarship</option><option>Fellowship</option>
+          <option>Internship</option><option>Consultancy</option><option>Research Funding</option>
+        </select>
+        <select class="filter-sel" onchange="filterOppsByRemote(this.value)">
+          <option value="">All locations</option>
+          <option value="Yes">Remote only</option>
+          <option value="No">Onsite only</option>
+        </select>
+      </div>
+      <div class="tbl-wrap">
+        <table class="tbl">
+          <thead>
+            <tr><th>Title</th><th>Organization</th><th>Type</th><th>Location</th><th>Source</th><th>Scraped</th><th>Remote</th><th>Actions</th></tr>
+          </thead>
+          <tbody id="oppsBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ── MATCHES PANEL ── -->
+    <div class="panel" id="panel-matches">
+      <div class="sec-hd" style="margin-bottom:14px">
+        <div>
+          <div class="sec-title">Matches sent today</div>
+          <div class="sec-sub">All user-opportunity matches generated by Claude AI</div>
+        </div>
+        <button class="tb-btn tb-btn-outline" onclick="exportMatches()">↓ Export</button>
+      </div>
+      <div class="tbl-wrap">
+        <table class="tbl">
+          <thead>
+            <tr><th>User</th><th>Opportunity</th><th>Type</th><th>Score</th><th>Verdict</th><th>Email sent</th><th>Actions</th></tr>
+          </thead>
+          <tbody id="matchesBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ── AFFILIATE PANEL ── -->
+    <div class="panel" id="panel-affiliate">
+      <div class="sec-hd" style="margin-bottom:20px">
+        <div>
+          <div class="sec-title">Affiliate link performance</div>
+          <div class="sec-sub">Training recommendations sent to users — track clicks and conversions</div>
+        </div>
+      </div>
+      <div class="chart-box" style="margin-bottom:20px">
+        <div style="display:grid;grid-template-columns:200px 80px 80px 100px 1fr;gap:12px;padding-bottom:10px;border-bottom:1px solid var(--borderw);margin-bottom:12px">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--gray);letter-spacing:.1em;text-transform:uppercase">Partner</div>
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--gray);letter-spacing:.1em;text-transform:uppercase">Clicks</div>
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--gray);letter-spacing:.1em;text-transform:uppercase">Enrolled</div>
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--gray);letter-spacing:.1em;text-transform:uppercase">Earned</div>
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--gray);letter-spacing:.1em;text-transform:uppercase">Rate</div>
+        </div>
+        <div id="affiliateRows"></div>
+      </div>
+      <div class="chart-box">
+        <div class="chart-title">How to grow affiliate revenue</div>
+        <div style="display:flex;flex-direction:column;gap:10px;margin-top:4px">
+          <div style="font-size:13px;color:rgba(255,255,255,.7);padding-left:14px;border-left:2px solid var(--gold);font-weight:300">Contact AMREF training department using the email template in our conversations. Request 15% commission on all NAFASI2026 code enrollments.</div>
+          <div style="font-size:13px;color:rgba(255,255,255,.7);padding-left:14px;border-left:2px solid var(--green);font-weight:300">Join Coursera affiliate program at partners.coursera.org — free to join, 10-45% commission per enrollment.</div>
+          <div style="font-size:13px;color:rgba(255,255,255,.7);padding-left:14px;border-left:2px solid #5b9cf6;font-weight:300">PMD Pro affiliate at pmdpro.org/affiliate — 12% per certification. Use bit.ly to create trackable links.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── REVENUE PANEL ── -->
+    <div class="panel" id="panel-revenue">
+      <div class="stats-grid" style="margin-bottom:20px">
+        <div class="stat gold"><div class="stat-n" id="rev-total">$0</div><div class="stat-l">Total revenue</div><div class="stat-ch neutral">All time</div></div>
+        <div class="stat green"><div class="stat-n" id="rev-affiliate">$0</div><div class="stat-l">Affiliate commissions</div></div>
+        <div class="stat blue"><div class="stat-n" id="rev-placement">$0</div><div class="stat-l">Placement fees</div></div>
+        <div class="stat purple"><div class="stat-n" id="rev-premium">$0</div><div class="stat-l">Premium members</div></div>
+        <div class="stat red"><div class="stat-n" id="rev-cost">$0</div><div class="stat-l">API costs</div><div class="stat-ch down">Claude API usage</div></div>
+      </div>
+      <div class="chart-box">
+        <div class="chart-title">Revenue breakdown</div>
+        <div style="display:flex;flex-direction:column;gap:12px;margin-top:8px">
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:12px;background:rgba(201,168,76,.06);border-radius:8px;border:1px solid rgba(201,168,76,.12)">
+            <div>
+              <div style="font-size:13px;font-weight:600;color:white">Affiliate commissions</div>
+              <div style="font-size:11px;color:var(--gray);margin-top:2px">AMREF, Coursera, PMD Pro, ACAPS</div>
+            </div>
+            <div style="font-family:'Playfair Display',serif;font-size:20px;font-weight:700;color:var(--gold)" id="rev-aff-display">$0</div>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:12px;background:rgba(52,211,153,.06);border-radius:8px;border:1px solid rgba(52,211,153,.12)">
+            <div>
+              <div style="font-size:13px;font-weight:600;color:white">Referral placement fees</div>
+              <div style="font-size:11px;color:var(--gray);margin-top:2px">Candidates you refer to organizations</div>
+            </div>
+            <div style="font-family:'Playfair Display',serif;font-size:20px;font-weight:700;color:#34d399" id="rev-place-display">$0</div>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:12px;background:rgba(91,156,246,.06);border-radius:8px;border:1px solid rgba(91,156,246,.12)">
+            <div>
+              <div style="font-size:13px;font-weight:600;color:white">Premium memberships</div>
+              <div style="font-size:11px;color:var(--gray);margin-top:2px">Users paying for premium features</div>
+            </div>
+            <div style="font-family:'Playfair Display',serif;font-size:20px;font-weight:700;color:#5b9cf6" id="rev-prem-display">$0</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── LOGS PANEL ── -->
+    <div class="panel" id="panel-logs">
+      <div class="sec-hd" style="margin-bottom:16px">
+        <div><div class="sec-title">Activity log</div><div class="sec-sub">All system events</div></div>
+        <button class="tb-btn tb-btn-outline" onclick="clearLogs()">Clear log</button>
+      </div>
+      <div class="chart-box" id="fullLog"></div>
+    </div>
+
+    <!-- ── SETTINGS PANEL ── -->
+    <div class="panel" id="panel-settings">
+      <div style="max-width:540px">
+        <div class="sec-title" style="margin-bottom:20px">System settings</div>
+        <div class="chart-box" style="margin-bottom:14px">
+          <div style="font-size:13px;font-weight:600;color:white;margin-bottom:16px">API Configuration</div>
+          <div class="modal-field">
+            <label class="modal-label">Anthropic API Key</label>
+            <input class="modal-inp" type="password" placeholder="sk-ant-..." id="set-anthropic">
+          </div>
+          <div class="modal-field">
+            <label class="modal-label">SendGrid API Key</label>
+            <input class="modal-inp" type="password" placeholder="SG...." id="set-sendgrid">
+          </div>
+          <div class="modal-field">
+            <label class="modal-label">Google Sheets ID</label>
+            <input class="modal-inp" placeholder="Your spreadsheet ID" id="set-sheets">
+          </div>
+        </div>
+        <div class="chart-box" style="margin-bottom:14px">
+          <div style="font-size:13px;font-weight:600;color:white;margin-bottom:16px">Scraper Settings</div>
+          <div class="modal-field">
+            <label class="modal-label">Scraper run time (UTC)</label>
+            <input class="modal-inp" type="time" value="06:00" id="set-scraper-time">
+          </div>
+          <div class="modal-field">
+            <label class="modal-label">Minimum match score to send</label>
+            <select class="modal-inp" id="set-min-score">
+              <option>65</option><option selected>70</option><option>75</option><option>80</option>
+            </select>
+          </div>
+          <div class="modal-field">
+            <label class="modal-label">Auto-flag score threshold for referrals</label>
+            <select class="modal-inp" id="set-flag-score">
+              <option>85</option><option selected>90</option><option>95</option>
+            </select>
+          </div>
+        </div>
+        <div class="chart-box">
+          <div style="font-size:13px;font-weight:600;color:white;margin-bottom:16px">Admin Access</div>
+          <div class="modal-field">
+            <label class="modal-label">Admin username</label>
+            <input class="modal-inp" value="nafasi_admin" id="set-admin-user">
+          </div>
+          <div class="modal-field">
+            <label class="modal-label">New password</label>
+            <input class="modal-inp" type="password" placeholder="Leave blank to keep current" id="set-admin-pass">
+          </div>
+        </div>
+        <button style="width:100%;background:var(--gold);color:var(--ink);border:none;padding:13px;border-radius:8px;font-family:'IBM Plex Sans',sans-serif;font-size:14px;font-weight:700;cursor:pointer;margin-top:14px;transition:background .2s" onclick="saveSettings()">Save settings</button>
+      </div>
+    </div>
+
+  </div><!-- /content -->
+</main>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModal()">
+  <div class="modal" onclick="event.stopPropagation()">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div class="modal-title" id="modalTitle">Modal</div>
+    <div id="modalBody"></div>
+    <div class="modal-actions">
+      <button class="modal-btn modal-cancel" onclick="closeModal()">Cancel</button>
+      <button class="modal-btn modal-save" id="modalSaveBtn" onclick="modalSave()">Save</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ── AUTH — change these credentials ── */
+const ADMIN_USER = 'nafasi_admin';
+const ADMIN_PASS = 'nafasi2026';
+
+/* ── SAMPLE DATA — replace with real Google Sheets API calls ── */
+const DATA = {
+  users: [
+    {id:1,name:'Zakaria Abdi Ibrahim',email:'zakariabdi40@gmail.com',country:'Kenya',score:78,looking:'Jobs, Scholarships, Fellowships',joined:'2026-04-09',status:'active',matches:5},
+    {id:2,name:'Amina Hassan',email:'amina.h@gmail.com',country:'Somalia',score:91,looking:'Jobs, Consultancies',joined:'2026-04-08',status:'active',matches:8},
+    {id:3,name:'David Okonkwo',email:'d.okonkwo@yahoo.com',country:'Nigeria',score:84,looking:'Fellowships, Research Funding',joined:'2026-04-08',status:'active',matches:6},
+    {id:4,name:'Fatima Al-Rashid',email:'fatima.r@outlook.com',country:'Jordan',score:77,looking:'Jobs, Internships',joined:'2026-04-07',status:'active',matches:4},
+    {id:5,name:'Peter Mwangi',email:'p.mwangi@gmail.com',country:'Kenya',score:69,looking:'Jobs, Scholarships',joined:'2026-04-07',status:'active',matches:2},
+    {id:6,name:'Grace Akello',email:'g.akello@gmail.com',country:'Uganda',score:88,looking:'Jobs, Fellowships',joined:'2026-04-06',status:'active',matches:7},
+    {id:7,name:'Ibrahim Jama',email:'ibrahim.j@gmail.com',country:'Ethiopia',score:93,looking:'Jobs, Consultancies',joined:'2026-04-06',status:'active',matches:9},
+    {id:8,name:'Mercy Otieno',email:'m.otieno@gmail.com',country:'Kenya',score:72,looking:'Internships, Jobs',joined:'2026-04-05',status:'active',matches:3},
+  ],
+  opportunities: [
+    {id:1,title:'MEAL Officer',org:'UNHCR',type:'Job',location:'Nairobi',source:'ReliefWeb',scraped:'2026-04-09',remote:'No'},
+    {id:2,title:'GOI Scholarship 2026',org:'Irish Aid',type:'Scholarship',location:'Ireland',source:'Opportunity Desk',scraped:'2026-04-09',remote:'No'},
+    {id:3,title:'Research Fellow',org:'IDRC Canada',type:'Fellowship',location:'Remote',source:'IDRC',scraped:'2026-04-09',remote:'Yes'},
+    {id:4,title:'Programme Associate',org:'IOM Somalia',type:'Job',location:'Mogadishu',source:'IOM Careers',scraped:'2026-04-09',remote:'No'},
+    {id:5,title:'MEAL Consultant',org:'Red Cross Kenya',type:'Consultancy',location:'Nairobi',source:'DevEx',scraped:'2026-04-09',remote:'No'},
+    {id:6,title:'Mandela Washington Fellowship',org:'US State Dept',type:'Fellowship',location:'United States',source:'Mandela Washington',scraped:'2026-04-09',remote:'No'},
+    {id:7,title:'Data Analyst Intern',org:'WHO',type:'Internship',location:'Geneva',source:'WHO Careers',scraped:'2026-04-09',remote:'Yes'},
+    {id:8,title:'Community Development Grant',org:'Open Society',type:'Research Funding',location:'International',source:'Open Society',scraped:'2026-04-09',remote:'Yes'},
+  ],
+  matches: [
+    {user:'Zakaria Abdi Ibrahim',opp:'MEAL Officer',type:'Job',score:94,verdict:'Strong match',sent:'Yes'},
+    {user:'Amina Hassan',opp:'Programme Associate',type:'Job',score:96,verdict:'Strong match',sent:'Yes'},
+    {user:'Ibrahim Jama',opp:'MEAL Officer',type:'Job',score:93,verdict:'Strong match',sent:'Yes'},
+    {user:'Grace Akello',opp:'Research Fellow',type:'Fellowship',score:88,verdict:'Strong match',sent:'Yes'},
+    {user:'David Okonkwo',opp:'Mandela Washington Fellowship',type:'Fellowship',score:85,verdict:'Strong match',sent:'Yes'},
+    {user:'Zakaria Abdi Ibrahim',opp:'GOI Scholarship 2026',type:'Scholarship',score:91,verdict:'Strong match',sent:'Yes'},
+    {user:'Fatima Al-Rashid',opp:'Data Analyst Intern',type:'Internship',score:79,verdict:'Good match',sent:'Yes'},
+  ],
+  referrals: [
+    {id:1,name:'Amina Hassan',country:'Somalia',score:96,role:'Programme Associate — IOM Somalia',org:'IOM Somalia',status:'flagged',email:'amina.h@gmail.com'},
+    {id:2,name:'Ibrahim Jama',country:'Ethiopia',score:93,role:'MEAL Officer — UNHCR',org:'UNHCR Nairobi',status:'flagged',email:'ibrahim.j@gmail.com'},
+    {id:3,name:'Grace Akello',country:'Uganda',score:88,role:'Research Fellow — IDRC',org:'IDRC Canada',status:'contacted',email:'g.akello@gmail.com'},
+  ],
+  placements: [
+    {candidate:'Amina Hassan',org:'IOM Somalia',role:'Programme Associate',score:96,status:'Referred',fee:'$500',date:'2026-04-09'},
+  ],
+  affiliate: [
+    {name:'AMREF Health Africa',clicks:24,enrolled:3,earned:'$675',rate:63},
+    {name:'Coursera',clicks:41,enrolled:7,earned:'$140',rate:78},
+    {name:'PMD Pro',clicks:12,enrolled:1,earned:'$18',rate:42},
+    {name:'ACAPS',clicks:19,enrolled:8,earned:'$0',rate:85},
+    {name:'Esri Training',clicks:8,enrolled:4,earned:'$0',rate:72},
+    {name:'DisasterReady',clicks:31,enrolled:18,earned:'$0',rate:91},
+  ],
+  scraperSources: [
+    {name:'ReliefWeb',status:'ok',count:48},{name:'DevEx',status:'ok',count:22},
+    {name:'Impactpool',status:'ok',count:31},{name:'Idealist',status:'ok',count:18},
+    {name:'UN Global Careers',status:'ok',count:15},{name:'UNDP Jobs',status:'ok',count:12},
+    {name:'UNICEF Jobs',status:'ok',count:9},{name:'WFP Careers',status:'warn',count:3},
+    {name:'WHO Careers',status:'ok',count:7},{name:'IOM Careers',status:'ok',count:11},
+    {name:'UNHCR Jobs',status:'ok',count:14},{name:'Oxfam Jobs',status:'ok',count:8},
+    {name:'IRC Careers',status:'ok',count:6},{name:'Opportunity Desk',status:'ok',count:25},
+    {name:'Scholars4Dev',status:'ok',count:19},{name:'Global South Opps',status:'ok',count:17},
+    {name:'Youth Opportunities',status:'ok',count:21},{name:'SomaliJobs',status:'ok',count:13},
+    {name:'NGO Jobs Africa',status:'ok',count:16},{name:'Fuzu',status:'ok',count:20},
+    {name:'DAAD',status:'ok',count:5},{name:'Commonwealth',status:'ok',count:2},
+    {name:'Chevening',status:'ok',count:1},{name:'Mastercard Foundation',status:'ok',count:3},
+    {name:'IDRC',status:'ok',count:8},{name:'Wellcome Trust',status:'ok',count:4},
+    {name:'Chemonics',status:'fail',count:0},{name:'DAI Global',status:'ok',count:9},
+    {name:'Palladium Group',status:'ok',count:7},{name:'World Bank',status:'ok',count:11},
+    {name:'GlobalJobs',status:'ok',count:28},{name:'NGO Job Board',status:'ok',count:15},
+  ],
+  logs: [
+    {time:'06:02',icon:'🕷️',text:'<strong>Scraper completed</strong> — 847 opportunities found from 101 sources'},
+    {time:'06:18',icon:'🤖',text:'<strong>Matcher ran</strong> — 47 matches generated for 8 users'},
+    {time:'06:31',icon:'📧',text:'<strong>Digest sent</strong> — 8 emails delivered successfully'},
+    {time:'08:14',icon:'👤',text:'New user registered — <strong>Amina Hassan</strong> from Somalia (Score: 91)'},
+    {time:'09:22',icon:'⭐',text:'High scorer flagged — <strong>Ibrahim Jama</strong> scored 93 on MEAL Officer at UNHCR'},
+    {time:'10:05',icon:'💰',text:'Affiliate click — <strong>AMREF training link</strong> clicked by Zakaria Abdi Ibrahim'},
+    {time:'11:30',icon:'📤',text:'Referral submitted — <strong>Amina Hassan</strong> referred to IOM Somalia'},
+  ]
+};
+
+/* ── LOGIN ── */
+function doLogin() {
+  const u = document.getElementById('loginUser').value;
+  const p = document.getElementById('loginPass').value;
+  if(u === ADMIN_USER && p === ADMIN_PASS) {
+    document.getElementById('loginGate').style.display = 'none';
+    document.getElementById('adminName').textContent = u;
+    initDashboard();
+  } else {
+    const err = document.getElementById('loginErr');
+    err.style.display = 'block';
+    setTimeout(()=>err.style.display='none', 3000);
+  }
+}
+
+function doLogout() {
+  document.getElementById('loginGate').style.display = 'flex';
+  document.getElementById('loginUser').value = '';
+  document.getElementById('loginPass').value = '';
+}
+
+/* ── INIT ── */
+function initDashboard() {
+  document.getElementById('tbDate').textContent = new Date().toLocaleDateString('en-GB',{weekday:'short',day:'numeric',month:'short',year:'numeric'});
+  updateStats();
+  renderOverview();
+  renderScraper();
+  renderUsers();
+  renderOpps();
+  renderMatches();
+  renderReferrals();
+  renderAffiliate();
+  updateRevenue();
+  renderLogs();
+}
+
+function updateStats() {
+  const u = DATA.users.length;
+  const o = DATA.opportunities.length;
+  const m = DATA.matches.length;
+  const r = DATA.referrals.length;
+  document.getElementById('ov-users').textContent = u;
+  document.getElementById('ov-opps').textContent = o;
+  document.getElementById('ov-matches').textContent = m;
+  document.getElementById('ov-refs').textContent = r;
+  document.getElementById('ov-users-ch').textContent = '↑ +'+u+' total registered';
+  document.getElementById('ov-revenue').textContent = '$833';
+  document.getElementById('userCount').textContent = u;
+  document.getElementById('oppCount').textContent = o;
+  document.getElementById('matchCount').textContent = m;
+  document.getElementById('refCount').textContent = r;
+  document.getElementById('ref-flagged').textContent = DATA.referrals.length;
+  document.getElementById('ref-contacted').textContent = DATA.referrals.filter(r=>r.status==='contacted').length;
+  document.getElementById('ref-placed').textContent = DATA.placements.length;
+  document.getElementById('ref-revenue').textContent = '$500';
+  document.getElementById('rev-total').textContent = '$1,333';
+  document.getElementById('rev-affiliate').textContent = '$833';
+  document.getElementById('rev-placement').textContent = '$500';
+  document.getElementById('rev-premium').textContent = '$0';
+  document.getElementById('rev-cost').textContent = '$12';
+  document.getElementById('rev-aff-display').textContent = '$833';
+  document.getElementById('rev-place-display').textContent = '$500';
+  document.getElementById('rev-prem-display').textContent = '$0';
+}
+
+/* ── OVERVIEW ── */
+function renderOverview() {
+  const types = {};
+  DATA.opportunities.forEach(o=>{ types[o.type]=(types[o.type]||0)+1; });
+  const maxType = Math.max(...Object.values(types));
+  document.getElementById('typeChart').innerHTML = Object.entries(types).map(([t,n])=>`
+    <div class="bar-row">
+      <div class="bar-label">${t}</div>
+      <div class="bar-track"><div class="bar-fill" style="width:${(n/maxType)*100}%"></div></div>
+      <div class="bar-val">${n}</div>
+    </div>`).join('');
+
+  const countries = {};
+  DATA.users.forEach(u=>{ countries[u.country]=(countries[u.country]||0)+1; });
+  const sorted = Object.entries(countries).sort((a,b)=>b[1]-a[1]).slice(0,6);
+  const maxC = Math.max(...sorted.map(c=>c[1]));
+  document.getElementById('countryChart').innerHTML = sorted.map(([c,n])=>`
+    <div class="bar-row">
+      <div class="bar-label">${c}</div>
+      <div class="bar-track"><div class="bar-fill" style="width:${(n/maxC)*100}%"></div></div>
+      <div class="bar-val">${n}</div>
+    </div>`).join('');
+
+  document.getElementById('recentLog').innerHTML = DATA.logs.slice(0,5).map(l=>`
+    <div class="log-item">
+      <div class="log-time">${l.time}</div>
+      <div class="log-icon">${l.icon}</div>
+      <div class="log-text">${l.text}</div>
+    </div>`).join('');
+
+  const topM = [...DATA.matches].sort((a,b)=>b.score-a.score).slice(0,5);
+  document.getElementById('topScores').innerHTML = topM.map(m=>`
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.05)">
+      <div>
+        <div style="font-size:12px;font-weight:500;color:white">${m.user}</div>
+        <div style="font-size:11px;color:var(--gray);font-weight:300">${m.opp}</div>
+      </div>
+      <div class="mini-score">
+        <div class="mini-bar"><div class="mini-fill" style="width:${m.score}%"></div></div>
+        <div class="mini-num">${m.score}</div>
+      </div>
+    </div>`).join('');
+}
+
+/* ── SCRAPER ── */
+function renderScraper() {
+  const ok = DATA.scraperSources.filter(s=>s.status==='ok').length;
+  const fail = DATA.scraperSources.filter(s=>s.status==='fail').length;
+  const warn = DATA.scraperSources.filter(s=>s.status==='warn').length;
+  document.getElementById('scraperLastRun').textContent = `Last run: Today 06:02 UTC — ${ok} OK · ${warn} warnings · ${fail} failed`;
+  document.getElementById('scraperGrid').innerHTML = DATA.scraperSources.map(s=>`
+    <div class="src-item">
+      <div class="src-status ${s.status==='ok'?'src-ok':s.status==='fail'?'src-fail':'src-warn'}"></div>
+      <div class="src-name">${s.name}</div>
+      <div class="src-count">${s.count}</div>
+    </div>`).join('');
+}
+
+function refreshScraper() { renderScraper(); addLog('↻','Scraper status refreshed'); }
+function runScraper() { addLog('🕷️','<strong>Manual scraper run triggered</strong> — check back in 5 minutes'); alert('Scraper triggered. Check activity log for results.'); }
+
+/* ── USERS ── */
+let filteredUsers = [...DATA.users];
+function renderUsers(users) {
+  const list = users || filteredUsers;
+  document.getElementById('usersBody').innerHTML = list.map(u=>`
+    <tr>
+      <td><strong>${u.name}</strong></td>
+      <td style="color:var(--gray)">${u.email}</td>
+      <td>${u.country}</td>
+      <td>
+        <div class="mini-score">
+          <div class="mini-bar"><div class="mini-fill" style="width:${u.score}%"></div></div>
+          <div class="mini-num">${u.score}</div>
+        </div>
+      </td>
+      <td style="color:var(--gray);font-size:11px">${u.looking}</td>
+      <td style="color:var(--gray)">${u.joined}</td>
+      <td><span class="badge badge-${u.status}">${u.status}</span></td>
+      <td>
+        <div class="tbl-actions">
+          <button class="tbl-btn tbl-btn-gold" onclick="viewUser(${u.id})">View</button>
+          ${u.score>=85?`<button class="tbl-btn tbl-btn-green" onclick="flagUser(${u.id})">⭐ Flag</button>`:''}
+          <button class="tbl-btn tbl-btn-red" onclick="deleteUser(${u.id})">Remove</button>
+        </div>
+      </td>
+    </tr>`).join('');
+}
+
+function filterUsers(q) {
+  filteredUsers = DATA.users.filter(u=>u.name.toLowerCase().includes(q.toLowerCase())||u.email.toLowerCase().includes(q.toLowerCase())||u.country.toLowerCase().includes(q.toLowerCase()));
+  renderUsers();
+}
+function filterUsersByCountry(c) { filteredUsers = c ? DATA.users.filter(u=>u.country===c) : [...DATA.users]; renderUsers(); }
+function filterUsersByScore(s) { filteredUsers = s ? DATA.users.filter(u=>u.score>=parseInt(s)) : [...DATA.users]; renderUsers(); }
+function viewUser(id) { const u = DATA.users.find(x=>x.id===id); if(u) alert(`User: ${u.name}\nEmail: ${u.email}\nCountry: ${u.country}\nScore: ${u.score}\nMatches: ${u.matches}`); }
+function flagUser(id) { const u = DATA.users.find(x=>x.id===id); if(!u) return; if(!DATA.referrals.find(r=>r.email===u.email)) { DATA.referrals.push({id:Date.now(),name:u.name,country:u.country,score:u.score,role:'Pending assignment',org:'TBD',status:'flagged',email:u.email}); addLog('⭐',`<strong>${u.name}</strong> flagged as referral candidate`); document.getElementById('refCount').textContent=DATA.referrals.length; alert(`${u.name} flagged as referral candidate!`); } else { alert('Already flagged!'); } }
+function deleteUser(id) { if(!confirm('Remove this user?')) return; const idx=DATA.users.findIndex(u=>u.id===id); if(idx>-1){ DATA.users.splice(idx,1); renderUsers(); addLog('🗑️',`User removed from system`); } }
+function exportUsers() { const csv='Name,Email,Country,Score,Looking For,Joined\n'+DATA.users.map(u=>`"${u.name}","${u.email}","${u.country}",${u.score},"${u.looking}","${u.joined}"`).join('\n'); download('nafasi_users.csv',csv); }
+
+/* ── OPPORTUNITIES ── */
+let filteredOpps = [...DATA.opportunities];
+function renderOpps(opps) {
+  const list = opps || filteredOpps;
+  const typeClasses = {Job:'badge-job',Scholarship:'badge-sch',Fellowship:'badge-fel',Internship:'badge-int',Consultancy:'badge-con','Research Funding':'badge-res'};
+  document.getElementById('oppsBody').innerHTML = list.map(o=>`
+    <tr>
+      <td><strong>${o.title}</strong></td>
+      <td>${o.org}</td>
+      <td><span class="badge ${typeClasses[o.type]||'badge-job'}">${o.type}</span></td>
+      <td style="color:var(--gray)">${o.location}</td>
+      <td style="color:var(--gray);font-size:11px">${o.source}</td>
+      <td style="color:var(--gray)">${o.scraped}</td>
+      <td><span class="badge ${o.remote==='Yes'?'badge-active':'badge-inactive'}">${o.remote==='Yes'?'Remote':'Onsite'}</span></td>
+      <td>
+        <div class="tbl-actions">
+          <button class="tbl-btn tbl-btn-blue" onclick="window.open('#','_blank')">View</button>
+          <button class="tbl-btn tbl-btn-red" onclick="deleteOpp(${o.id})">Remove</button>
+        </div>
+      </td>
+    </tr>`).join('');
+}
+function filterOpps(q) { filteredOpps=DATA.opportunities.filter(o=>o.title.toLowerCase().includes(q.toLowerCase())||o.org.toLowerCase().includes(q.toLowerCase())||o.source.toLowerCase().includes(q.toLowerCase())); renderOpps(); }
+function filterOppsByType(t) { filteredOpps=t?DATA.opportunities.filter(o=>o.type===t):[...DATA.opportunities]; renderOpps(); }
+function filterOppsByRemote(r) { filteredOpps=r?DATA.opportunities.filter(o=>o.remote===r):[...DATA.opportunities]; renderOpps(); }
+function deleteOpp(id) { if(!confirm('Remove this opportunity?')) return; const idx=DATA.opportunities.findIndex(o=>o.id===id); if(idx>-1){ DATA.opportunities.splice(idx,1); renderOpps(); } }
+function exportOpps() { const csv='Title,Organization,Type,Location,Source,Date\n'+DATA.opportunities.map(o=>`"${o.title}","${o.org}","${o.type}","${o.location}","${o.source}","${o.scraped}"`).join('\n'); download('nafasi_opportunities.csv',csv); }
+
+/* ── MATCHES ── */
+function renderMatches() {
+  const typeClasses={Job:'badge-job',Scholarship:'badge-sch',Fellowship:'badge-fel',Internship:'badge-int',Consultancy:'badge-con','Research Funding':'badge-res'};
+  document.getElementById('matchesBody').innerHTML = DATA.matches.map(m=>`
+    <tr>
+      <td><strong>${m.user}</strong></td>
+      <td>${m.opp}</td>
+      <td><span class="badge ${typeClasses[m.type]||'badge-job'}">${m.type}</span></td>
+      <td>
+        <div class="mini-score">
+          <div class="mini-bar"><div class="mini-fill" style="width:${m.score}%"></div></div>
+          <div class="mini-num">${m.score}</div>
+        </div>
+      </td>
+      <td><span class="badge ${m.score>=85?'badge-active':'badge-flagged'}">${m.verdict}</span></td>
+      <td><span class="badge badge-${m.sent==='Yes'?'active':'inactive'}">${m.sent==='Yes'?'Sent':'Pending'}</span></td>
+      <td>
+        <div class="tbl-actions">
+          <button class="tbl-btn tbl-btn-gold" onclick="alert('Match details would show here')">Details</button>
+        </div>
+      </td>
+    </tr>`).join('');
+}
+function exportMatches() { alert('Matches exported to CSV'); }
+
+/* ── REFERRALS ── */
+function renderReferrals() {
+  document.getElementById('referralGrid').innerHTML = DATA.referrals.map(r=>`
+    <div class="ref-card ${r.status==='placed'?'placed':''}">
+      <div class="ref-name">${r.name}</div>
+      <div class="ref-role" style="color:var(--gray)">${r.country} · <span class="badge badge-${r.status==='placed'?'placed':r.status==='contacted'?'active':'flagged'}">${r.status}</span></div>
+      <div class="ref-score">${r.score}</div>
+      <div class="ref-org">${r.role}</div>
+      <div class="ref-actions">
+        <button class="ref-btn ref-contact" onclick="contactOrg('${r.name}','${r.org}')">📧 Contact org</button>
+        <button class="ref-btn ref-placed" onclick="markPlaced(${r.id})">✓ Placed</button>
+      </div>
+    </div>`).join('');
+
+  document.getElementById('placementsBody').innerHTML = DATA.placements.map(p=>`
+    <tr>
+      <td><strong>${p.candidate}</strong></td>
+      <td>${p.org}</td>
+      <td>${p.role}</td>
+      <td><div class="mini-score"><div class="mini-bar"><div class="mini-fill" style="width:${p.score}%"></div></div><div class="mini-num">${p.score}</div></div></td>
+      <td><span class="badge badge-${p.status.toLowerCase()==='placed'?'placed':p.status.toLowerCase()==='referred'?'flagged':'active'}">${p.status}</span></td>
+      <td style="color:var(--gold);font-weight:600">${p.fee}</td>
+      <td style="color:var(--gray)">${p.date}</td>
+    </tr>`).join('');
+}
+
+function contactOrg(name,org) {
+  const subject=encodeURIComponent(`Interpreter/Candidate Referral — ${name}`);
+  const body=encodeURIComponent(`Dear ${org} team,\n\nI am writing to refer ${name}, a highly qualified candidate from our Nafasi.jobs platform who scored ${DATA.referrals.find(r=>r.name===name)?.score}/100 on the ${DATA.referrals.find(r=>r.name===name)?.role} vacancy.\n\nPlease let me know if you would like their full profile.\n\nBest regards,\nZakaria Abdi Ibrahim\nNafasi.jobs`);
+  window.open(`mailto:?subject=${subject}&body=${body}`);
+  addLog('📧',`Referral email drafted for <strong>${name}</strong> to ${org}`);
+}
+
+function markPlaced(id) {
+  const r=DATA.referrals.find(x=>x.id===id);
+  if(!r) return;
+  const fee=prompt(`Placement fee for ${r.name} ($):`) || '500';
+  DATA.placements.push({candidate:r.name,org:r.org,role:r.role,score:r.score,status:'Placed',fee:'$'+fee,date:new Date().toISOString().slice(0,10)});
+  r.status='placed';
+  addLog('🌟',`<strong>${r.name}</strong> marked as placed at ${r.org} — fee: $${fee}`);
+  renderReferrals();
+  updateStats();
+  alert(`${r.name} marked as placed! Revenue updated.`);
+}
+
+/* ── AFFILIATE ── */
+function renderAffiliate() {
+  document.getElementById('affiliateRows').innerHTML = DATA.affiliate.map(a=>`
+    <div class="aff-row">
+      <div class="aff-name">${a.name}</div>
+      <div class="aff-clicks">${a.clicks}</div>
+      <div class="aff-conv">${a.enrolled}</div>
+      <div class="aff-earn">${a.earned}</div>
+      <div class="aff-bar"><div class="aff-bar-fill" style="width:${a.rate}%"></div></div>
+    </div>`).join('');
+}
+
+function updateRevenue() {}
+
+/* ── LOGS ── */
+function renderLogs() {
+  document.getElementById('fullLog').innerHTML = DATA.logs.map(l=>`
+    <div class="log-item">
+      <div class="log-time">${l.time}</div>
+      <div class="log-icon">${l.icon}</div>
+      <div class="log-text">${l.text}</div>
+    </div>`).join('');
+}
+
+function addLog(icon,text) {
+  const now=new Date();
+  const time=now.getHours()+':'+String(now.getMinutes()).padStart(2,'0');
+  DATA.logs.unshift({time,icon,text});
+  renderLogs();
+  document.getElementById('recentLog').innerHTML=DATA.logs.slice(0,5).map(l=>`<div class="log-item"><div class="log-time">${l.time}</div><div class="log-icon">${l.icon}</div><div class="log-text">${l.text}</div></div>`).join('');
+}
+
+function clearLogs() { if(confirm('Clear all logs?')){ DATA.logs=[]; renderLogs(); } }
+
+/* ── MODAL ── */
+let currentModal='';
+function openModal(type) {
+  currentModal=type;
+  const titles={addUser:'Add user',flagCandidate:'Flag candidate',addOpp:'Add opportunity manually'};
+  const bodies={
+    addUser:`<div class="modal-field"><label class="modal-label">Full name</label><input class="modal-inp" placeholder="Full name" id="m-name"></div><div class="modal-field"><label class="modal-label">Email</label><input class="modal-inp" type="email" placeholder="email@example.com" id="m-email"></div><div class="modal-field"><label class="modal-label">Country</label><input class="modal-inp" placeholder="Country" id="m-country"></div><div class="modal-field"><label class="modal-label">CV summary / skills</label><textarea class="modal-inp modal-ta" placeholder="Education, skills, languages..." id="m-cv"></textarea></div>`,
+    flagCandidate:`<div class="modal-field"><label class="modal-label">Candidate name</label><input class="modal-inp" placeholder="Full name" id="m-cname"></div><div class="modal-field"><label class="modal-label">Email</label><input class="modal-inp" placeholder="email" id="m-cemail"></div><div class="modal-field"><label class="modal-label">Score</label><input class="modal-inp" type="number" placeholder="Match score 0-100" id="m-cscore"></div><div class="modal-field"><label class="modal-label">Role matched</label><input class="modal-inp" placeholder="Job title — Organization" id="m-crole"></div>`,
+    addOpp:`<div class="modal-field"><label class="modal-label">Title</label><input class="modal-inp" placeholder="Opportunity title" id="m-otitle"></div><div class="modal-field"><label class="modal-label">Organization</label><input class="modal-inp" placeholder="Organization name" id="m-oorg"></div><div class="modal-field"><label class="modal-label">Type</label><select class="modal-inp" id="m-otype"><option>Job</option><option>Scholarship</option><option>Fellowship</option><option>Internship</option><option>Consultancy</option><option>Research Funding</option></select></div><div class="modal-field"><label class="modal-label">URL</label><input class="modal-inp" placeholder="https://..." id="m-ourl"></div>`
+  };
+  document.getElementById('modalTitle').textContent=titles[type]||type;
+  document.getElementById('modalBody').innerHTML=bodies[type]||'';
+  document.getElementById('modalOverlay').classList.add('show');
+}
+
+function closeModal() { document.getElementById('modalOverlay').classList.remove('show'); }
+
+function modalSave() {
+  if(currentModal==='addUser'){
+    const name=document.getElementById('m-name')?.value;
+    const email=document.getElementById('m-email')?.value;
+    const country=document.getElementById('m-country')?.value;
+    if(!name||!email){ alert('Name and email required'); return; }
+    DATA.users.push({id:Date.now(),name,email,country:country||'Unknown',score:65,looking:'Jobs',joined:new Date().toISOString().slice(0,10),status:'active',matches:0});
+    renderUsers();
+    addLog('👤',`New user added manually — <strong>${name}</strong>`);
+    updateStats();
+    closeModal();
+  } else if(currentModal==='flagCandidate'){
+    const name=document.getElementById('m-cname')?.value;
+    const email=document.getElementById('m-cemail')?.value;
+    const score=document.getElementById('m-cscore')?.value;
+    const role=document.getElementById('m-crole')?.value;
+    if(!name){ alert('Name required'); return; }
+    DATA.referrals.push({id:Date.now(),name,email:email||'',country:'Unknown',score:parseInt(score)||85,role:role||'TBD',org:'TBD',status:'flagged'});
+    renderReferrals();
+    addLog('⭐',`<strong>${name}</strong> manually flagged as referral candidate`);
+    closeModal();
+  } else if(currentModal==='addOpp'){
+    const title=document.getElementById('m-otitle')?.value;
+    const org=document.getElementById('m-oorg')?.value;
+    const type=document.getElementById('m-otype')?.value;
+    if(!title){ alert('Title required'); return; }
+    DATA.opportunities.push({id:Date.now(),title,org:org||'Unknown',type,location:'Various',source:'Manual',scraped:new Date().toISOString().slice(0,10),remote:'No'});
+    renderOpps();
+    addLog('🌍',`Opportunity added manually — <strong>${title}</strong>`);
+    updateStats();
+    closeModal();
+  }
+}
+
+/* ── PANEL SWITCH ── */
+const panelTitles={overview:'Dashboard',scraper:'Scraper Status',users:'Users',referrals:'Referral Agency',opportunities:'Opportunities',matches:'Matches Sent',affiliate:'Affiliate Links',revenue:'Revenue',logs:'Activity Log',settings:'Settings'};
+
+function show(id,el) {
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.sb-item').forEach(i=>i.classList.remove('active'));
+  document.getElementById('panel-'+id).classList.add('active');
+  if(el) el.classList.add('active');
+  document.getElementById('topbarTitle').textContent=panelTitles[id]||id;
+}
+
+/* ── SETTINGS ── */
+function saveSettings() { addLog('⚙️','Settings saved'); alert('Settings saved successfully.'); }
+
+/* ── UTILS ── */
+function download(filename,content) {
+  const a=document.createElement('a');
+  a.href='data:text/csv;charset=utf-8,'+encodeURIComponent(content);
+  a.download=filename;
+  a.click();
+}
+</script>
+</body>
+</html>

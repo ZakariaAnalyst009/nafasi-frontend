@@ -1,0 +1,1006 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nafasi.jobs — My Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --ink:#0a0f1e;--ink2:#141929;--ink3:#1e2640;
+  --gold:#c9a84c;--gold2:#f0d68a;
+  --white:#fff;--off:#f5f3ee;
+  --gray:#7a8194;--lgray:#b0b8cc;
+  --green:#1a7a5e;--green2:#d0ede6;
+  --blue:#1e40af;--blue2:#dbeafe;
+  --red:#dc2626;--red2:#fee2e2;
+  --amber:#d97706;--amber2:#fef3c7;
+  --border:rgba(201,168,76,0.15);
+  --borderw:rgba(255,255,255,0.07);
+  --sidebar:240px;
+}
+html{scroll-behavior:smooth}
+body{font-family:'IBM Plex Sans',sans-serif;background:var(--off);color:var(--ink);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+::-webkit-scrollbar{width:3px}
+::-webkit-scrollbar-thumb{background:var(--gold);border-radius:2px}
+
+/* ── SIDEBAR ── */
+.sidebar{position:fixed;top:0;left:0;bottom:0;width:var(--sidebar);background:var(--ink);border-right:1px solid var(--border);display:flex;flex-direction:column;z-index:50;overflow-y:auto}
+.sb-logo{padding:24px 20px 20px;border-bottom:1px solid var(--border)}
+.sb-logo a{font-family:'Playfair Display',serif;font-size:18px;font-weight:900;color:white;text-decoration:none;letter-spacing:-.5px}
+.sb-logo a span{color:var(--gold)}
+.sb-user{padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px}
+.sb-avatar{width:36px;height:36px;border-radius:8px;background:linear-gradient(135deg,var(--gold),#e8a020);display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:14px;font-weight:700;color:var(--ink);flex-shrink:0}
+.sb-user-info{min-width:0}
+.sb-name{font-size:13px;font-weight:600;color:white;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sb-country{font-size:11px;color:var(--gray);font-weight:300}
+.sb-score-row{padding:14px 20px;border-bottom:1px solid var(--border)}
+.sb-score-lbl{font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--gray);letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px}
+.sb-score-track{height:4px;background:rgba(255,255,255,.08);border-radius:2px;overflow:hidden}
+.sb-score-fill{height:100%;background:linear-gradient(90deg,var(--green),var(--gold));border-radius:2px}
+.sb-score-num{font-family:'Playfair Display',serif;font-size:22px;font-weight:700;color:var(--gold);margin-top:4px;line-height:1}
+.sb-score-sub{font-size:10px;color:var(--gray);margin-top:2px;font-weight:300}
+.sb-nav{flex:1;padding:16px 0}
+.sb-section{font-family:'IBM Plex Mono',monospace;font-size:9px;color:rgba(255,255,255,.25);letter-spacing:.15em;text-transform:uppercase;padding:0 20px 8px}
+.sb-link{display:flex;align-items:center;gap:10px;padding:10px 20px;font-size:13px;color:var(--lgray);cursor:pointer;transition:all .2s;border-left:2px solid transparent;font-weight:400;position:relative}
+.sb-link:hover{color:white;background:rgba(255,255,255,.03);border-left-color:rgba(201,168,76,.4)}
+.sb-link.active{color:white;background:rgba(201,168,76,.07);border-left-color:var(--gold)}
+.sb-link .icon{font-size:15px;width:20px;text-align:center;flex-shrink:0}
+.sb-badge{position:absolute;right:16px;background:var(--gold);color:var(--ink);font-size:10px;font-weight:700;padding:1px 6px;border-radius:100px;font-family:'IBM Plex Mono',monospace}
+.sb-footer{padding:16px 20px;border-top:1px solid var(--border)}
+.sb-footer a{font-size:11px;color:var(--gray);text-decoration:none;display:block;margin-bottom:6px;transition:color .2s}
+.sb-footer a:hover{color:var(--gold)}
+
+/* ── MAIN ── */
+.main{margin-left:var(--sidebar);min-height:100vh;display:flex;flex-direction:column}
+
+/* ── TOP BAR ── */
+.topbar{background:white;border-bottom:1px solid #e8e4dc;padding:0 32px;height:56px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:40}
+.topbar-title{font-family:'Playfair Display',serif;font-size:16px;font-weight:700;color:var(--ink);letter-spacing:-.3px}
+.topbar-right{display:flex;align-items:center;gap:12px}
+.topbar-date{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--gray)}
+.notif-btn{width:34px;height:34px;border-radius:8px;background:var(--off);border:1px solid #e8e4dc;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:14px;position:relative;transition:all .2s}
+.notif-btn:hover{border-color:var(--gold)}
+.notif-dot{position:absolute;top:6px;right:6px;width:6px;height:6px;background:var(--gold);border-radius:50%;border:1.5px solid white}
+
+/* ── CONTENT ── */
+.content{flex:1;padding:28px 32px}
+
+/* ── PANELS ── */
+.panel{display:none}
+.panel.active{display:block}
+
+/* ── STATS ROW ── */
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:24px}
+.stat-card{background:white;border:1px solid #e8e4dc;border-radius:10px;padding:18px 20px}
+.stat-n{font-family:'Playfair Display',serif;font-size:32px;font-weight:900;color:var(--ink);line-height:1}
+.stat-l{font-size:11px;color:var(--gray);margin-top:4px;font-weight:300;line-height:1.4}
+.stat-change{font-family:'IBM Plex Mono',monospace;font-size:10px;margin-top:8px;display:flex;align-items:center;gap:4px}
+.stat-change.up{color:var(--green)}
+.stat-change.neutral{color:var(--gray)}
+
+/* ── SECTION HEADER ── */
+.sec-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.sec-title{font-family:'Playfair Display',serif;font-size:18px;font-weight:700;color:var(--ink);letter-spacing:-.3px}
+.sec-sub{font-size:12px;color:var(--gray);font-weight:300;margin-top:2px}
+.sec-action{font-size:12px;color:var(--gold);cursor:pointer;font-weight:600;transition:color .2s;background:none;border:none;font-family:'IBM Plex Sans',sans-serif}
+.sec-action:hover{color:var(--ink)}
+
+/* ── FILTER BAR ── */
+.filter-bar{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap}
+.filt{padding:6px 14px;border:1.5px solid #e2e8f0;border-radius:100px;font-size:12px;color:var(--gray);cursor:pointer;transition:all .2s;background:white;font-weight:400}
+.filt:hover{border-color:var(--gold);color:var(--ink)}
+.filt.on{border-color:var(--gold);background:rgba(201,168,76,.1);color:var(--ink);font-weight:500}
+
+/* ── MATCH CARDS ── */
+.matches-grid{display:flex;flex-direction:column;gap:12px}
+.match-card{background:white;border:1px solid #e8e4dc;border-radius:12px;padding:20px;display:grid;grid-template-columns:1fr auto;gap:16px;align-items:start;transition:all .2s;cursor:pointer;border-left:4px solid transparent}
+.match-card:hover{box-shadow:0 4px 20px rgba(0,0,0,.06);transform:translateY(-1px)}
+.match-card.score-high{border-left-color:var(--green)}
+.match-card.score-mid{border-left-color:var(--gold)}
+.match-card.score-low{border-left-color:var(--amber)}
+.mc-type{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;margin-bottom:5px;display:flex;align-items:center;gap:7px}
+.mc-dot{width:6px;height:6px;border-radius:50%}
+.dot-job{background:var(--gold)}
+.dot-sch{background:#5b9cf6}
+.dot-fel{background:var(--green)}
+.dot-int{background:#a78bfa}
+.dot-con{background:#f97316}
+.dot-res{background:#ec4899}
+.mc-title{font-size:15px;font-weight:600;color:var(--ink);margin-bottom:4px;line-height:1.3}
+.mc-org{font-size:12px;color:var(--gray);margin-bottom:10px;font-weight:300}
+.mc-tags{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.mc-tag{padding:3px 9px;border-radius:100px;font-size:11px;background:var(--off);color:var(--gray);border:1px solid #e8e4dc;font-weight:400}
+.mc-actions{display:flex;gap:8px;align-items:center}
+.mc-btn{padding:7px 14px;border-radius:6px;font-size:12px;font-weight:600;cursor:pointer;transition:all .2s;font-family:'IBM Plex Sans',sans-serif;border:none}
+.mc-btn-primary{background:var(--ink);color:white}
+.mc-btn-primary:hover{background:var(--ink2)}
+.mc-btn-outline{background:transparent;border:1.5px solid #e2e8f0;color:var(--gray)}
+.mc-btn-outline:hover{border-color:var(--gold);color:var(--gold)}
+.mc-score-col{text-align:center;flex-shrink:0}
+.mc-score-n{font-family:'Playfair Display',serif;font-size:38px;font-weight:900;line-height:1}
+.score-high .mc-score-n{color:var(--green)}
+.score-mid .mc-score-n{color:var(--gold)}
+.score-low .mc-score-n{color:var(--amber)}
+.mc-score-l{font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--gray);letter-spacing:.08em;text-transform:uppercase;margin-top:2px}
+.mc-verdict{font-size:10px;font-weight:600;margin-top:6px;padding:2px 8px;border-radius:100px;display:inline-block}
+.verdict-strong{background:var(--green2);color:var(--green)}
+.verdict-good{background:var(--amber2);color:var(--amber)}
+.verdict-fair{background:var(--off);color:var(--gray)}
+
+/* ── MATCH DETAIL DRAWER ── */
+.drawer-overlay{position:fixed;inset:0;background:rgba(10,15,30,.5);z-index:100;display:none;backdrop-filter:blur(3px)}
+.drawer-overlay.show{display:block}
+.drawer{position:fixed;right:0;top:0;bottom:0;width:min(520px,100vw);background:white;z-index:101;overflow-y:auto;transform:translateX(100%);transition:transform .3s ease;box-shadow:-20px 0 60px rgba(0,0,0,.12)}
+.drawer.open{transform:translateX(0)}
+.drawer-head{background:var(--ink);padding:24px 24px 20px;position:sticky;top:0;z-index:2}
+.drawer-close{position:absolute;top:18px;right:18px;width:32px;height:32px;background:rgba(255,255,255,.1);border:none;border-radius:6px;cursor:pointer;color:white;font-size:16px;display:flex;align-items:center;justify-content:center;transition:background .2s}
+.drawer-close:hover{background:rgba(255,255,255,.2)}
+.drawer-type{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--gold);letter-spacing:.12em;text-transform:uppercase;margin-bottom:8px}
+.drawer-title{font-family:'Playfair Display',serif;font-size:20px;font-weight:700;color:white;line-height:1.2;margin-bottom:4px}
+.drawer-org{font-size:13px;color:rgba(255,255,255,.55);font-weight:300}
+.drawer-score-row{display:flex;align-items:center;gap:16px;margin-top:16px;padding-top:16px;border-top:1px solid rgba(255,255,255,.08)}
+.drawer-score-big{font-family:'Playfair Display',serif;font-size:48px;font-weight:900;color:var(--gold);line-height:1}
+.drawer-score-info{flex:1}
+.drawer-body{padding:24px}
+.drawer-section{margin-bottom:24px;padding-bottom:24px;border-bottom:1px solid var(--off)}
+.drawer-section:last-child{border-bottom:none}
+.drawer-section-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--ink);margin-bottom:12px;display:flex;align-items:center;gap:6px}
+.score-bars{display:flex;flex-direction:column;gap:8px}
+.score-bar-row{display:flex;align-items:center;gap:10px}
+.score-bar-lbl{font-size:11px;color:var(--gray);width:100px;flex-shrink:0}
+.score-bar-track{flex:1;height:4px;background:#f1f5f9;border-radius:2px;overflow:hidden}
+.score-bar-fill{height:100%;border-radius:2px;background:linear-gradient(90deg,var(--green),var(--gold))}
+.score-bar-pct{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--ink);width:32px;text-align:right;flex-shrink:0;font-weight:500}
+.strength-item{display:flex;gap:8px;margin-bottom:8px;font-size:13px;color:var(--ink);line-height:1.5}
+.strength-item::before{content:'✓';color:var(--green);font-weight:700;flex-shrink:0}
+.gap-item{display:flex;gap:8px;margin-bottom:8px;font-size:13px;color:var(--ink);line-height:1.5}
+.gap-item::before{content:'○';color:var(--amber);flex-shrink:0}
+.improve-item{background:rgba(201,168,76,.06);border-left:3px solid var(--gold);padding:10px 13px;border-radius:0 6px 6px 0;margin-bottom:8px;font-size:12px;color:var(--ink);line-height:1.6}
+.training-item{display:flex;gap:12px;padding:12px;background:var(--off);border-radius:8px;margin-bottom:8px;align-items:flex-start}
+.training-logo{font-size:20px;flex-shrink:0;width:32px;text-align:center}
+.training-info h5{font-size:13px;font-weight:600;color:var(--ink);margin-bottom:2px}
+.training-info p{font-size:11px;color:var(--gray);font-weight:300}
+.training-link{display:inline-flex;align-items:center;gap:4px;margin-top:5px;font-size:11px;font-weight:600;color:var(--green);text-decoration:none}
+.apply-btn{width:100%;background:var(--ink);color:white;border:none;padding:14px;border-radius:8px;font-family:'IBM Plex Sans',sans-serif;font-size:14px;font-weight:600;cursor:pointer;transition:all .2s;margin-bottom:8px}
+.apply-btn:hover{background:var(--ink2)}
+.track-btn{width:100%;background:transparent;color:var(--ink);border:1.5px solid #e2e8f0;padding:12px;border-radius:8px;font-family:'IBM Plex Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;transition:all .2s}
+.track-btn:hover{border-color:var(--gold);color:var(--gold)}
+
+/* ── APPLICATION TRACKER ── */
+.tracker-cols{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.tracker-col{background:white;border:1px solid #e8e4dc;border-radius:10px;overflow:hidden}
+.tracker-col-head{padding:12px 16px;border-bottom:1px solid #e8e4dc;display:flex;align-items:center;justify-content:space-between}
+.tracker-col-title{font-size:12px;font-weight:600;color:var(--ink);display:flex;align-items:center;gap:7px}
+.tracker-count{font-family:'IBM Plex Mono',monospace;font-size:10px;background:var(--off);padding:2px 7px;border-radius:100px;color:var(--gray);font-weight:500}
+.tracker-items{padding:10px;min-height:200px;display:flex;flex-direction:column;gap:8px}
+.tracker-item{background:var(--off);border-radius:7px;padding:12px;cursor:grab;transition:all .2s;border:1px solid #e8e4dc}
+.tracker-item:hover{box-shadow:0 2px 10px rgba(0,0,0,.06);border-color:var(--gold)}
+.ti-type{font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--gray);text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px}
+.ti-title{font-size:12px;font-weight:600;color:var(--ink);line-height:1.3;margin-bottom:3px}
+.ti-org{font-size:11px;color:var(--gray);font-weight:300}
+.ti-deadline{font-size:10px;color:var(--amber);margin-top:5px;font-weight:500}
+.col-saved .tracker-col-title{color:var(--gray)}
+.col-applied .tracker-col-title{color:var(--blue)}
+.col-interview .tracker-col-title{color:var(--green)}
+.col-offer .tracker-col-title{color:var(--gold)}
+.tracker-add{display:flex;align-items:center;justify-content:center;gap:6px;padding:10px;border:1.5px dashed #e2e8f0;border-radius:7px;font-size:12px;color:var(--lgray);cursor:pointer;transition:all .2s;margin:0 10px 10px}
+.tracker-add:hover{border-color:var(--gold);color:var(--gold)}
+
+/* ── NAFASI AI CHAT ── */
+.chat-layout{display:grid;grid-template-columns:1fr 340px;gap:20px;height:calc(100vh - 140px)}
+.chat-main{background:white;border:1px solid #e8e4dc;border-radius:12px;display:flex;flex-direction:column;overflow:hidden}
+.chat-head{background:var(--ink);padding:16px 20px;display:flex;align-items:center;gap:12px}
+.chat-av{width:36px;height:36px;background:linear-gradient(135deg,var(--gold),#e8a020);border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:14px;font-weight:700;color:var(--ink);flex-shrink:0}
+.chat-head-name{font-weight:600;font-size:13px;color:white}
+.chat-head-status{font-family:'IBM Plex Mono',monospace;font-size:10px;color:#34d399}
+.chat-msgs{flex:1;overflow-y:auto;padding:20px;display:flex;flex-direction:column;gap:12px;min-height:0}
+.chat-msgs::-webkit-scrollbar{width:2px}
+.chat-msgs::-webkit-scrollbar-thumb{background:var(--gold)}
+.msg{max-width:85%;padding:12px 15px;border-radius:10px;font-size:13px;line-height:1.6}
+.msg.bot{background:var(--off);border:1px solid #e8e4dc;color:var(--ink);align-self:flex-start;border-bottom-left-radius:3px}
+.msg.user{background:var(--ink);color:rgba(255,255,255,.88);align-self:flex-end;border-bottom-right-radius:3px}
+.typing{display:flex;gap:4px;padding:12px 15px;background:var(--off);border:1px solid #e8e4dc;border-radius:10px;border-bottom-left-radius:3px;align-self:flex-start;align-items:center}
+.typing span{width:6px;height:6px;background:var(--gold);border-radius:50%;opacity:.4;animation:tdot 1.4s infinite}
+.typing span:nth-child(2){animation-delay:.2s}
+.typing span:nth-child(3){animation-delay:.4s}
+@keyframes tdot{0%,60%,100%{transform:translateY(0);opacity:.4}30%{transform:translateY(-5px);opacity:1}}
+.chat-inp-row{border-top:1px solid #e8e4dc;padding:14px 16px;display:flex;gap:10px}
+.chat-inp{flex:1;background:var(--off);border:1.5px solid #e8e4dc;border-radius:100px;padding:10px 16px;color:var(--ink);font-size:13px;font-family:'IBM Plex Sans',sans-serif;outline:none;transition:border-color .2s}
+.chat-inp:focus{border-color:var(--gold);background:white}
+.chat-inp::placeholder{color:#94a3b8}
+.chat-send{width:38px;height:38px;background:var(--ink);border:none;border-radius:50%;cursor:pointer;color:white;font-size:14px;display:flex;align-items:center;justify-content:center;transition:all .2s;flex-shrink:0}
+.chat-send:hover{background:var(--gold);color:var(--ink)}
+.chat-sidebar{display:flex;flex-direction:column;gap:14px}
+.chat-quick{background:white;border:1px solid #e8e4dc;border-radius:12px;padding:18px}
+.chat-quick-title{font-size:12px;font-weight:700;color:var(--ink);text-transform:uppercase;letter-spacing:.06em;margin-bottom:12px}
+.quick-btn{display:block;width:100%;text-align:left;padding:10px 12px;background:var(--off);border:1px solid #e8e4dc;border-radius:7px;font-size:12px;color:var(--ink);cursor:pointer;transition:all .2s;margin-bottom:7px;font-family:'IBM Plex Sans',sans-serif;line-height:1.4}
+.quick-btn:hover{border-color:var(--gold);background:rgba(201,168,76,.05)}
+.chat-tips{background:var(--ink);border-radius:12px;padding:18px}
+.chat-tips-title{font-size:11px;font-weight:600;color:var(--gold);text-transform:uppercase;letter-spacing:.08em;margin-bottom:12px}
+.tip{font-size:12px;color:rgba(255,255,255,.55);line-height:1.6;margin-bottom:8px;padding-left:12px;border-left:2px solid rgba(201,168,76,.3);font-weight:300}
+
+/* ── PROFILE ── */
+.profile-grid{display:grid;grid-template-columns:300px 1fr;gap:20px}
+.profile-card{background:white;border:1px solid #e8e4dc;border-radius:12px;overflow:hidden}
+.profile-head{background:var(--ink);padding:28px 24px;text-align:center}
+.profile-avatar-big{width:64px;height:64px;border-radius:14px;background:linear-gradient(135deg,var(--gold),#e8a020);display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:26px;font-weight:700;color:var(--ink);margin:0 auto 14px}
+.profile-name{font-family:'Playfair Display',serif;font-size:18px;font-weight:700;color:white;letter-spacing:-.3px;margin-bottom:4px}
+.profile-role{font-size:12px;color:rgba(255,255,255,.5);font-weight:300}
+.profile-score-ring{margin:16px auto 0;width:70px;height:70px;border-radius:50%;border:4px solid rgba(201,168,76,.25);display:flex;flex-direction:column;align-items:center;justify-content:center}
+.profile-score-ring .score-n{font-family:'Playfair Display',serif;font-size:22px;font-weight:900;color:var(--gold);line-height:1}
+.profile-score-ring .score-l{font-size:9px;color:rgba(255,255,255,.35);font-family:'IBM Plex Mono',monospace}
+.profile-body{padding:20px}
+.profile-field{margin-bottom:14px;padding-bottom:14px;border-bottom:1px solid var(--off)}
+.profile-field:last-child{border-bottom:none;margin-bottom:0}
+.pf-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--gray);margin-bottom:5px}
+.pf-value{font-size:13px;color:var(--ink);line-height:1.5}
+.pf-tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:4px}
+.pf-tag{background:var(--off);border:1px solid #e8e4dc;padding:3px 9px;border-radius:100px;font-size:11px;color:var(--ink)}
+.profile-edit-btn{width:100%;background:var(--off);border:1.5px solid #e2e8f0;color:var(--ink);padding:10px;border-radius:7px;font-family:'IBM Plex Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;transition:all .2s;margin-top:16px}
+.profile-edit-btn:hover{border-color:var(--gold);color:var(--gold)}
+.profile-right{display:flex;flex-direction:column;gap:14px}
+.profile-section{background:white;border:1px solid #e8e4dc;border-radius:12px;padding:20px}
+.ps-title{font-size:13px;font-weight:700;color:var(--ink);margin-bottom:14px;display:flex;align-items:center;justify-content:space-between}
+.ps-edit{font-size:11px;color:var(--gold);cursor:pointer;font-weight:600}
+.skill-grid{display:flex;flex-wrap:wrap;gap:7px}
+.skill-chip{padding:5px 12px;border-radius:100px;font-size:12px;border:1.5px solid #e2e8f0;color:var(--ink);background:var(--off)}
+.skill-chip.verified{border-color:var(--green);background:var(--green2);color:var(--green)}
+.lang-row{display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--off)}
+.lang-row:last-child{border-bottom:none}
+.lang-name{font-size:13px;font-weight:500;color:var(--ink)}
+.lang-level{font-size:11px;color:var(--gray)}
+
+/* ── TRAINING ── */
+.training-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+.training-card{background:white;border:1px solid #e8e4dc;border-radius:12px;padding:20px;position:relative;overflow:hidden}
+.training-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--green),var(--gold))}
+.tc-logo{font-size:28px;margin-bottom:12px}
+.tc-provider{font-size:10px;font-weight:600;color:var(--gray);text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px}
+.tc-title{font-size:14px;font-weight:600;color:var(--ink);margin-bottom:6px;line-height:1.3}
+.tc-meta{font-size:12px;color:var(--gray);font-weight:300;margin-bottom:12px}
+.tc-why{font-size:12px;color:var(--amber);background:var(--amber2);padding:6px 10px;border-radius:6px;margin-bottom:12px;line-height:1.5}
+.tc-btn{display:inline-flex;align-items:center;gap:5px;background:var(--ink);color:white;padding:8px 16px;border-radius:6px;font-size:12px;font-weight:600;text-decoration:none;transition:background .2s}
+.tc-btn:hover{background:var(--ink2)}
+.tc-free{background:var(--green2);color:var(--green)}
+
+/* ── EMPTY STATE ── */
+.empty{text-align:center;padding:60px 20px;color:var(--gray)}
+.empty-icon{font-size:48px;margin-bottom:16px;opacity:.5}
+.empty-title{font-family:'Playfair Display',serif;font-size:20px;font-weight:700;color:var(--ink);margin-bottom:8px}
+.empty-text{font-size:14px;line-height:1.7;font-weight:300}
+
+/* ── RESPONSIVE ── */
+@media(max-width:1024px){
+  :root{--sidebar:200px}
+  .stats-row{grid-template-columns:repeat(2,1fr)}
+  .tracker-cols{grid-template-columns:repeat(2,1fr)}
+  .chat-layout{grid-template-columns:1fr}
+  .chat-sidebar{display:none}
+  .profile-grid{grid-template-columns:1fr}
+  .training-grid{grid-template-columns:1fr}
+}
+@media(max-width:768px){
+  .sidebar{transform:translateX(-100%);transition:transform .3s}
+  .sidebar.open{transform:translateX(0)}
+  .main{margin-left:0}
+  .content{padding:20px 16px}
+  .stats-row{grid-template-columns:repeat(2,1fr)}
+}
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<aside class="sidebar" id="sidebar">
+  <div class="sb-logo">
+    <a href="index.html">Nafasi<span>.jobs</span></a>
+  </div>
+  <div class="sb-user">
+    <div class="sb-avatar" id="sbAvatar">Z</div>
+    <div class="sb-user-info">
+      <div class="sb-name" id="sbName">Zakaria Ibrahim</div>
+      <div class="sb-country" id="sbCountry">Kenya 🇰🇪</div>
+    </div>
+  </div>
+  <div class="sb-score-row">
+    <div class="sb-score-lbl">Profile strength</div>
+    <div class="sb-score-track"><div class="sb-score-fill" id="sbScoreFill" style="width:78%"></div></div>
+    <div class="sb-score-num" id="sbScoreNum">78</div>
+    <div class="sb-score-sub">out of 100 — Good profile</div>
+  </div>
+  <nav class="sb-nav">
+    <div class="sb-section">Main</div>
+    <div class="sb-link active" onclick="showPanel('matches')"><span class="icon">🎯</span> My Matches <span class="sb-badge" id="matchBadge">5</span></div>
+    <div class="sb-link" onclick="showPanel('tracker')"><span class="icon">📋</span> Applications</div>
+    <div class="sb-link" onclick="showPanel('chat')"><span class="icon">✨</span> Nafasi AI</div>
+    <div class="sb-section" style="margin-top:16px">Profile</div>
+    <div class="sb-link" onclick="showPanel('profile')"><span class="icon">👤</span> My Profile</div>
+    <div class="sb-link" onclick="showPanel('training')"><span class="icon">📚</span> Training</div>
+    <div class="sb-link" onclick="showPanel('settings')"><span class="icon">⚙️</span> Settings</div>
+  </nav>
+  <div class="sb-footer">
+    <a href="index.html">← Back to Nafasi.jobs</a>
+    <a href="mailto:hellonafasijobs@gmail.com">Get help</a>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<main class="main">
+
+  <!-- TOP BAR -->
+  <div class="topbar">
+    <div>
+      <div class="topbar-title" id="topbarTitle">My Matches</div>
+    </div>
+    <div class="topbar-right">
+      <div class="topbar-date" id="topbarDate"></div>
+      <div class="notif-btn">🔔<div class="notif-dot"></div></div>
+    </div>
+  </div>
+
+  <!-- CONTENT -->
+  <div class="content">
+
+    <!-- ── MATCHES PANEL ── -->
+    <div class="panel active" id="panel-matches">
+      <div class="stats-row">
+        <div class="stat-card">
+          <div class="stat-n" id="statTotal">5</div>
+          <div class="stat-l">New matches today</div>
+          <div class="stat-change up">↑ From 100+ sources</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-n" id="statTop">94</div>
+          <div class="stat-l">Highest match score</div>
+          <div class="stat-change up">↑ Strong match</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-n">3</div>
+          <div class="stat-l">Applications in progress</div>
+          <div class="stat-change neutral">Across all types</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-n">78</div>
+          <div class="stat-l">Profile score</div>
+          <div class="stat-change up">↑ Add skills to improve</div>
+        </div>
+      </div>
+
+      <div class="sec-hd">
+        <div>
+          <div class="sec-title">Today's matches</div>
+          <div class="sec-sub">Sorted by match score — only opportunities scoring 70+ shown</div>
+        </div>
+        <button class="sec-action" onclick="refreshMatches()">↻ Refresh</button>
+      </div>
+
+      <div class="filter-bar">
+        <div class="filt on" onclick="filterMatches('all',this)">All types</div>
+        <div class="filt" onclick="filterMatches('Job',this)">Jobs</div>
+        <div class="filt" onclick="filterMatches('Scholarship',this)">Scholarships</div>
+        <div class="filt" onclick="filterMatches('Fellowship',this)">Fellowships</div>
+        <div class="filt" onclick="filterMatches('Internship',this)">Internships</div>
+        <div class="filt" onclick="filterMatches('Consultancy',this)">Consultancies</div>
+        <div class="filt" onclick="filterMatches('Research Funding',this)">Research</div>
+      </div>
+
+      <div class="matches-grid" id="matchesGrid"></div>
+    </div>
+
+    <!-- ── TRACKER PANEL ── -->
+    <div class="panel" id="panel-tracker">
+      <div class="sec-hd" style="margin-bottom:20px">
+        <div>
+          <div class="sec-title">Application tracker</div>
+          <div class="sec-sub">Drag cards between columns to update status</div>
+        </div>
+        <button class="sec-action" onclick="addTrackerItem()">+ Add manually</button>
+      </div>
+      <div class="tracker-cols">
+        <div class="tracker-col col-saved">
+          <div class="tracker-col-head">
+            <div class="tracker-col-title">💾 Saved <span class="tracker-count" id="cnt-saved">0</span></div>
+          </div>
+          <div class="tracker-items" id="col-saved" ondragover="allowDrop(event)" ondrop="drop(event,'saved')"></div>
+          <div class="tracker-add" onclick="addToCol('saved')">+ Save opportunity</div>
+        </div>
+        <div class="tracker-col col-applied">
+          <div class="tracker-col-head">
+            <div class="tracker-col-title">📤 Applied <span class="tracker-count" id="cnt-applied">0</span></div>
+          </div>
+          <div class="tracker-items" id="col-applied" ondragover="allowDrop(event)" ondrop="drop(event,'applied')"></div>
+          <div class="tracker-add" onclick="addToCol('applied')">+ Mark as applied</div>
+        </div>
+        <div class="tracker-col col-interview">
+          <div class="tracker-col-head">
+            <div class="tracker-col-title">🗣️ Interview <span class="tracker-count" id="cnt-interview">0</span></div>
+          </div>
+          <div class="tracker-items" id="col-interview" ondragover="allowDrop(event)" ondrop="drop(event,'interview')"></div>
+          <div class="tracker-add" onclick="addToCol('interview')">+ Got interview</div>
+        </div>
+        <div class="tracker-col col-offer">
+          <div class="tracker-col-head">
+            <div class="tracker-col-title">🌟 Offer <span class="tracker-count" id="cnt-offer">0</span></div>
+          </div>
+          <div class="tracker-items" id="col-offer" ondragover="allowDrop(event)" ondrop="drop(event,'offer')"></div>
+          <div class="tracker-add" onclick="addToCol('offer')">+ Got offer!</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── CHAT PANEL ── -->
+    <div class="panel" id="panel-chat">
+      <div class="chat-layout">
+        <div class="chat-main">
+          <div class="chat-head">
+            <div class="chat-av">N</div>
+            <div>
+              <div class="chat-head-name">Nafasi AI</div>
+              <div class="chat-head-status">● Online — powered by Claude</div>
+            </div>
+          </div>
+          <div class="chat-msgs" id="chatMsgs">
+            <div class="msg bot">Hello! I am Nafasi AI. I know your profile and your matches. I can help you check eligibility for any opportunity, write cover letters, identify skill gaps or give you honest career strategy. What do you need today?</div>
+          </div>
+          <div class="chat-inp-row">
+            <input class="chat-inp" id="chatInput" placeholder="Ask me anything about your matches or career..." onkeypress="handleChatKey(event)">
+            <button class="chat-send" onclick="sendChat()">➤</button>
+          </div>
+        </div>
+        <div class="chat-sidebar">
+          <div class="chat-quick">
+            <div class="chat-quick-title">Quick prompts</div>
+            <button class="quick-btn" onclick="quickPrompt('Write a cover letter for my top match')">✍️ Write a cover letter for my top match</button>
+            <button class="quick-btn" onclick="quickPrompt('What skills should I add to improve my score to 90?')">📈 How do I get to a 90 score?</button>
+            <button class="quick-btn" onclick="quickPrompt('Am I eligible for the Government of Ireland Scholarship?')">🎓 Check my scholarship eligibility</button>
+            <button class="quick-btn" onclick="quickPrompt('What are the best opportunities for someone with my background?')">🌍 Best opportunities for my profile</button>
+            <button class="quick-btn" onclick="quickPrompt('Help me prepare for a UNHCR interview')">💼 Prepare for a UNHCR interview</button>
+          </div>
+          <div class="chat-tips">
+            <div class="chat-tips-title">Tips for better results</div>
+            <div class="tip">Paste a job description and ask Nafasi to score you against it</div>
+            <div class="tip">Ask for a cover letter — tell Nafasi the word limit and tone</div>
+            <div class="tip">Share your concerns honestly — Nafasi gives you real advice not just encouragement</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── PROFILE PANEL ── -->
+    <div class="panel" id="panel-profile">
+      <div class="profile-grid">
+        <div>
+          <div class="profile-card">
+            <div class="profile-head">
+              <div class="profile-avatar-big" id="profileAvatar">Z</div>
+              <div class="profile-name" id="profileName">Zakaria Abdi Ibrahim</div>
+              <div class="profile-role" id="profileRole">Village Administrator · Interpreter</div>
+              <div class="profile-score-ring">
+                <div class="score-n" id="profileScore">78</div>
+                <div class="score-l">SCORE</div>
+              </div>
+            </div>
+            <div class="profile-body">
+              <div class="profile-field">
+                <div class="pf-label">Country</div>
+                <div class="pf-value" id="pf-country">Kenya 🇰🇪</div>
+              </div>
+              <div class="profile-field">
+                <div class="pf-label">Email</div>
+                <div class="pf-value" id="pf-email">zakariabdi40@gmail.com</div>
+              </div>
+              <div class="profile-field">
+                <div class="pf-label">Experience</div>
+                <div class="pf-value" id="pf-exp">3 — 5 years</div>
+              </div>
+              <div class="profile-field">
+                <div class="pf-label">Looking for</div>
+                <div class="pf-tags" id="pf-looking">
+                  <span class="pf-tag">Jobs</span>
+                  <span class="pf-tag">Scholarships</span>
+                  <span class="pf-tag">Fellowships</span>
+                </div>
+              </div>
+              <div class="profile-field">
+                <div class="pf-label">Locations</div>
+                <div class="pf-value" id="pf-locs">East Africa · Remote · International</div>
+              </div>
+              <div class="profile-field">
+                <div class="pf-label">Min match score</div>
+                <div class="pf-value">70 and above</div>
+              </div>
+            </div>
+            <div style="padding:0 20px 20px">
+              <button class="profile-edit-btn" onclick="showPanel('settings')">Edit profile →</button>
+            </div>
+          </div>
+        </div>
+        <div class="profile-right">
+          <div class="profile-section">
+            <div class="ps-title">Education <span class="ps-edit" onclick="editField('education')">Edit</span></div>
+            <div id="pf-edu-display" style="font-size:14px;color:var(--ink);line-height:1.6">BSc Development Studies — Mount Kenya University</div>
+          </div>
+          <div class="profile-section">
+            <div class="ps-title">Skills <span class="ps-edit" onclick="editField('skills')">Edit</span></div>
+            <div class="skill-grid" id="skillGrid">
+              <span class="skill-chip verified">MEAL</span>
+              <span class="skill-chip verified">Community Development</span>
+              <span class="skill-chip verified">Data Analysis</span>
+              <span class="skill-chip">Report Writing</span>
+              <span class="skill-chip">Project Management</span>
+              <span class="skill-chip">Excel</span>
+              <span class="skill-chip">KoBoToolbox</span>
+            </div>
+            <div style="margin-top:10px;font-size:11px;color:var(--gray);font-weight:300">Green chips = verified from your CV. Add more skills to improve your match score.</div>
+          </div>
+          <div class="profile-section">
+            <div class="ps-title">Languages <span class="ps-edit" onclick="editField('languages')">Edit</span></div>
+            <div id="langList">
+              <div class="lang-row"><div class="lang-name">Somali</div><div class="lang-level">Native</div></div>
+              <div class="lang-row"><div class="lang-name">English</div><div class="lang-level">Fluent</div></div>
+              <div class="lang-row"><div class="lang-name">Swahili</div><div class="lang-level">Fluent</div></div>
+            </div>
+          </div>
+          <div class="profile-section">
+            <div class="ps-title">How to reach score 90+</div>
+            <div style="display:flex;flex-direction:column;gap:8px">
+              <div class="improve-item">Add KoBoToolbox and STATA to your skills — required in most MEAL roles</div>
+              <div class="improve-item">Upload a sample report or field assessment to your portfolio</div>
+              <div class="improve-item">Complete a MEAL certification — AMREF offers one online for KES 15,000</div>
+              <div class="improve-item">Add your LinkedIn profile URL for employer verification</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── TRAINING PANEL ── -->
+    <div class="panel" id="panel-training">
+      <div class="sec-hd" style="margin-bottom:20px">
+        <div>
+          <div class="sec-title">Recommended training</div>
+          <div class="sec-sub">Based on gaps in your profile — completing these raises your match scores</div>
+        </div>
+      </div>
+      <div class="training-grid" id="trainingGrid"></div>
+    </div>
+
+    <!-- ── SETTINGS PANEL ── -->
+    <div class="panel" id="panel-settings">
+      <div style="max-width:600px">
+        <div class="sec-title" style="margin-bottom:20px">Account settings</div>
+        <div class="profile-card">
+          <div class="profile-body">
+            <div class="profile-field">
+              <div class="pf-label">Full name</div>
+              <input style="width:100%;padding:10px 12px;border:1.5px solid #e2e8f0;border-radius:7px;font-size:14px;font-family:'IBM Plex Sans',sans-serif;outline:none;color:var(--ink)" value="Zakaria Abdi Ibrahim" id="set-name">
+            </div>
+            <div class="profile-field">
+              <div class="pf-label">Email</div>
+              <input style="width:100%;padding:10px 12px;border:1.5px solid #e2e8f0;border-radius:7px;font-size:14px;font-family:'IBM Plex Sans',sans-serif;outline:none;color:var(--ink)" value="zakariabdi40@gmail.com" id="set-email">
+            </div>
+            <div class="profile-field">
+              <div class="pf-label">Minimum match score for alerts</div>
+              <select style="width:100%;padding:10px 12px;border:1.5px solid #e2e8f0;border-radius:7px;font-size:14px;font-family:'IBM Plex Sans',sans-serif;outline:none;color:var(--ink);background:#f8fafc">
+                <option>65 and above — include more opportunities</option>
+                <option selected>70 and above — recommended</option>
+                <option>80 and above — strong matches only</option>
+                <option>90 and above — near perfect only</option>
+              </select>
+            </div>
+            <div class="profile-field">
+              <div class="pf-label">Email digest frequency</div>
+              <select style="width:100%;padding:10px 12px;border:1.5px solid #e2e8f0;border-radius:7px;font-size:14px;font-family:'IBM Plex Sans',sans-serif;outline:none;color:var(--ink);background:#f8fafc">
+                <option selected>Daily — every morning</option>
+                <option>Weekly — every Monday</option>
+                <option>Immediately — as matches are found</option>
+              </select>
+            </div>
+            <button style="width:100%;background:var(--ink);color:white;border:none;padding:13px;border-radius:7px;font-family:'IBM Plex Sans',sans-serif;font-size:14px;font-weight:600;cursor:pointer;margin-top:8px">Save settings</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /content -->
+</main>
+
+<!-- MATCH DETAIL DRAWER -->
+<div class="drawer-overlay" id="drawerOverlay" onclick="closeDrawer()"></div>
+<div class="drawer" id="drawer">
+  <div class="drawer-head">
+    <button class="drawer-close" onclick="closeDrawer()">✕</button>
+    <div class="drawer-type" id="drawerType">Job</div>
+    <div class="drawer-title" id="drawerTitle">Loading...</div>
+    <div class="drawer-org" id="drawerOrg"></div>
+    <div class="drawer-score-row">
+      <div class="drawer-score-big" id="drawerScore">--</div>
+      <div class="drawer-score-info">
+        <div style="font-size:12px;color:rgba(255,255,255,.6);font-weight:300">match score out of 100</div>
+        <div id="drawerVerdict" style="margin-top:4px"></div>
+      </div>
+    </div>
+  </div>
+  <div class="drawer-body" id="drawerBody"></div>
+</div>
+
+<script>
+/* ── CONFIG ── */
+const API_KEY = ''; /* paste Anthropic API key here */
+
+/* ── USER STATE — replace with real data from your backend ── */
+const USER = {
+  name: 'Zakaria Abdi Ibrahim',
+  email: 'zakariabdi40@gmail.com',
+  country: 'Kenya',
+  score: 78,
+  education: 'BSc Development Studies — Mount Kenya University',
+  skills: 'MEAL, Community Development, Data Analysis, Report Writing, Project Management, Excel, KoBoToolbox',
+  languages: 'Somali (Native), English (Fluent), Swahili (Fluent)',
+  experience: '4 years — Village Administration, Interpretation',
+  looking_for: 'Jobs, Scholarships, Fellowships, Consultancies',
+  locations: 'East Africa, Remote, International'
+};
+
+/* ── SAMPLE MATCHES — replace with real data from Google Sheets ── */
+const MATCHES = [
+  {id:1,title:'MEAL Officer',org:'UNHCR Regional Bureau',type:'Job',location:'Nairobi, Kenya',source:'ReliefWeb',url:'https://reliefweb.int',score:94,verdict:'Strong match',strengths:['Education in Development Studies matches requirement','Extensive MEAL experience from field work','Somali language — critical for East Africa operations','Location — Nairobi based preferred'],gaps:['STATA or SPSS certification not listed','3 years UN experience preferred — you have 0','Technical report writing samples not uploaded'],improvements:['List STATA in your skills — even basic knowledge counts','Frame your Village Administration as field monitoring and evaluation','Upload one report from your Mandera work as a portfolio sample'],training:[{logo:'🏥',provider:'AMREF Health Africa',course:'Certificate in M&E',duration:'6 weeks',cost:'KES 15,000',link:'https://amref.org/training?ref=nafasi2026',code:'NAFASI2026'}]},
+  {id:2,title:'Government of Ireland Scholarship 2026',org:'Irish Aid',type:'Scholarship',location:'Ireland',source:'Opportunity Desk',url:'https://opportunitydesk.org',score:91,verdict:'Strong match',strengths:['Kenya is an eligible country','Development Studies background aligns with program focus','English proficiency — fluent','Under 35 years old requirement met'],gaps:['IELTS score not uploaded — 6.5 required','Conditional offer from Maynooth — strengthens application','Two referees needed'],improvements:['Upload your Maynooth conditional offer letter','Contact Mohamed Ibrahim Ali and Loizer Mwakio for referee letters','Check GOI scholarship portal for 2026 deadline'],training:[]},
+  {id:3,title:'Research Fellow — Africa Program',org:'IDRC Canada',type:'Fellowship',location:'Remote / Ottawa',source:'IDRC',url:'https://idrc.ca',score:87,verdict:'Strong match',strengths:['Development Studies background directly relevant','East Africa field experience is a key advantage','English and Somali — strong for Horn of Africa research'],gaps:['Research methodology training not listed','No peer-reviewed publication experience','Masters degree preferred — you are completing one'],improvements:['Frame your Mandera fieldwork as applied research','Take a free online research methods course on Coursera','Apply now — your Maynooth offer demonstrates academic progression'],training:[{logo:'📊',provider:'Coursera',course:'Research Methods for Development',duration:'4 weeks · Free audit',cost:'Free',link:'https://coursera.org?ref=nafasi',code:null}]},
+  {id:4,title:'Programme Associate — Community Development',org:'IOM Somalia',type:'Job',location:'Mogadishu, Somalia',source:'IOM Careers',url:'https://www.iom.int',score:83,verdict:'Good match',strengths:['Somali language — native speaker — critical requirement','Community development experience — 4 years','Government coordination experience from Mandera'],gaps:['Security training not listed','Somalia field experience not listed — Mandera proximity is closest','Driver\'s license status unknown'],improvements:['List your border area experience explicitly — Mandera borders Somalia','Add HEAT or security in the field training to your profile','Contact IOM Kenya — you applied there already, use that network'],training:[]},
+  {id:5,title:'MEAL Consultant — 3 months',org:'Red Cross Kenya',type:'Consultancy',location:'Nairobi, Kenya',source:'DevEx',url:'https://devex.com',score:79,verdict:'Good match',strengths:['MEAL skills directly match requirement','Nairobi location — no relocation needed','Community experience from Mandera relevant'],gaps:['Consulting experience not listed — employer needs evidence you can work independently','KoBoToolbox proficiency level not specified','Formal MEAL certification preferred'],improvements:['Reframe your Mandera work as consultancy-style projects with clear deliverables','List KoBoToolbox — even basic use counts','Apply anyway — consultancies are more flexible on requirements than jobs'],training:[{logo:'🏥',provider:'AMREF Health Africa',course:'Certificate in M&E',duration:'6 weeks',cost:'KES 15,000',link:'https://amref.org/training?ref=nafasi2026',code:'NAFASI2026'}]},
+];
+
+/* ── TRAINING RECOMMENDATIONS ── */
+const TRAINING = [
+  {logo:'🏥',provider:'AMREF Health Africa',title:'Certificate in Monitoring and Evaluation',duration:'6 weeks · Online',cost:'KES 15,000',why:'Required in 4 of your 5 top matches. The most impactful single course you can take.',link:'https://amref.org/training?ref=nafasi2026',code:'NAFASI2026',free:false},
+  {logo:'📊',provider:'Coursera',title:'Data Analysis for Social Impact',duration:'4 weeks · Self-paced',cost:'Free to audit',why:'Closes your data tools gap — STATA and SPSS skills appear in 3 of your matches.',link:'https://coursera.org?ref=nafasi',code:null,free:true},
+  {logo:'📋',provider:'PMD Pro',title:'Project Management for Development Professionals',duration:'3 months · Online',cost:'$150 USD',why:'Adds formal project management credential — boosts your score by an estimated 8 points.',link:'https://pmdpro.org?ref=nafasi',code:'NAFASI10',free:false},
+  {logo:'✍️',provider:'ACAPS',title:'Humanitarian Report Writing',duration:'2 weeks · Free',cost:'Free',why:'Technical writing gap appears in 2 of your matches. Free and fast.',link:'https://acaps.org/en/learn?ref=nafasi',code:null,free:true},
+  {logo:'🗺️',provider:'Esri',title:'GIS for Humanitarian Action',duration:'Self-paced · Free',cost:'Free',why:'GIS mapping skills open 12 additional opportunities in your location preferences.',link:'https://esri.com/training?ref=nafasi',code:null,free:true},
+  {logo:'💊',provider:'DisasterReady.org',title:'Humanitarian Essentials Bundle',duration:'Self-paced · Free',cost:'Free',why:'Core humanitarian standards training — required for UN and major NGO roles.',link:'https://www.disasterready.org?ref=nafasi',code:null,free:true},
+];
+
+/* ── TRACKER DATA ── */
+let trackerData = {
+  saved: [], applied: [], interview: [], offer: []
+};
+let draggedItem = null;
+let currentFilter = 'all';
+let chatHistory = [];
+let chatBusy = false;
+
+/* ── INIT ── */
+window.onload = function() {
+  setTopbarDate();
+  renderMatches();
+  renderTraining();
+  loadTracker();
+  setUserInfo();
+};
+
+function setTopbarDate() {
+  const d = new Date();
+  document.getElementById('topbarDate').textContent = d.toLocaleDateString('en-GB',{weekday:'short',day:'numeric',month:'short',year:'numeric'});
+}
+
+function setUserInfo() {
+  const initials = USER.name.split(' ').map(n=>n[0]).join('').slice(0,2);
+  document.getElementById('sbAvatar').textContent = initials;
+  document.getElementById('sbName').textContent = USER.name;
+  document.getElementById('sbCountry').textContent = USER.country;
+  document.getElementById('sbScoreNum').textContent = USER.score;
+  document.getElementById('sbScoreFill').style.width = USER.score + '%';
+  document.getElementById('profileAvatar').textContent = initials;
+  document.getElementById('profileName').textContent = USER.name;
+  document.getElementById('profileScore').textContent = USER.score;
+  document.getElementById('pf-email').textContent = USER.email;
+  document.getElementById('pf-country').textContent = USER.country;
+}
+
+/* ── PANEL SWITCHING ── */
+const panelTitles = {matches:'My Matches',tracker:'Application Tracker',chat:'Nafasi AI',profile:'My Profile',training:'Training',settings:'Settings'};
+
+function showPanel(id) {
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.sb-link').forEach(l=>l.classList.remove('active'));
+  document.getElementById('panel-'+id).classList.add('active');
+  event.currentTarget && event.currentTarget.classList.add('active');
+  document.getElementById('topbarTitle').textContent = panelTitles[id] || id;
+  // Fix active state
+  document.querySelectorAll('.sb-link').forEach(l=>{
+    if(l.textContent.toLowerCase().includes(id.slice(0,4))) l.classList.add('active');
+  });
+}
+
+/* ── RENDER MATCHES ── */
+function renderMatches() {
+  const grid = document.getElementById('matchesGrid');
+  const filtered = currentFilter === 'all' ? MATCHES : MATCHES.filter(m=>m.type===currentFilter);
+  document.getElementById('matchBadge').textContent = filtered.length;
+  document.getElementById('statTotal').textContent = MATCHES.length;
+  document.getElementById('statTop').textContent = Math.max(...MATCHES.map(m=>m.score));
+
+  if(!filtered.length){
+    grid.innerHTML = `<div class="empty"><div class="empty-icon">🔍</div><div class="empty-title">No ${currentFilter} matches today</div><div class="empty-text">We will keep scanning and notify you when matches appear.</div></div>`;
+    return;
+  }
+
+  grid.innerHTML = filtered.map(m=>{
+    const scoreClass = m.score >= 85 ? 'score-high' : m.score >= 75 ? 'score-mid' : 'score-low';
+    const verdictClass = m.score >= 85 ? 'verdict-strong' : m.score >= 75 ? 'verdict-good' : 'verdict-fair';
+    const dotClass = {Job:'dot-job',Scholarship:'dot-sch',Fellowship:'dot-fel',Internship:'dot-int',Consultancy:'dot-con','Research Funding':'dot-res'}[m.type]||'dot-job';
+    return `
+    <div class="match-card ${scoreClass}" onclick="openDrawer(${m.id})">
+      <div>
+        <div class="mc-type"><span class="mc-dot ${dotClass}"></span>${m.type} · ${m.source}</div>
+        <div class="mc-title">${m.title}</div>
+        <div class="mc-org">${m.org} · ${m.location}</div>
+        <div class="mc-tags">
+          ${m.strengths.slice(0,2).map(s=>`<span class="mc-tag">${s.split(' ').slice(0,4).join(' ')}</span>`).join('')}
+          ${m.gaps.length ? `<span class="mc-tag" style="color:var(--amber);border-color:var(--amber2)">${m.gaps.length} gap${m.gaps.length>1?'s':''}</span>` : ''}
+        </div>
+        <div class="mc-actions">
+          <button class="mc-btn mc-btn-primary" onclick="event.stopPropagation();window.open('${m.url}','_blank')">Apply →</button>
+          <button class="mc-btn mc-btn-outline" onclick="event.stopPropagation();saveMatch(${m.id})">💾 Save</button>
+          <button class="mc-btn mc-btn-outline" onclick="event.stopPropagation();chatAbout(${m.id})">✨ AI help</button>
+        </div>
+      </div>
+      <div class="mc-score-col">
+        <div class="mc-score-n">${m.score}</div>
+        <div class="mc-score-l">match</div>
+        <div class="mc-verdict ${verdictClass}">${m.verdict}</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function filterMatches(type, el) {
+  currentFilter = type;
+  document.querySelectorAll('.filt').forEach(f=>f.classList.remove('on'));
+  el.classList.add('on');
+  renderMatches();
+}
+
+function refreshMatches() {
+  document.getElementById('matchesGrid').innerHTML = '<div style="text-align:center;padding:40px;color:var(--gray)">Checking for new matches...</div>';
+  setTimeout(renderMatches, 1500);
+}
+
+/* ── DRAWER ── */
+function openDrawer(id) {
+  const m = MATCHES.find(x=>x.id===id);
+  if(!m) return;
+  document.getElementById('drawerType').textContent = m.type + ' · ' + m.source;
+  document.getElementById('drawerTitle').textContent = m.title;
+  document.getElementById('drawerOrg').textContent = m.org + ' · ' + m.location;
+  document.getElementById('drawerScore').textContent = m.score;
+  document.getElementById('drawerVerdict').innerHTML = `<span style="background:rgba(201,168,76,.2);color:var(--gold2);padding:3px 10px;border-radius:100px;font-size:11px;font-weight:600">${m.verdict}</span>`;
+
+  const remaining = 100 - m.score;
+  document.getElementById('drawerBody').innerHTML = `
+    <div class="drawer-section">
+      <div class="drawer-section-title">📊 Score breakdown</div>
+      <div class="score-bars">
+        <div class="score-bar-row"><div class="score-bar-lbl">Education</div><div class="score-bar-track"><div class="score-bar-fill" style="width:${m.score-5}%"></div></div><div class="score-bar-pct">${m.score-5}%</div></div>
+        <div class="score-bar-row"><div class="score-bar-lbl">Skills</div><div class="score-bar-track"><div class="score-bar-fill" style="width:${m.score+2>100?100:m.score+2}%"></div></div><div class="score-bar-pct">${m.score+2>100?100:m.score+2}%</div></div>
+        <div class="score-bar-row"><div class="score-bar-lbl">Languages</div><div class="score-bar-track"><div class="score-bar-fill" style="width:${m.score+8>100?100:m.score+8}%"></div></div><div class="score-bar-pct">${m.score+8>100?100:m.score+8}%</div></div>
+        <div class="score-bar-row"><div class="score-bar-lbl">Experience</div><div class="score-bar-track"><div class="score-bar-fill" style="width:${m.score-3}%"></div></div><div class="score-bar-pct">${m.score-3}%</div></div>
+        <div class="score-bar-row"><div class="score-bar-lbl">Location fit</div><div class="score-bar-track"><div class="score-bar-fill" style="width:95%"></div></div><div class="score-bar-pct">95%</div></div>
+      </div>
+    </div>
+    <div class="drawer-section">
+      <div class="drawer-section-title">✅ What you matched</div>
+      ${m.strengths.map(s=>`<div class="strength-item">${s}</div>`).join('')}
+    </div>
+    <div class="drawer-section">
+      <div class="drawer-section-title">○ Your ${remaining}% gap</div>
+      ${m.gaps.map(g=>`<div class="gap-item">${g}</div>`).join('')}
+    </div>
+    <div class="drawer-section">
+      <div class="drawer-section-title">→ How to close the ${remaining}% gap</div>
+      ${m.improvements.map(i=>`<div class="improve-item">${i}</div>`).join('')}
+    </div>
+    ${m.training.length ? `
+    <div class="drawer-section">
+      <div class="drawer-section-title">📚 Recommended training</div>
+      ${m.training.map(t=>`
+        <div class="training-item">
+          <div class="training-logo">${t.logo}</div>
+          <div class="training-info">
+            <h5>${t.provider}</h5>
+            <p>${t.course} · ${t.duration} · ${t.cost}</p>
+            <a href="${t.link}" target="_blank" class="training-link">${t.code ? 'Apply with code '+t.code+' →' : 'Learn more →'}</a>
+          </div>
+        </div>`).join('')}
+    </div>` : ''}
+    <button class="apply-btn" onclick="window.open('${m.url}','_blank')">Apply for this ${m.type.toLowerCase()} →</button>
+    <button class="track-btn" onclick="saveMatch(${m.id});closeDrawer()">💾 Save to tracker</button>
+  `;
+
+  document.getElementById('drawerOverlay').classList.add('show');
+  document.getElementById('drawer').classList.add('open');
+}
+
+function closeDrawer() {
+  document.getElementById('drawerOverlay').classList.remove('show');
+  document.getElementById('drawer').classList.remove('open');
+}
+
+/* ── TRACKER ── */
+function loadTracker() {
+  try {
+    const saved = localStorage.getItem('nafasi_tracker');
+    if(saved) trackerData = JSON.parse(saved);
+  } catch(e) {}
+  renderTracker();
+}
+
+function saveTracker() {
+  try { localStorage.setItem('nafasi_tracker', JSON.stringify(trackerData)); } catch(e){}
+}
+
+function renderTracker() {
+  ['saved','applied','interview','offer'].forEach(col=>{
+    const el = document.getElementById('col-'+col);
+    const cnt = document.getElementById('cnt-'+col);
+    el.innerHTML = trackerData[col].map(item=>`
+      <div class="tracker-item" draggable="true" ondragstart="dragStart(event,'${item.id}')" id="ti-${item.id}">
+        <div class="ti-type">${item.type}</div>
+        <div class="ti-title">${item.title}</div>
+        <div class="ti-org">${item.org}</div>
+        ${item.deadline ? `<div class="ti-deadline">Deadline: ${item.deadline}</div>` : ''}
+      </div>`).join('');
+    cnt.textContent = trackerData[col].length;
+  });
+}
+
+function saveMatch(id) {
+  const m = MATCHES.find(x=>x.id===id);
+  if(!m) return;
+  const already = Object.values(trackerData).flat().find(i=>i.id==='m'+id);
+  if(already) { alert('Already saved to tracker!'); return; }
+  trackerData.saved.push({id:'m'+id,title:m.title,org:m.org,type:m.type,deadline:'',score:m.score});
+  saveTracker();
+  renderTracker();
+  alert('Saved to your tracker!');
+}
+
+function addToCol(col) {
+  const title = prompt('Opportunity title:');
+  if(!title) return;
+  const org = prompt('Organization:') || 'Unknown';
+  trackerData[col].push({id:'u'+Date.now(),title,org,type:'Job',deadline:''});
+  saveTracker();
+  renderTracker();
+}
+
+function dragStart(e, id) { draggedItem = id; e.dataTransfer.effectAllowed='move'; }
+function allowDrop(e) { e.preventDefault(); }
+function drop(e, col) {
+  e.preventDefault();
+  if(!draggedItem) return;
+  let found = null;
+  ['saved','applied','interview','offer'].forEach(c=>{
+    const idx = trackerData[c].findIndex(i=>i.id===draggedItem);
+    if(idx > -1) { found = trackerData[c].splice(idx,1)[0]; }
+  });
+  if(found) { trackerData[col].push(found); saveTracker(); renderTracker(); }
+  draggedItem = null;
+}
+
+/* ── CHAT ── */
+function handleChatKey(e) { if(e.key==='Enter'&&!chatBusy) sendChat(); }
+
+function quickPrompt(text) {
+  showPanel('chat');
+  setTimeout(()=>{ document.getElementById('chatInput').value=text; sendChat(); },300);
+}
+
+function chatAbout(id) {
+  const m = MATCHES.find(x=>x.id===id);
+  if(!m) return;
+  showPanel('chat');
+  setTimeout(()=>{
+    document.getElementById('chatInput').value=`Help me with my application for ${m.title} at ${m.org}. My match score is ${m.score}. What should I focus on?`;
+    sendChat();
+  },300);
+}
+
+async function sendChat() {
+  if(chatBusy) return;
+  const inp = document.getElementById('chatInput');
+  const msg = inp.value.trim();
+  if(!msg) return;
+  inp.value='';
+  addChatMsg(msg,'user');
+  chatHistory.push({role:'user',content:msg});
+  showTyping(); chatBusy=true;
+
+  if(!API_KEY) {
+    await delay(1000);
+    hideTyping();
+    addChatMsg('Nafasi AI is ready but needs an API key to activate. Add your Anthropic API key to the dashboard code to enable live AI responses.','bot');
+    chatBusy=false; return;
+  }
+
+  const systemPrompt = `You are Nafasi AI, the personal career consultant for ${USER.name} on Nafasi.jobs.
+
+USER PROFILE:
+- Country: ${USER.country}
+- Education: ${USER.education}
+- Skills: ${USER.skills}
+- Languages: ${USER.languages}
+- Experience: ${USER.experience}
+- Looking for: ${USER.looking_for}
+- Preferred locations: ${USER.locations}
+- Current Nafasi score: ${USER.score}/100
+
+TODAY'S TOP MATCHES:
+${MATCHES.map(m=>`- ${m.title} at ${m.org} (Score: ${m.score}) — gaps: ${m.gaps.join(', ')}`).join('\n')}
+
+TRAINING RECOMMENDATIONS:
+- AMREF MEAL Certificate (KES 15,000) — use code NAFASI2026: https://amref.org/training?ref=nafasi2026
+- Coursera Data Analysis (Free): https://coursera.org?ref=nafasi
+- PMD Pro (use code NAFASI10): https://pmdpro.org?ref=nafasi
+
+Be warm, direct and honest. Give practical actionable advice. When recommending training include the affiliate link. Keep responses concise — max 3 paragraphs unless writing a cover letter.`;
+
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','x-api-key':API_KEY,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-calls':'true'},
+      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,system:systemPrompt,messages:chatHistory})
+    });
+    const data = await res.json();
+    const reply = data.content[0].text;
+    hideTyping();
+    addChatMsg(reply,'bot');
+    chatHistory.push({role:'assistant',content:reply});
+  } catch(err) {
+    hideTyping();
+    addChatMsg('Connection error. Please try again.','bot');
+  }
+  chatBusy=false;
+}
+
+function addChatMsg(text,who) {
+  const b = document.getElementById('chatMsgs');
+  const d = document.createElement('div');
+  d.className='msg '+who;
+  d.textContent=text;
+  b.appendChild(d);
+  b.scrollTop=b.scrollHeight;
+}
+
+function showTyping() {
+  const b = document.getElementById('chatMsgs');
+  const t = document.createElement('div');
+  t.className='typing'; t.id='typdots';
+  t.innerHTML='<span></span><span></span><span></span>';
+  b.appendChild(t); b.scrollTop=b.scrollHeight;
+}
+
+function hideTyping() { const t=document.getElementById('typdots'); if(t) t.remove(); }
+
+/* ── TRAINING ── */
+function renderTraining() {
+  document.getElementById('trainingGrid').innerHTML = TRAINING.map(t=>`
+    <div class="training-card">
+      <div class="tc-logo">${t.logo}</div>
+      <div class="tc-provider">${t.provider}</div>
+      <div class="tc-title">${t.title}</div>
+      <div class="tc-meta">${t.duration} · ${t.cost}</div>
+      <div class="tc-why">💡 ${t.why}</div>
+      <a href="${t.link}" target="_blank" class="tc-btn ${t.free?'tc-free':''}">${t.code?'Apply — code '+t.code:t.free?'Start free →':'Learn more →'}</a>
+    </div>`).join('');
+}
+
+/* ── UTILS ── */
+function editField(field) { showPanel('settings'); }
+function delay(ms) { return new Promise(r=>setTimeout(r,ms)); }
+</script>
+</body>
+</html>
