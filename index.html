@@ -3,326 +3,900 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Nafasi.jobs — Your next opportunity is already out there.</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<title>Nafasi.jobs</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
-:root{
-  --ink:#0a0f1e;--ink2:#141929;
-  --gold:#c9a84c;--gold2:#f0d68a;
-  --white:#fff;--off:#f5f3ee;
-  --gray:#7a8194;--lgray:#b0b8cc;
-  --green:#1a7a5e;
-  --border:rgba(201,168,76,0.18);
-  --bw:rgba(255,255,255,0.07);
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --ink: #08090d;
+  --ink2: #111318;
+  --ink3: #1a1d26;
+  --gold: #c8a84b;
+  --gold2: #e8c96a;
+  --gold-dim: rgba(200,168,75,0.12);
+  --white: #ffffff;
+  --muted: rgba(255,255,255,0.45);
+  --muted2: rgba(255,255,255,0.22);
+  --green: #22c55e;
+  --green-dim: rgba(34,197,94,0.1);
+  --border: rgba(255,255,255,0.07);
+  --border-gold: rgba(200,168,75,0.2);
 }
-html{scroll-behavior:smooth}
-body{font-family:'IBM Plex Sans',sans-serif;background:var(--ink);color:var(--white);-webkit-font-smoothing:antialiased;min-height:100vh}
 
-/* NAV */
-nav{padding:0 32px;height:56px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--bw)}
-.logo{font-family:'Playfair Display',serif;font-size:20px;font-weight:900;color:white;text-decoration:none;letter-spacing:-.5px}
-.logo span{color:var(--gold)}
-.nav-signup{background:var(--gold);color:var(--ink);padding:8px 20px;border-radius:5px;font-size:13px;font-weight:700;text-decoration:none;transition:background .2s}
-.nav-signup:hover{background:var(--gold2)}
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Inter', sans-serif;
+  background: var(--ink);
+  color: var(--white);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
 
-/* BANNER */
-.banner{background:var(--gold);padding:8px 20px;text-align:center;font-size:13px;font-weight:600;color:var(--ink);position:relative}
-.bx{position:absolute;right:16px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:15px;color:var(--ink);opacity:.5}
-.bx:hover{opacity:1}
+/* ── BANNER ── */
+.banner {
+  background: var(--gold);
+  padding: 10px 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  position: relative;
+}
+.banner-text {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ink);
+  letter-spacing: 0.04em;
+}
+.banner-close {
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--ink);
+  font-size: 14px;
+  opacity: 0.5;
+  line-height: 1;
+  padding: 4px;
+}
+.banner-close:hover { opacity: 1; }
 
-/* HERO */
-.hero{min-height:calc(100vh - 90px);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:60px 24px;position:relative;overflow:hidden}
-.hero::before{content:'';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:700px;height:700px;border-radius:50%;background:radial-gradient(circle,rgba(201,168,76,0.07) 0%,transparent 65%);pointer-events:none}
-.hero-inner{position:relative;z-index:1;width:100%;max-width:900px}
-h1{font-family:'Playfair Display',serif;font-size:clamp(44px,8vw,96px);font-weight:900;line-height:.97;letter-spacing:-4px;margin-bottom:24px}
-h1 em{font-style:italic;color:var(--gold)}
-.hero-desc{font-size:clamp(15px,2vw,18px);color:rgba(255,255,255,.6);line-height:1.8;max-width:620px;margin:0 auto 44px;font-weight:300}
-.hero-desc strong{color:white;font-weight:500}
+/* ── NAV ── */
+nav {
+  padding: 0 48px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(8,9,13,0.95);
+  backdrop-filter: blur(16px);
+}
+.logo {
+  font-family: 'Playfair Display', serif;
+  font-size: 18px;
+  font-weight: 900;
+  color: var(--white);
+  text-decoration: none;
+  letter-spacing: -0.5px;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+.logo-dot { color: var(--gold); }
+.nav-btn {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--muted);
+  background: none;
+  border: 1px solid var(--border);
+  padding: 8px 18px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: 'Inter', sans-serif;
+}
+.nav-btn:hover { color: var(--white); border-color: rgba(255,255,255,0.2); }
 
-/* TWO BUTTONS */
-.two-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
-.btn-how{background:transparent;color:rgba(255,255,255,.85);padding:15px 36px;border-radius:6px;font-size:15px;font-weight:500;border:1.5px solid rgba(255,255,255,.2);cursor:pointer;transition:all .25s;font-family:'IBM Plex Sans',sans-serif}
-.btn-how:hover,.btn-how.on{border-color:rgba(255,255,255,.6);color:white;background:rgba(255,255,255,.04)}
-.btn-account{background:var(--gold);color:var(--ink);padding:15px 36px;border-radius:6px;font-size:15px;font-weight:700;border:none;cursor:pointer;transition:all .25s;font-family:'IBM Plex Sans',sans-serif}
-.btn-account:hover,.btn-account.on{background:var(--gold2);transform:translateY(-1px);box-shadow:0 8px 28px rgba(201,168,76,.25)}
+/* ── HERO ── */
+.hero {
+  min-height: calc(100vh - 100px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 80px 24px;
+  position: relative;
+  overflow: hidden;
+}
 
-/* PANELS */
-.panel{max-width:820px;margin:44px auto 0;display:none;animation:up .3s ease both}
-.panel.show{display:block}
-@keyframes up{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+/* Grid lines background */
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+  background-size: 60px 60px;
+  pointer-events: none;
+}
 
-/* HOW IT WORKS */
-.how-desc{font-size:14px;color:rgba(255,255,255,.5);line-height:1.8;text-align:center;margin-bottom:28px;font-weight:300;max-width:500px;margin-left:auto;margin-right:auto}
-.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;margin-bottom:20px}
-.step{background:var(--ink2);border:1px solid var(--bw);padding:26px 22px;text-align:left}
-.sn{font-family:'Playfair Display',serif;font-size:42px;font-weight:900;color:rgba(201,168,76,.12);line-height:1;margin-bottom:10px}
-.st{font-size:14px;font-weight:600;color:white;margin-bottom:7px}
-.sd{font-size:12px;color:rgba(255,255,255,.42);line-height:1.7;font-weight:300}
-.how-note{background:rgba(201,168,76,.07);border:1px solid rgba(201,168,76,.16);border-radius:9px;padding:16px 20px;font-size:13px;color:rgba(255,255,255,.65);line-height:1.75;text-align:center;margin-bottom:20px}
-.how-note strong{color:var(--gold);font-weight:600}
+/* Gold glow */
+.hero::after {
+  content: '';
+  position: absolute;
+  top: 20%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 600px;
+  height: 400px;
+  background: radial-gradient(ellipse, rgba(200,168,75,0.08) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.hero-inner {
+  position: relative;
+  z-index: 1;
+  max-width: 860px;
+  width: 100%;
+}
+
+.hero-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--gold);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-bottom: 28px;
+  padding: 6px 14px;
+  border: 1px solid var(--border-gold);
+  border-radius: 2px;
+  background: var(--gold-dim);
+}
+.label-dot {
+  width: 5px;
+  height: 5px;
+  background: var(--green);
+  border-radius: 50%;
+  animation: blink 2s infinite;
+}
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(48px, 8vw, 96px);
+  font-weight: 900;
+  line-height: 0.96;
+  letter-spacing: -4px;
+  margin-bottom: 28px;
+}
+h1 em {
+  font-style: italic;
+  color: var(--gold);
+  display: block;
+}
+
+.hero-desc {
+  font-size: clamp(15px, 1.8vw, 17px);
+  color: var(--muted);
+  line-height: 1.85;
+  max-width: 580px;
+  margin: 0 auto 52px;
+  font-weight: 300;
+}
+.hero-desc strong { color: rgba(255,255,255,0.85); font-weight: 500; }
+
+/* ── TWO BUTTONS ── */
+.two-btns {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.btn-outline {
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--muted);
+  background: transparent;
+  border: 1px solid var(--border);
+  padding: 14px 32px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.25s;
+  letter-spacing: 0.02em;
+}
+.btn-outline:hover, .btn-outline.active {
+  color: var(--white);
+  border-color: rgba(255,255,255,0.3);
+  background: rgba(255,255,255,0.03);
+}
+
+.btn-gold {
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ink);
+  background: var(--gold);
+  border: none;
+  padding: 14px 32px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.25s;
+  letter-spacing: 0.02em;
+}
+.btn-gold:hover, .btn-gold.active {
+  background: var(--gold2);
+  transform: translateY(-1px);
+  box-shadow: 0 8px 32px rgba(200,168,75,0.25);
+}
+
+/* ── PANELS ── */
+.panel {
+  display: none;
+  max-width: 780px;
+  margin: 52px auto 0;
+  animation: rise 0.3s ease both;
+}
+.panel.show { display: block; }
+@keyframes rise {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── HOW PANEL ── */
+.how-intro {
+  font-size: 14px;
+  color: var(--muted);
+  line-height: 1.85;
+  text-align: center;
+  margin-bottom: 32px;
+  font-weight: 300;
+  max-width: 480px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.steps {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  margin-bottom: 20px;
+}
+.step {
+  background: var(--ink2);
+  padding: 28px 24px;
+  position: relative;
+}
+.step-num {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--gold);
+  letter-spacing: 0.1em;
+  margin-bottom: 14px;
+  opacity: 0.7;
+}
+.step-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--white);
+  margin-bottom: 10px;
+  line-height: 1.3;
+}
+.step-desc {
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.75;
+  font-weight: 300;
+}
+
+.how-free-note {
+  background: var(--ink2);
+  border: 1px solid var(--border-gold);
+  padding: 16px 20px;
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.75;
+  text-align: center;
+  margin-bottom: 20px;
+}
+.how-free-note strong { color: var(--gold); font-weight: 600; }
 
 /* TICKER */
-.ticker-section{overflow:hidden;padding:14px 0;border-top:1px solid var(--bw);margin-bottom:0}
-.ticker-lbl{font-size:10px;color:var(--gray);letter-spacing:.15em;text-transform:uppercase;text-align:center;margin-bottom:10px}
-.tw{overflow:hidden;margin-bottom:7px}
-.ticker{display:flex;gap:7px;animation:scroll 40s linear infinite;width:max-content}
-.ticker.rev{animation-direction:reverse}
-@keyframes scroll{to{transform:translateX(-50%)}}
-.chip{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:100px;padding:6px 12px;font-size:11px;color:var(--lgray);white-space:nowrap;display:flex;align-items:center;gap:5px}
-.cdot{width:4px;height:4px;border-radius:50%;flex-shrink:0}
+.ticker-wrap {
+  overflow: hidden;
+  margin-bottom: 8px;
+  border-top: 1px solid var(--border);
+  padding-top: 16px;
+}
+.ticker-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: var(--muted2);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  text-align: center;
+  margin-bottom: 12px;
+}
+.ticker-track { overflow: hidden; margin-bottom: 8px; }
+.ticker {
+  display: flex;
+  gap: 6px;
+  animation: scroll 45s linear infinite;
+  width: max-content;
+}
+.ticker.rev { animation-direction: reverse; }
+@keyframes scroll { to { transform: translateX(-50%); } }
+.chip {
+  background: var(--ink3);
+  border: 1px solid var(--border);
+  padding: 6px 12px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--muted);
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.cdot { width: 4px; height: 4px; border-radius: 50%; flex-shrink: 0; }
 
-/* SIGNUP */
-.scard{background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:14px;padding:30px}
-.sc-title{font-family:'Playfair Display',serif;font-size:21px;font-weight:700;color:white;letter-spacing:-.3px;margin-bottom:4px}
-.sc-sub{font-size:13px;color:rgba(255,255,255,.38);font-weight:300;margin-bottom:22px}
-.fg{margin-bottom:12px;text-align:left}
-.fl{display:block;font-size:10px;font-weight:600;color:rgba(255,255,255,.38);letter-spacing:.08em;text-transform:uppercase;margin-bottom:4px}
-.fi{width:100%;padding:11px 13px;background:rgba(255,255,255,.06);border:1.5px solid rgba(255,255,255,.1);border-radius:7px;color:white;font-size:14px;font-family:'IBM Plex Sans',sans-serif;outline:none;transition:border-color .2s}
-.fi:focus{border-color:var(--gold)}
-.fi::placeholder{color:rgba(255,255,255,.2)}
-.fi-sel{appearance:none;cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%237a8194' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:34px}
-.fi-sel option{background:var(--ink2);color:white}
-.cv-zone{border:1.5px dashed rgba(255,255,255,.15);border-radius:8px;padding:18px;text-align:center;cursor:pointer;transition:border-color .25s;position:relative;margin-bottom:12px}
-.cv-zone:hover{border-color:var(--gold)}
-.cv-zone input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
-.cv-icon{font-size:22px;margin-bottom:5px}
-.cv-lbl{font-size:13px;font-weight:500;color:rgba(255,255,255,.65)}
-.cv-sub{font-size:11px;color:rgba(255,255,255,.28);margin-top:2px}
-.cv-ok{display:none;align-items:center;gap:9px;background:rgba(26,122,94,.1);border:1px solid rgba(26,122,94,.22);border-radius:7px;padding:9px 12px;margin-bottom:12px}
-.cv-ok.show{display:flex}
-.cv-fn{font-size:12px;font-weight:500;color:#34d399;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.cv-rm{background:none;border:none;cursor:pointer;color:rgba(255,255,255,.3);font-size:14px}
-.cv-rm:hover{color:#f87171}
-.cv-reading{display:none;text-align:center;padding:12px;font-size:12px;color:rgba(255,255,255,.38);font-weight:300}
-.cv-reading.show{display:block}
-.spin{display:inline-block;width:12px;height:12px;border:2px solid rgba(201,168,76,.2);border-top-color:var(--gold);border-radius:50%;animation:spin .7s linear infinite;margin-right:6px;vertical-align:middle}
-@keyframes spin{to{transform:rotate(360deg)}}
-.ext-box{display:none;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:7px;padding:12px;margin-bottom:12px;text-align:left}
-.ext-box.show{display:block}
-.ext-hd{font-size:10px;font-weight:600;color:#34d399;letter-spacing:.08em;text-transform:uppercase;margin-bottom:7px}
-.ext-row{font-size:12px;color:rgba(255,255,255,.55);margin-bottom:4px;line-height:1.5;font-weight:300}
-.ext-row b{color:rgba(255,255,255,.8);font-weight:500}
-.sub-btn{width:100%;background:var(--gold);color:var(--ink);border:none;padding:14px;border-radius:7px;font-family:'IBM Plex Sans',sans-serif;font-size:15px;font-weight:700;cursor:pointer;transition:background .2s;margin-top:4px}
-.sub-btn:hover{background:var(--gold2)}
-.fnote{font-size:11px;color:rgba(255,255,255,.22);margin-top:10px;text-align:center;line-height:1.6}
-.fnote a{color:var(--gold)}
-.success-w{display:none;text-align:center;padding:16px 0}
-.success-w.show{display:block}
-.s-em{font-size:52px;margin-bottom:13px}
-.s-ttl{font-family:'Playfair Display',serif;font-size:23px;font-weight:700;color:white;margin-bottom:8px}
-.s-body{font-size:13px;color:rgba(255,255,255,.48);line-height:1.8;font-weight:300;max-width:340px;margin:0 auto}
-.s-tag{display:inline-flex;align-items:center;gap:6px;margin-top:13px;background:rgba(26,122,94,.15);color:#34d399;padding:6px 14px;border-radius:100px;font-size:11px;font-weight:600}
+/* ── SIGNUP PANEL ── */
+.signup-card {
+  background: var(--ink2);
+  border: 1px solid var(--border);
+  padding: 36px;
+}
+.signup-card-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--white);
+  letter-spacing: -0.5px;
+  margin-bottom: 4px;
+}
+.signup-card-sub {
+  font-size: 13px;
+  color: var(--muted);
+  font-weight: 300;
+  margin-bottom: 28px;
+}
+
+/* CV ZONE */
+.cv-zone {
+  border: 1px dashed rgba(255,255,255,0.15);
+  padding: 22px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  position: relative;
+  margin-bottom: 14px;
+}
+.cv-zone:hover { border-color: var(--gold); background: var(--gold-dim); }
+.cv-zone input {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
+  width: 100%;
+  height: 100%;
+}
+.cv-zone-icon { font-size: 20px; margin-bottom: 6px; }
+.cv-zone-label {
+  font-size: 13px;
+  font-weight: 500;
+  color: rgba(255,255,255,0.65);
+  margin-bottom: 3px;
+}
+.cv-zone-sub { font-size: 11px; color: var(--muted2); }
+
+.cv-loaded {
+  display: none;
+  align-items: center;
+  gap: 10px;
+  background: var(--green-dim);
+  border: 1px solid rgba(34,197,94,0.25);
+  padding: 10px 14px;
+  margin-bottom: 14px;
+}
+.cv-loaded.show { display: flex; }
+.cv-fn { font-size: 12px; font-weight: 500; color: var(--green); flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.cv-rm { background: none; border: none; cursor: pointer; color: var(--muted2); font-size: 14px; line-height: 1; }
+.cv-rm:hover { color: #f87171; }
+
+.cv-reading {
+  display: none;
+  text-align: center;
+  padding: 12px;
+  font-size: 12px;
+  color: var(--muted);
+  font-weight: 300;
+}
+.cv-reading.show { display: block; }
+.spin {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border: 2px solid rgba(200,168,75,0.2);
+  border-top-color: var(--gold);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  margin-right: 6px;
+  vertical-align: middle;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.ext-box {
+  display: none;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid var(--border);
+  border-left: 2px solid var(--green);
+  padding: 14px;
+  margin-bottom: 14px;
+}
+.ext-box.show { display: block; }
+.ext-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: var(--green);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+.ext-row {
+  font-size: 12px;
+  color: var(--muted);
+  margin-bottom: 4px;
+  line-height: 1.5;
+  font-weight: 300;
+}
+.ext-row b { color: rgba(255,255,255,0.75); font-weight: 500; }
+
+/* FORM FIELDS */
+.fg { margin-bottom: 14px; }
+.fl {
+  display: block;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  font-weight: 500;
+  color: var(--muted2);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+.fi {
+  width: 100%;
+  padding: 11px 13px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid var(--border);
+  color: var(--white);
+  font-size: 14px;
+  font-family: 'Inter', sans-serif;
+  outline: none;
+  transition: border-color 0.2s;
+  border-radius: 0;
+}
+.fi:focus { border-color: var(--gold); background: rgba(255,255,255,0.07); }
+.fi::placeholder { color: var(--muted2); }
+.fi-sel {
+  appearance: none;
+  cursor: pointer;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23555' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 13px center;
+  padding-right: 36px;
+}
+.fi-sel option { background: var(--ink2); color: var(--white); }
+
+/* WHATSAPP HINT */
+.field-hint {
+  font-size: 11px;
+  color: var(--muted2);
+  margin-top: 4px;
+  font-weight: 300;
+}
+
+/* REGIONS */
+.region-label-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+.region-default {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  color: var(--green);
+  font-weight: 400;
+}
+.regions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.region {
+  padding: 6px 12px;
+  border: 1px solid var(--border);
+  font-size: 12px;
+  color: var(--muted);
+  cursor: pointer;
+  transition: all 0.2s;
+  user-select: none;
+  font-family: 'Inter', sans-serif;
+}
+.region:hover { border-color: rgba(255,255,255,0.25); color: var(--white); }
+.region.on { border-color: var(--gold); background: var(--gold-dim); color: var(--white); }
+.region.locked {
+  border-color: rgba(34,197,94,0.35);
+  background: var(--green-dim);
+  color: var(--green);
+  cursor: default;
+  font-size: 11px;
+}
+
+/* SUBMIT */
+.submit-btn {
+  width: 100%;
+  background: var(--gold);
+  color: var(--ink);
+  border: none;
+  padding: 14px;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+  margin-top: 6px;
+  letter-spacing: 0.02em;
+}
+.submit-btn:hover { background: var(--gold2); }
+
+.form-note {
+  font-size: 11px;
+  color: var(--muted2);
+  margin-top: 12px;
+  text-align: center;
+  line-height: 1.65;
+}
+.form-note a { color: var(--gold); text-decoration: none; }
+
+/* SUCCESS */
+.success-wrap { display: none; text-align: center; padding: 20px 0; }
+.success-wrap.show { display: block; }
+.s-icon { font-size: 48px; margin-bottom: 16px; }
+.s-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--white);
+  margin-bottom: 10px;
+}
+.s-body { font-size: 13px; color: var(--muted); line-height: 1.8; font-weight: 300; max-width: 360px; margin: 0 auto; }
+.s-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 16px;
+  background: var(--green-dim);
+  border: 1px solid rgba(34,197,94,0.25);
+  color: var(--green);
+  padding: 7px 16px;
+  font-size: 12px;
+  font-weight: 500;
+  font-family: 'JetBrains Mono', monospace;
+}
 
 /* FOOTER */
-footer{border-top:1px solid var(--bw);padding:20px 32px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-top:60px}
-.f-logo{font-family:'Playfair Display',serif;font-size:15px;font-weight:900;color:white}
-.f-logo span{color:var(--gold)}
-.f-r{font-size:11px;color:rgba(255,255,255,.22)}
-.f-r a{color:var(--gold);text-decoration:none}
-.rnote{font-size:11px;color:rgba(255,255,255,.3);margin-bottom:8px;font-weight:300}
-.regions{display:flex;flex-wrap:wrap;gap:7px}
-.region{padding:6px 12px;border:1.5px solid rgba(255,255,255,.1);border-radius:100px;font-size:12px;color:rgba(255,255,255,.5);cursor:pointer;transition:all .2s;user-select:none}
-.region:hover{border-color:rgba(255,255,255,.3);color:white}
-.region.on{border-color:var(--gold);background:rgba(201,168,76,.1);color:white}
-.region.locked{border-color:var(--green);background:rgba(26,122,94,.1);color:#34d399;cursor:default}
+footer {
+  border-top: 1px solid var(--border);
+  padding: 24px 48px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 80px;
+}
+.f-logo {
+  font-family: 'Playfair Display', serif;
+  font-size: 16px;
+  font-weight: 900;
+  color: var(--white);
+}
+.f-logo span { color: var(--gold); }
+.f-note { font-size: 11px; color: var(--muted2); }
+.f-note a { color: var(--gold); text-decoration: none; }
 
-@media(max-width:680px){
-  h1{letter-spacing:-2px}
-  .steps{grid-template-columns:1fr}
-  .two-btns{flex-direction:column;align-items:center}
-  .btn-how,.btn-account{width:100%;max-width:320px}
-  nav,.scard{padding:0 18px}
-  .scard{padding:22px 16px}
-  footer{flex-direction:column;text-align:center}
+/* RESPONSIVE */
+@media (max-width: 700px) {
+  nav { padding: 0 20px; }
+  h1 { letter-spacing: -2px; }
+  .steps { grid-template-columns: 1fr; }
+  .two-btns { flex-direction: column; align-items: center; }
+  .btn-outline, .btn-gold { width: 100%; max-width: 320px; }
+  .signup-card { padding: 24px 18px; }
+  footer { flex-direction: column; text-align: center; padding: 20px; }
 }
 </style>
 </head>
 <body>
 
-<div class="banner" id="banner">
-  ⚡ Apply today — not tomorrow. Deadlines close without warning.
-  <button class="bx" onclick="document.getElementById('banner').style.display='none'">✕</button>
+<!-- BANNER -->
+<div id="banner" class="banner">
+  <div class="banner-text">⚡ Apply today — not tomorrow. Deadlines close without warning.</div>
+  <button class="banner-close" onclick="document.getElementById('banner').style.display='none'">✕</button>
 </div>
 
+<!-- NAV -->
 <nav>
-  <a href="/" class="logo">Nafasi<span>.jobs</span></a>
-  <a href="#" class="nav-signup" onclick="openSignup();return false">Create free account</a>
+  <a href="/" class="logo">nafasi<span class="logo-dot">.jobs</span></a>
+  <button class="nav-btn" onclick="openPanel('signup')">Create free account</button>
 </nav>
 
+<!-- HERO -->
 <section class="hero">
   <div class="hero-inner">
-    <h1>Your next opportunity<br>is already <em>out there.</em></h1>
+    <div class="hero-label">
+      <span class="label-dot"></span>
+      AI-powered career matching
+    </div>
+    <h1>
+      Your next opportunity
+      <em>is already out there.</em>
+    </h1>
     <p class="hero-desc">
       Nafasi scans <strong>100+ sources</strong> every day — jobs, scholarships, fellowships, and consultancies — and uses AI to show you only the ones you actually qualify for. <strong>No noise. Just your next move.</strong>
     </p>
     <div class="two-btns">
-      <button class="btn-how" id="howBtn" onclick="togglePanel('how')">How it works</button>
-      <button class="btn-account" id="accBtn" onclick="togglePanel('signup')">Create free account</button>
+      <button class="btn-outline" id="howBtn" onclick="openPanel('how')">How it works</button>
+      <button class="btn-gold" id="accBtn" onclick="openPanel('signup')">Create free account</button>
     </div>
 
-    <!-- HOW IT WORKS PANEL -->
+    <!-- HOW IT WORKS -->
     <div class="panel" id="panel-how">
-      <p class="how-desc">Three steps. Every morning your matches arrive — scored and ready to apply.</p>
+      <p class="how-intro">Three steps. Every morning your matches arrive — scored, ranked and ready to apply.</p>
       <div class="steps">
         <div class="step">
-          <div class="sn">01</div>
-          <div class="st">Create your profile</div>
-          <div class="sd">Upload your CV. Nafasi reads it and fills your profile automatically — education, skills, experience, languages. Takes two minutes.</div>
+          <div class="step-num">// 01</div>
+          <div class="step-title">Create your profile</div>
+          <div class="step-desc">Upload your CV. Nafasi reads it and fills your profile automatically — education, skills, experience, languages. Two minutes.</div>
         </div>
         <div class="step">
-          <div class="sn">02</div>
-          <div class="st">AI finds your matches</div>
-          <div class="sd">Every morning Nafasi reads 100+ sources and scores every new opportunity against your profile. Only what you qualify for reaches you — with a score, your gaps and how to close them.</div>
+          <div class="step-num">// 02</div>
+          <div class="step-title">AI finds your matches</div>
+          <div class="step-desc">Every morning Nafasi reads 100+ sources and scores each new opportunity against your profile. Only what you qualify for reaches you — with a score and your gaps explained.</div>
         </div>
         <div class="step">
-          <div class="sn">03</div>
-          <div class="st">Apply on the original platform</div>
-          <div class="sd">Your digest arrives by email or WhatsApp — your choice. Click any match to apply directly on ReliefWeb, UNHCR, Opportunity Desk or wherever it was posted. Nafasi tracks your progress here.</div>
+          <div class="step-num">// 03</div>
+          <div class="step-title">Apply on the original platform</div>
+          <div class="step-desc">Your digest arrives by email or WhatsApp — your choice. Click any match to apply directly on ReliefWeb, UNHCR or wherever it was posted. Nafasi tracks your progress.</div>
         </div>
       </div>
-      <div class="how-note">
-        <strong>Completely free.</strong> No subscription. No premium tier. No credit card. Create an account and matches start arriving the next morning — by email or WhatsApp, whichever you prefer.
+      <div class="how-free-note">
+        <strong>Completely free.</strong> No subscription. No premium tier. No credit card ever. Create an account and your first matches arrive tomorrow morning.
       </div>
-      <div class="ticker-section">
-        <div class="ticker-lbl">Sources scanned every morning</div>
-        <div class="tw"><div class="ticker">
-          <div class="chip"><span class="cdot" style="background:var(--gold)"></span>ReliefWeb</div>
+      <div class="ticker-wrap">
+        <div class="ticker-label">102 sources scanned every morning</div>
+        <div class="ticker-track"><div class="ticker">
+          <div class="chip"><span class="cdot" style="background:#c8a84b"></span>ReliefWeb</div>
           <div class="chip"><span class="cdot" style="background:#5b9cf6"></span>DevEx</div>
-          <div class="chip"><span class="cdot" style="background:#34d399"></span>UN Global Careers</div>
+          <div class="chip"><span class="cdot" style="background:#22c55e"></span>UN Global Careers</div>
           <div class="chip"><span class="cdot" style="background:#a78bfa"></span>Opportunity Desk</div>
-          <div class="chip"><span class="cdot" style="background:var(--gold)"></span>Scholars4Dev</div>
+          <div class="chip"><span class="cdot" style="background:#c8a84b"></span>Scholars4Dev</div>
           <div class="chip"><span class="cdot" style="background:#5b9cf6"></span>Impactpool</div>
-          <div class="chip"><span class="cdot" style="background:#34d399"></span>UNDP Jobs</div>
+          <div class="chip"><span class="cdot" style="background:#22c55e"></span>UNDP Jobs</div>
           <div class="chip"><span class="cdot" style="background:#f97316"></span>UNHCR Jobs</div>
-          <div class="chip"><span class="cdot" style="background:var(--gold)"></span>WHO Careers</div>
+          <div class="chip"><span class="cdot" style="background:#c8a84b"></span>WHO Careers</div>
           <div class="chip"><span class="cdot" style="background:#5b9cf6"></span>IOM Careers</div>
-          <div class="chip"><span class="cdot" style="background:#34d399"></span>Oxfam Jobs</div>
+          <div class="chip"><span class="cdot" style="background:#22c55e"></span>Oxfam Jobs</div>
           <div class="chip"><span class="cdot" style="background:#a78bfa"></span>Chevening</div>
           <div class="chip"><span class="cdot" style="background:#f97316"></span>Ford Foundation</div>
-          <div class="chip"><span class="cdot" style="background:var(--gold)"></span>Gates Cambridge</div>
+          <div class="chip"><span class="cdot" style="background:#c8a84b"></span>Gates Cambridge</div>
           <div class="chip"><span class="cdot" style="background:#5b9cf6"></span>Youth Opportunities</div>
-          <div class="chip"><span class="cdot" style="background:#34d399"></span>JobsToApply</div>
+          <div class="chip"><span class="cdot" style="background:#22c55e"></span>JobsToApply</div>
           <div class="chip"><span class="cdot" style="background:#a78bfa"></span>SomaliJobs</div>
           <div class="chip"><span class="cdot" style="background:#f97316"></span>World Bank</div>
-          <div class="chip"><span class="cdot" style="background:var(--gold)"></span>Fuzu</div>
+          <div class="chip"><span class="cdot" style="background:#c8a84b"></span>Fuzu</div>
           <div class="chip"><span class="cdot" style="background:#5b9cf6"></span>IRC Careers</div>
-          <!-- duplicate -->
-          <div class="chip"><span class="cdot" style="background:var(--gold)"></span>ReliefWeb</div>
+          <div class="chip"><span class="cdot" style="background:#c8a84b"></span>ReliefWeb</div>
           <div class="chip"><span class="cdot" style="background:#5b9cf6"></span>DevEx</div>
-          <div class="chip"><span class="cdot" style="background:#34d399"></span>UN Global Careers</div>
+          <div class="chip"><span class="cdot" style="background:#22c55e"></span>UN Global Careers</div>
           <div class="chip"><span class="cdot" style="background:#a78bfa"></span>Opportunity Desk</div>
-          <div class="chip"><span class="cdot" style="background:var(--gold)"></span>Scholars4Dev</div>
+          <div class="chip"><span class="cdot" style="background:#c8a84b"></span>Scholars4Dev</div>
           <div class="chip"><span class="cdot" style="background:#5b9cf6"></span>Impactpool</div>
-          <div class="chip"><span class="cdot" style="background:#34d399"></span>UNDP Jobs</div>
+          <div class="chip"><span class="cdot" style="background:#22c55e"></span>UNDP Jobs</div>
           <div class="chip"><span class="cdot" style="background:#f97316"></span>UNHCR Jobs</div>
-          <div class="chip"><span class="cdot" style="background:var(--gold)"></span>WHO Careers</div>
+          <div class="chip"><span class="cdot" style="background:#c8a84b"></span>WHO Careers</div>
           <div class="chip"><span class="cdot" style="background:#5b9cf6"></span>IOM Careers</div>
-          <div class="chip"><span class="cdot" style="background:#34d399"></span>Oxfam Jobs</div>
+          <div class="chip"><span class="cdot" style="background:#22c55e"></span>Oxfam Jobs</div>
           <div class="chip"><span class="cdot" style="background:#a78bfa"></span>Chevening</div>
           <div class="chip"><span class="cdot" style="background:#f97316"></span>Ford Foundation</div>
-          <div class="chip"><span class="cdot" style="background:var(--gold)"></span>Gates Cambridge</div>
+          <div class="chip"><span class="cdot" style="background:#c8a84b"></span>Gates Cambridge</div>
           <div class="chip"><span class="cdot" style="background:#5b9cf6"></span>Youth Opportunities</div>
-          <div class="chip"><span class="cdot" style="background:#34d399"></span>JobsToApply</div>
+          <div class="chip"><span class="cdot" style="background:#22c55e"></span>JobsToApply</div>
           <div class="chip"><span class="cdot" style="background:#a78bfa"></span>SomaliJobs</div>
           <div class="chip"><span class="cdot" style="background:#f97316"></span>World Bank</div>
-          <div class="chip"><span class="cdot" style="background:var(--gold)"></span>Fuzu</div>
+          <div class="chip"><span class="cdot" style="background:#c8a84b"></span>Fuzu</div>
           <div class="chip"><span class="cdot" style="background:#5b9cf6"></span>IRC Careers</div>
+        </div></div>
+        <div class="ticker-track"><div class="ticker rev">
+          <div class="chip"><span class="cdot" style="background:#22c55e"></span>Save the Children</div>
+          <div class="chip"><span class="cdot" style="background:#c8a84b"></span>Mercy Corps</div>
+          <div class="chip"><span class="cdot" style="background:#5b9cf6"></span>NRC Jobs</div>
+          <div class="chip"><span class="cdot" style="background:#a78bfa"></span>Obama Foundation</div>
+          <div class="chip"><span class="cdot" style="background:#f97316"></span>Fulbright</div>
+          <div class="chip"><span class="cdot" style="background:#c8a84b"></span>MSF Careers</div>
+          <div class="chip"><span class="cdot" style="background:#5b9cf6"></span>Globaljobs</div>
+          <div class="chip"><span class="cdot" style="background:#22c55e"></span>Tony Elumelu</div>
+          <div class="chip"><span class="cdot" style="background:#a78bfa"></span>DAI Global</div>
+          <div class="chip"><span class="cdot" style="background:#f97316"></span>Chemonics</div>
+          <div class="chip"><span class="cdot" style="background:#c8a84b"></span>Palladium</div>
+          <div class="chip"><span class="cdot" style="background:#5b9cf6"></span>IDRC Canada</div>
+          <div class="chip"><span class="cdot" style="background:#22c55e"></span>Wellcome Trust</div>
+          <div class="chip"><span class="cdot" style="background:#a78bfa"></span>African Union</div>
+          <div class="chip"><span class="cdot" style="background:#f97316"></span>AfDB</div>
+          <div class="chip"><span class="cdot" style="background:#c8a84b"></span>YALI Network</div>
+          <div class="chip"><span class="cdot" style="background:#5b9cf6"></span>BrighterMonday</div>
+          <div class="chip"><span class="cdot" style="background:#22c55e"></span>Plan International</div>
+          <div class="chip"><span class="cdot" style="background:#a78bfa"></span>UNICEF Jobs</div>
+          <div class="chip"><span class="cdot" style="background:#f97316"></span>WFP Careers</div>
+          <div class="chip"><span class="cdot" style="background:#22c55e"></span>Save the Children</div>
+          <div class="chip"><span class="cdot" style="background:#c8a84b"></span>Mercy Corps</div>
+          <div class="chip"><span class="cdot" style="background:#5b9cf6"></span>NRC Jobs</div>
+          <div class="chip"><span class="cdot" style="background:#a78bfa"></span>Obama Foundation</div>
+          <div class="chip"><span class="cdot" style="background:#f97316"></span>Fulbright</div>
+          <div class="chip"><span class="cdot" style="background:#c8a84b"></span>MSF Careers</div>
+          <div class="chip"><span class="cdot" style="background:#5b9cf6"></span>Globaljobs</div>
+          <div class="chip"><span class="cdot" style="background:#22c55e"></span>Tony Elumelu</div>
+          <div class="chip"><span class="cdot" style="background:#a78bfa"></span>DAI Global</div>
+          <div class="chip"><span class="cdot" style="background:#f97316"></span>Chemonics</div>
+          <div class="chip"><span class="cdot" style="background:#c8a84b"></span>Palladium</div>
+          <div class="chip"><span class="cdot" style="background:#5b9cf6"></span>IDRC Canada</div>
+          <div class="chip"><span class="cdot" style="background:#22c55e"></span>Wellcome Trust</div>
+          <div class="chip"><span class="cdot" style="background:#a78bfa"></span>African Union</div>
+          <div class="chip"><span class="cdot" style="background:#f97316"></span>AfDB</div>
+          <div class="chip"><span class="cdot" style="background:#c8a84b"></span>YALI Network</div>
+          <div class="chip"><span class="cdot" style="background:#5b9cf6"></span>BrighterMonday</div>
+          <div class="chip"><span class="cdot" style="background:#22c55e"></span>Plan International</div>
+          <div class="chip"><span class="cdot" style="background:#a78bfa"></span>UNICEF Jobs</div>
+          <div class="chip"><span class="cdot" style="background:#f97316"></span>WFP Careers</div>
         </div></div>
       </div>
     </div>
 
-    <!-- SIGNUP PANEL -->
+    <!-- SIGNUP -->
     <div class="panel" id="panel-signup">
-      <div class="scard">
+      <div class="signup-card">
         <div id="formWrap">
-          <div class="sc-title">Create your free account</div>
-          <p class="sc-sub">Upload your CV — Nafasi fills the rest. Matches start tomorrow morning.</p>
+          <div class="signup-card-title">Create your free account</div>
+          <p class="signup-card-sub">Upload your CV — Nafasi fills the rest. First matches arrive tomorrow morning.</p>
 
+          <!-- CV UPLOAD -->
           <div class="cv-zone" id="cvZone">
             <input type="file" id="cvFile" accept=".pdf" onchange="handleCV(this)">
-            <div class="cv-icon">📄</div>
-            <div class="cv-lbl">Upload your CV — PDF</div>
-            <div class="cv-sub">Nafasi reads it and fills your profile automatically</div>
+            <div class="cv-zone-icon">📄</div>
+            <div class="cv-zone-label">Upload your CV — PDF</div>
+            <div class="cv-zone-sub">Nafasi reads it and fills your profile automatically</div>
           </div>
-          <div class="cv-ok" id="cvOk">
+          <div class="cv-loaded" id="cvLoaded">
             <span>📄</span>
             <span class="cv-fn" id="cvFn"></span>
             <button class="cv-rm" onclick="removeCV()">✕</button>
           </div>
-          <div class="cv-reading" id="cvReading"><span class="spin"></span>Reading your CV...</div>
+          <div class="cv-reading" id="cvReading"><span class="spin"></span> Reading your CV...</div>
           <div class="ext-box" id="extBox">
-            <div class="ext-hd">✓ Profile auto-filled from your CV</div>
+            <div class="ext-label">✓ profile auto-filled from CV</div>
             <div id="extRows"></div>
           </div>
 
-          <form id="nForm">
+          <!-- FORM -->
+          <div class="fg">
+            <label class="fl">Full name</label>
+            <input type="text" class="fi" id="f_name" placeholder="Your full name">
+          </div>
+          <div class="fg">
+            <label class="fl">Email address</label>
+            <input type="email" class="fi" id="f_email" placeholder="your@email.com">
+          </div>
+          <div class="fg">
+            <label class="fl">Receive matches via</label>
+            <select class="fi fi-sel" id="f_method" onchange="toggleWA()">
+              <option value="">Choose how you want your matches</option>
+              <option value="email">Email</option>
+              <option value="whatsapp">WhatsApp</option>
+              <option value="both">Both — email and WhatsApp</option>
+            </select>
+          </div>
+          <div class="fg" id="waRow" style="display:none">
+            <label class="fl">WhatsApp number</label>
+            <input type="tel" class="fi" id="f_wa" placeholder="+254 722 000 000">
+            <div class="field-hint">Include country code. Kenya: +254 · Somalia: +252 · Uganda: +256</div>
+          </div>
+          <div class="fg">
+            <label class="fl">Country</label>
+            <select class="fi fi-sel" id="f_country">
+              <option value="">Select your country</option>
+              <optgroup label="Africa">
+                <option>Kenya</option><option>Nigeria</option><option>Ghana</option>
+                <option>Uganda</option><option>Tanzania</option><option>Ethiopia</option>
+                <option>Somalia</option><option>Rwanda</option><option>South Africa</option>
+                <option>Egypt</option><option>Morocco</option><option>Senegal</option>
+                <option>Zimbabwe</option><option>DRC</option><option>Sudan</option>
+                <option>South Sudan</option><option>Cameroon</option>
+              </optgroup>
+              <optgroup label="Asia">
+                <option>India</option><option>Bangladesh</option><option>Pakistan</option>
+                <option>Nepal</option><option>Philippines</option><option>Myanmar</option>
+                <option>Afghanistan</option><option>Yemen</option>
+              </optgroup>
+              <optgroup label="Middle East">
+                <option>Jordan</option><option>Lebanon</option><option>Iraq</option>
+                <option>Syria</option><option>Palestine</option>
+              </optgroup>
+              <optgroup label="Latin America">
+                <option>Brazil</option><option>Colombia</option><option>Haiti</option>
+                <option>Venezuela</option><option>Peru</option>
+              </optgroup>
+              <optgroup label="Europe & Other">
+                <option>United Kingdom</option><option>Ireland</option><option>France</option>
+                <option>Germany</option><option>United States</option><option>Canada</option>
+                <option>Australia</option><option>Other</option>
+              </optgroup>
+            </select>
+          </div>
+          <div class="fg">
+            <div class="region-label-row">
+              <label class="fl" style="margin-bottom:0">Preferred job locations</label>
+              <span class="region-default">🌐 Remote always included</span>
+            </div>
+            <div class="regions" style="margin-top:8px">
+              <div class="region locked">🌐 Remote worldwide</div>
+              <div class="region" onclick="tR(this)">East Africa</div>
+              <div class="region" onclick="tR(this)">Horn of Africa</div>
+              <div class="region" onclick="tR(this)">West Africa</div>
+              <div class="region" onclick="tR(this)">Southern Africa</div>
+              <div class="region" onclick="tR(this)">Central Africa</div>
+              <div class="region" onclick="tR(this)">Middle East & North Africa</div>
+              <div class="region" onclick="tR(this)">South Asia</div>
+              <div class="region" onclick="tR(this)">Southeast Asia</div>
+              <div class="region" onclick="tR(this)">Latin America</div>
+              <div class="region" onclick="tR(this)">Europe</div>
+              <div class="region" onclick="tR(this)">North America</div>
+              <div class="region" onclick="tR(this)">Anywhere worldwide</div>
+            </div>
+          </div>
 
-            <input type="hidden" name="cv_summary" id="f_cv">
-            <input type="hidden" name="education" id="f_edu">
-            <input type="hidden" name="skills" id="f_skills">
-            <input type="hidden" name="languages" id="f_langs">
-            <div class="fg">
-              <label class="fl">Full name</label>
-              <input type="text" class="fi" name="full_name" id="f_name" placeholder="Your full name" required>
-            </div>
-            <div class="fg">
-              <label class="fl">Email address</label>
-              <input type="email" class="fi" name="email" id="f_email" placeholder="your@email.com" required>
-            </div>
-            <div class="fg">
-              <label class="fl">Receive matches via</label>
-              <select class="fi fi-sel" name="alert_method" id="alertMethod" onchange="toggleWA()" required>
-                <option value="">Choose how you want your matches</option>
-                <option value="email">Email</option>
-                <option value="whatsapp">WhatsApp</option>
-                <option value="both">Both — email and WhatsApp</option>
-              </select>
-            </div>
-            <div class="fg" id="waRow" style="display:none">
-              <label class="fl">WhatsApp number</label>
-              <input type="tel" class="fi" name="whatsapp" id="f_wa" placeholder="+254 7XX XXX XXX">
-            </div>
-            <div class="fg">
-              <label class="fl">Country</label>
-              <select class="fi fi-sel" name="country" required>
-                <option value="">Select your country</option>
-                <optgroup label="Africa"><option>Kenya</option><option>Nigeria</option><option>Ghana</option><option>Uganda</option><option>Tanzania</option><option>Ethiopia</option><option>Somalia</option><option>Rwanda</option><option>South Africa</option><option>Egypt</option><option>Morocco</option><option>Senegal</option><option>Zimbabwe</option><option>DRC</option><option>Sudan</option><option>South Sudan</option><option>Cameroon</option></optgroup>
-                <optgroup label="Asia"><option>India</option><option>Bangladesh</option><option>Pakistan</option><option>Nepal</option><option>Philippines</option><option>Myanmar</option><option>Afghanistan</option><option>Yemen</option></optgroup>
-                <optgroup label="Middle East"><option>Jordan</option><option>Lebanon</option><option>Iraq</option><option>Syria</option><option>Palestine</option></optgroup>
-                <optgroup label="Latin America"><option>Brazil</option><option>Colombia</option><option>Haiti</option><option>Venezuela</option><option>Peru</option></optgroup>
-                <optgroup label="Europe & Other"><option>United Kingdom</option><option>Ireland</option><option>France</option><option>Germany</option><option>United States</option><option>Canada</option><option>Australia</option><option>Other</option></optgroup>
-              </select>
-            </div>
-            <div class="fg">
-              <label class="fl">Preferred job locations</label>
-              <div class="rnote">🌐 Remote worldwide is always included by default</div>
-              <div class="regions" id="regions">
-                <div class="region locked">🌐 Remote worldwide</div>
-                <div class="region" onclick="tR(this)">🌍 East Africa</div>
-                <div class="region" onclick="tR(this)">🌍 Horn of Africa</div>
-                <div class="region" onclick="tR(this)">🌍 West Africa</div>
-                <div class="region" onclick="tR(this)">🌍 Southern Africa</div>
-                <div class="region" onclick="tR(this)">🌍 Central Africa</div>
-                <div class="region" onclick="tR(this)">🌎 Middle East & North Africa</div>
-                <div class="region" onclick="tR(this)">🌏 South Asia</div>
-                <div class="region" onclick="tR(this)">🌏 Southeast Asia</div>
-                <div class="region" onclick="tR(this)">🌎 Latin America</div>
-                <div class="region" onclick="tR(this)">🌍 Europe</div>
-                <div class="region" onclick="tR(this)">🌎 North America</div>
-                <div class="region" onclick="tR(this)">🌍 Anywhere worldwide</div>
-              </div>
-              <input type="hidden" name="locations" id="f_locations">
-            </div>
-          </form>
-          <button class="sub-btn" onclick="submitForm()">Start receiving matches →</button>
-          <p class="fnote">Completely free. No subscription ever.<br>Questions? <a href="mailto:hellonafasijobs@gmail.com">hellonafasijobs@gmail.com</a></p>
+          <button class="submit-btn" id="submitBtn" onclick="submitForm()">Start receiving matches →</button>
+          <p class="form-note">
+            Completely free. No subscription ever.<br>
+            Questions? <a href="mailto:hellonafasijobs@gmail.com">hellonafasijobs@gmail.com</a>
+          </p>
         </div>
-        <div class="success-w" id="successW">
-          <div class="s-em">🌍</div>
-          <div class="s-ttl">You are on Nafasi.</div>
+
+        <div class="success-wrap" id="successWrap">
+          <div class="s-icon">🌍</div>
+          <div class="s-title">You are on Nafasi.</div>
           <p class="s-body">Your first matches arrive tomorrow morning — scored, ranked and ready to apply. Completely free. Go build something great.</p>
-          <div class="s-tag">✓ Account created · Matches incoming</div>
+          <div class="s-badge">✓ account created · matches incoming</div>
         </div>
       </div>
     </div>
@@ -331,187 +905,215 @@ footer{border-top:1px solid var(--bw);padding:20px 32px;display:flex;align-items
 </section>
 
 <footer>
-  <div class="f-logo">Nafasi<span>.jobs</span></div>
-  <div class="f-r">Free for every job seeker worldwide · <a href="mailto:hellonafasijobs@gmail.com">hellonafasijobs@gmail.com</a></div>
+  <div class="f-logo">nafasi<span>.jobs</span></div>
+  <div class="f-note">Free for every job seeker · <a href="mailto:hellonafasijobs@gmail.com">hellonafasijobs@gmail.com</a></div>
 </footer>
 
-
-
 <script>
-const API_KEY = ''; /* Add Anthropic key here when ready */
-let cvBase64 = '', extracted = {};
+/* ── CONFIG ── */
+var SUPABASE_URL = 'https://dzcizvjppaxtcqwopfkc.supabase.co';
+var SUPABASE_KEY = 'sb_publishable_L4MgYvPPGj5jrLux9Q29rw_oQrCDRXF';
+var API_KEY = ''; /* Add Anthropic key here when ready */
 
-/* ── PANELS ── */
-function togglePanel(name) {
-  ['how','signup'].forEach(p => {
-    const el = document.getElementById('panel-' + p);
-    const btn = p === 'how' ? document.getElementById('howBtn') : document.getElementById('accBtn');
+var cvBase64 = '';
+var extracted = {};
+
+/* ── PANELS — no async here ── */
+function openPanel(name) {
+  var panels = ['how', 'signup'];
+  var buttons = {
+    how: document.getElementById('howBtn'),
+    signup: document.getElementById('accBtn')
+  };
+  panels.forEach(function(p) {
+    var el = document.getElementById('panel-' + p);
+    var btn = buttons[p];
     if (p === name) {
-      const open = el.classList.contains('show');
-      el.classList.toggle('show', !open);
-      btn.classList.toggle('on', !open);
+      var isOpen = el.classList.contains('show');
+      el.classList.toggle('show', !isOpen);
+      if (btn) btn.classList.toggle('active', !isOpen);
     } else {
       el.classList.remove('show');
-      btn.classList.remove('on');
+      if (btn) btn.classList.remove('active');
     }
   });
-  setTimeout(() => {
-    const active = document.querySelector('.panel.show');
+  setTimeout(function() {
+    var active = document.querySelector('.panel.show');
     if (active) active.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   }, 60);
 }
 
-function openSignup() {
-  document.getElementById('panel-how').classList.remove('show');
-  document.getElementById('howBtn').classList.remove('on');
-  document.getElementById('panel-signup').classList.add('show');
-  document.getElementById('accBtn').classList.add('on');
-  setTimeout(() => document.getElementById('panel-signup').scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 60);
+/* ── WHATSAPP TOGGLE ── */
+function toggleWA() {
+  var v = document.getElementById('f_method').value;
+  var show = v === 'whatsapp' || v === 'both';
+  document.getElementById('waRow').style.display = show ? 'block' : 'none';
 }
 
-/* ── WHATSAPP FIELD ── */
-function toggleWA() {
-  const v = document.getElementById('alertMethod').value;
-  document.getElementById('waRow').style.display = (v === 'whatsapp' || v === 'both') ? 'block' : 'none';
+/* ── REGION TOGGLE ── */
+function tR(el) { el.classList.toggle('on'); }
+
+function getRegions() {
+  var selected = document.querySelectorAll('.region.on, .region.locked');
+  return Array.prototype.map.call(selected, function(el) {
+    return el.textContent.trim();
+  }).join(', ');
 }
 
 /* ── CV UPLOAD ── */
 function handleCV(input) {
-  const file = input.files[0];
+  var file = input.files[0];
   if (!file) return;
   if (file.type !== 'application/pdf') { alert('Please upload a PDF file.'); return; }
-  if (file.size > 5 * 1024 * 1024) { alert('File too large. Max 5MB.'); return; }
+  if (file.size > 5 * 1024 * 1024) { alert('File too large. Maximum 5MB.'); return; }
+
   document.getElementById('cvFn').textContent = file.name;
-  document.getElementById('cvOk').classList.add('show');
+  document.getElementById('cvLoaded').classList.add('show');
   document.getElementById('cvZone').style.display = 'none';
-  const reader = new FileReader();
-  reader.onload = e => { cvBase64 = e.target.result.split(',')[1]; readCV(); };
+
+  var reader = new FileReader();
+  reader.onload = function(e) {
+    cvBase64 = e.target.result.split(',')[1];
+    readCV();
+  };
   reader.readAsDataURL(file);
 }
 
 function removeCV() {
-  cvBase64 = ''; extracted = {};
+  cvBase64 = '';
+  extracted = {};
   document.getElementById('cvFile').value = '';
-  document.getElementById('cvOk').classList.remove('show');
+  document.getElementById('cvLoaded').classList.remove('show');
   document.getElementById('cvZone').style.display = 'block';
   document.getElementById('extBox').classList.remove('show');
   document.getElementById('cvReading').classList.remove('show');
 }
 
-async function readCV() {
+function readCV() {
   document.getElementById('cvReading').classList.add('show');
   document.getElementById('extBox').classList.remove('show');
 
   if (!API_KEY) {
-    await new Promise(r => setTimeout(r, 1000));
-    extracted = { name:'', education:'Extracted from CV', skills:'Extracted from CV', languages:'Extracted from CV', summary:'CV uploaded.' };
-    showExt(); return;
+    setTimeout(function() {
+      extracted = {
+        name: '',
+        education: 'Extracted from your CV',
+        skills: 'Extracted from your CV',
+        languages: 'Extracted from your CV',
+        summary: 'CV uploaded successfully.'
+      };
+      showExtracted();
+    }, 1000);
+    return;
   }
-  try {
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'x-api-key': API_KEY, 'anthropic-version': '2023-06-01', 'anthropic-dangerous-direct-browser-calls': 'true' },
-      body: JSON.stringify({ model: 'claude-sonnet-4-20250514', max_tokens: 500,
-        messages: [{ role: 'user', content: [
+
+  fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'x-api-key': API_KEY,
+      'anthropic-version': '2023-06-01',
+      'anthropic-dangerous-direct-browser-calls': 'true'
+    },
+    body: JSON.stringify({
+      model: 'claude-sonnet-4-20250514',
+      max_tokens: 500,
+      messages: [{
+        role: 'user',
+        content: [
           { type: 'document', source: { type: 'base64', media_type: 'application/pdf', data: cvBase64 }},
           { type: 'text', text: 'Extract from CV. Return ONLY JSON no markdown:\n{"name":"","education":"","skills":"comma separated","languages":"comma separated","current_role":"","summary":"one sentence"}' }
-        ]}]
-      })
-    });
-    const d = await res.json();
-    extracted = JSON.parse(d.content[0].text.replace(/```json|```/g,'').trim());
-  } catch(e) {
-    extracted = { name:'', education:'', skills:'', languages:'', summary:'CV uploaded.' };
-  }
-  showExt();
+        ]
+      }]
+    })
+  })
+  .then(function(res) { return res.json(); })
+  .then(function(data) {
+    var text = data.content[0].text.replace(/```json|```/g, '').trim();
+    extracted = JSON.parse(text);
+    showExtracted();
+  })
+  .catch(function() {
+    extracted = { name: '', education: '', skills: '', languages: '', summary: 'CV uploaded.' };
+    showExtracted();
+  });
 }
 
-function showExt() {
+function showExtracted() {
   document.getElementById('cvReading').classList.remove('show');
+
   if (extracted.name) document.getElementById('f_name').value = extracted.name;
-  document.getElementById('f_cv').value = extracted.summary || '';
-  document.getElementById('f_edu').value = extracted.education || '';
-  document.getElementById('f_skills').value = extracted.skills || '';
-  document.getElementById('f_langs').value = extracted.languages || '';
-  const rows = [];
-  if (extracted.education) rows.push(`<div class="ext-row"><b>Education</b> — ${extracted.education}</div>`);
-  if (extracted.skills) rows.push(`<div class="ext-row"><b>Skills</b> — ${extracted.skills}</div>`);
-  if (extracted.languages) rows.push(`<div class="ext-row"><b>Languages</b> — ${extracted.languages}</div>`);
-  document.getElementById('extRows').innerHTML = rows.join('') || '<div class="ext-row">CV uploaded. Complete the form below.</div>';
+
+  var rows = [];
+  if (extracted.education) rows.push('<div class="ext-row"><b>Education</b> — ' + extracted.education + '</div>');
+  if (extracted.skills) rows.push('<div class="ext-row"><b>Skills</b> — ' + extracted.skills + '</div>');
+  if (extracted.languages) rows.push('<div class="ext-row"><b>Languages</b> — ' + extracted.languages + '</div>');
+  document.getElementById('extRows').innerHTML = rows.join('') || '<div class="ext-row">CV uploaded. Please complete the form below.</div>';
   document.getElementById('extBox').classList.add('show');
 }
 
-/* ── SUBMIT ── */
-async function submitForm() {
-  const name  = document.getElementById('f_name').value.trim();
-  const email = document.getElementById('f_email').value.trim();
-  const country = document.querySelector('select[name="country"]').value;
-  const method  = document.getElementById('alertMethod').value;
-  const wa = document.getElementById('f_wa').value.trim();
-
-  if (!name)  { alert('Please enter your name.'); return; }
-  if (!email || !email.includes('@')) { alert('Please enter a valid email.'); return; }
-  if (!country) { alert('Please select your country.'); return; }
-  if (!method)  { alert('Please choose how to receive your matches.'); return; }
-  if ((method==='whatsapp'||method==='both') && !wa) { alert('Please enter your WhatsApp number.'); return; }
-
-  document.getElementById('f_locations').value = getSelectedRegions();
-  await saveToSupabase({
-    full_name: name,
-    email: email,
-    country: country,
-    alert_method: method,
-    whatsapp: wa,
-    locations: getSelectedRegions(),
-    cv_summary: document.getElementById('f_cv').value,
-    education:  document.getElementById('f_edu').value,
-    skills:     document.getElementById('f_skills').value,
-    languages:  document.getElementById('f_langs').value,
-    min_score: 70,
-    status: 'active',
-    total_matches: 0
+/* ── SAVE TO SUPABASE ── */
+function saveToSupabase(userData, onDone) {
+  fetch(SUPABASE_URL + '/rest/v1/users', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'apikey': SUPABASE_KEY,
+      'Authorization': 'Bearer ' + SUPABASE_KEY,
+      'Prefer': 'return=minimal'
+    },
+    body: JSON.stringify(userData)
+  })
+  .then(function(res) {
+    onDone(true);
+  })
+  .catch(function(err) {
+    console.error('Supabase error:', err);
+    onDone(false);
   });
-
-  document.getElementById('formWrap').style.display = 'none';
-  document.getElementById('successW').classList.add('show');
-}
-/* regions */
-function tR(el){ el.classList.toggle('on'); }
-function getSelectedRegions(){
-  return [...document.querySelectorAll('.region.on,.region.locked')]
-    .map(e=>e.textContent.trim()).join(', ');
 }
 
-/* ── SUPABASE CONFIG ── */
-const SUPABASE_URL = 'https://dzcizvjppaxtcqwopfkc.supabase.co';   /* replace after setup */
-const SUPABASE_KEY = 'sb_publishable_L4MgYvPPGj5jrLux9Q29rw_oQrCDRXF'; /* replace after setup */
+/* ── SUBMIT — no async, uses callbacks ── */
+function submitForm() {
+  var name    = document.getElementById('f_name').value.trim();
+  var email   = document.getElementById('f_email').value.trim();
+  var method  = document.getElementById('f_method').value;
+  var country = document.getElementById('f_country').value;
+  var wa      = document.getElementById('f_wa').value.trim();
 
-async function saveToSupabase(userData) {
-  try {
-    const res = await fetch(`${SUPABASE_URL}/rest/v1/users`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'apikey': SUPABASE_KEY,
-        'Authorization': `Bearer ${SUPABASE_KEY}`,
-        'Prefer': 'return=minimal'
-      },
-      body: JSON.stringify({
-        ...userData,
-        date_joined: new Date().toISOString().slice(0, 10)
-      })
-    });
-    if (!res.ok) {
-      const err = await res.text();
-      /* If duplicate email just show success — user already registered */
-      if (err.includes('duplicate') || err.includes('unique')) return true;
-      console.error('Supabase error:', err);
-    }
-    return true;
-  } catch(e) {
-    console.error('Save failed:', e);
-    return false;
+  if (!name)   { alert('Please enter your name.'); return; }
+  if (!email || email.indexOf('@') < 0) { alert('Please enter a valid email address.'); return; }
+  if (!method) { alert('Please choose how you want to receive your matches.'); return; }
+  if ((method === 'whatsapp' || method === 'both') && !wa) {
+    alert('Please enter your WhatsApp number.'); return;
   }
+  if (!country) { alert('Please select your country.'); return; }
+
+  var btn = document.getElementById('submitBtn');
+  btn.textContent = 'Saving...';
+  btn.disabled = true;
+
+  var userData = {
+    full_name:    name,
+    email:        email,
+    country:      country,
+    alert_method: method,
+    whatsapp:     wa,
+    locations:    getRegions(),
+    education:    extracted.education || '',
+    skills:       extracted.skills || '',
+    languages:    extracted.languages || '',
+    cv_summary:   extracted.summary || '',
+    min_score:    70,
+    status:       'active',
+    total_matches: 0,
+    date_joined:  new Date().toISOString().slice(0, 10)
+  };
+
+  saveToSupabase(userData, function(ok) {
+    document.getElementById('formWrap').style.display = 'none';
+    document.getElementById('successWrap').classList.add('show');
+  });
 }
 </script>
 </body>
