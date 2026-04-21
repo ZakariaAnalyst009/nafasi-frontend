@@ -505,13 +505,8 @@ h1 em {
 }
 .fi-sel option { background: var(--ink2); color: var(--white); }
 
-/* WHATSAPP HINT */
-.field-hint {
-  font-size: 11px;
-  color: var(--muted2);
-  margin-top: 4px;
-  font-weight: 300;
-}
+/* FIELD HINT */
+
 
 /* REGIONS */
 .region-label-row {
@@ -688,14 +683,14 @@ footer {
         <div class="step">
           <div class="step-num">// 03</div>
           <div class="step-title">Apply on the original platform</div>
-          <div class="step-desc">Your digest arrives by email or WhatsApp — your choice. Click any match to apply directly on ReliefWeb, UNHCR or wherever it was posted. Nafasi tracks your progress.</div>
+          <div class="step-desc">Your digest arrives by email every morning. Click any match to apply directly on ReliefWeb, UNHCR or wherever it was posted. Nafasi tracks your progress.</div>
         </div>
       </div>
       <div class="how-free-note">
         <strong>Completely free.</strong> No subscription. No premium tier. No credit card ever. Create an account and your first matches arrive tomorrow morning.
       </div>
       <div class="ticker-wrap">
-        <div class="ticker-label">102 sources scanned every morning</div>
+        <div class="ticker-label">135+ sources scanned every morning</div>
         <div class="ticker-track"><div class="ticker">
           <div class="chip"><span class="cdot" style="background:#c8a84b"></span>ReliefWeb</div>
           <div class="chip"><span class="cdot" style="background:#5b9cf6"></span>DevEx</div>
@@ -736,6 +731,12 @@ footer {
           <div class="chip"><span class="cdot" style="background:#a78bfa"></span>SomaliJobs</div>
           <div class="chip"><span class="cdot" style="background:#f97316"></span>World Bank</div>
           <div class="chip"><span class="cdot" style="background:#c8a84b"></span>Fuzu</div>
+          <div class="chip"><span class="cdot" style="background:#22c55e"></span>Action Against Hunger</div>
+          <div class="chip"><span class="cdot" style="background:#c8a84b"></span>Catholic Relief Services</div>
+          <div class="chip"><span class="cdot" style="background:#5b9cf6"></span>Islamic Relief</div>
+          <div class="chip"><span class="cdot" style="background:#f97316"></span>Concern Worldwide</div>
+          <div class="chip"><span class="cdot" style="background:#a78bfa"></span>NGO Jobs East Africa</div>
+          <div class="chip"><span class="cdot" style="background:#22c55e"></span>EthioJobs</div>
           <div class="chip"><span class="cdot" style="background:#5b9cf6"></span>IRC Careers</div>
         </div></div>
         <div class="ticker-track"><div class="ticker rev">
@@ -817,19 +818,6 @@ footer {
             <label class="fl">Email address</label>
             <input type="email" class="fi" id="f_email" placeholder="your@email.com">
           </div>
-          <div class="fg">
-            <label class="fl">Receive matches via</label>
-            <select class="fi fi-sel" id="f_method" onchange="toggleWA()">
-              <option value="">Choose how you want your matches</option>
-              <option value="email">Email</option>
-              <option value="whatsapp">WhatsApp</option>
-              <option value="both">Both — email and WhatsApp</option>
-            </select>
-          </div>
-          <div class="fg" id="waRow" style="display:none">
-            <label class="fl">WhatsApp number</label>
-            <input type="tel" class="fi" id="f_wa" placeholder="+254 722 000 000">
-            <div class="field-hint">Include country code. Kenya: +254 · Somalia: +252 · Uganda: +256</div>
           </div>
           <div class="fg">
             <label class="fl">Country</label>
@@ -943,12 +931,7 @@ function openPanel(name) {
   }, 60);
 }
 
-/* ── WHATSAPP TOGGLE ── */
-function toggleWA() {
-  var v = document.getElementById('f_method').value;
-  var show = v === 'whatsapp' || v === 'both';
-  document.getElementById('waRow').style.display = show ? 'block' : 'none';
-}
+
 
 /* ── REGION TOGGLE ── */
 function tR(el) { el.classList.toggle('on'); }
@@ -1077,16 +1060,13 @@ function saveToSupabase(userData, onDone) {
 function submitForm() {
   var name    = document.getElementById('f_name').value.trim();
   var email   = document.getElementById('f_email').value.trim();
-  var method  = document.getElementById('f_method').value;
+  var method  = 'email';
   var country = document.getElementById('f_country').value;
-  var wa      = document.getElementById('f_wa').value.trim();
 
   if (!name)   { alert('Please enter your name.'); return; }
   if (!email || email.indexOf('@') < 0) { alert('Please enter a valid email address.'); return; }
   if (!method) { alert('Please choose how you want to receive your matches.'); return; }
-  if ((method === 'whatsapp' || method === 'both') && !wa) {
-    alert('Please enter your WhatsApp number.'); return;
-  }
+
   if (!country) { alert('Please select your country.'); return; }
 
   var btn = document.getElementById('submitBtn');
@@ -1097,8 +1077,6 @@ function submitForm() {
     full_name:    name,
     email:        email,
     country:      country,
-    alert_method: method,
-    whatsapp:     wa,
     locations:    getRegions(),
     education:    extracted.education || '',
     skills:       extracted.skills || '',
