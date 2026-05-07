@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nafasi.jobs — Congratulations!</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --ink:#0a0f1e;--ink2:#141929;
+  --gold:#c9a84c;--gold2:#f0d68a;
+  --off:#f5f3ee;--gray:#7a8194;--lgray:#b0b8cc;
+  --green:#1a7a5e;--green2:#d0ede6;
+  --border:rgba(201,168,76,0.18);
+}
+html{scroll-behavior:smooth}
+body{font-family:'IBM Plex Sans',sans-serif;background:var(--off);color:var(--ink);min-height:100vh;-webkit-font-smoothing:antialiased}
+
+/* NAV */
+nav{background:var(--ink);padding:0 28px;height:56px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border)}
+.nav-logo{font-family:'Playfair Display',serif;font-size:18px;font-weight:900;color:white;text-decoration:none}
+.nav-logo span{color:var(--gold)}
+
+/* HERO */
+.hero{background:var(--ink);padding:60px 24px 0;text-align:center;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;top:-100px;left:50%;transform:translateX(-50%);width:600px;height:400px;border-radius:50%;background:radial-gradient(circle,rgba(201,168,76,0.1) 0%,transparent 70%);pointer-events:none}
+.confetti-emoji{font-size:52px;margin-bottom:20px;display:block;animation:bounce 1s ease infinite alternate}
+@keyframes bounce{from{transform:translateY(0)}to{transform:translateY(-10px)}}
+.hero-eyebrow{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--gold);letter-spacing:.15em;text-transform:uppercase;margin-bottom:16px}
+.hero-title{font-family:'Playfair Display',serif;font-size:clamp(32px,5vw,52px);font-weight:900;color:white;letter-spacing:-1.5px;line-height:1.05;margin-bottom:16px}
+.hero-title em{font-style:italic;color:var(--gold)}
+.hero-sub{font-size:16px;color:rgba(255,255,255,.6);font-weight:300;line-height:1.8;max-width:540px;margin:0 auto}
+
+/* OPP CARD */
+.opp-reveal{max-width:600px;margin:36px auto 0;background:rgba(255,255,255,.06);border:1px solid rgba(201,168,76,.2);border-radius:14px;padding:24px;text-align:left;position:relative;overflow:hidden}
+.opp-reveal::before{content:'✓';position:absolute;top:-20px;right:-20px;font-size:120px;color:rgba(201,168,76,.05);font-weight:900;line-height:1}
+.opp-badge{display:inline-flex;align-items:center;gap:7px;background:rgba(201,168,76,.12);border:1px solid rgba(201,168,76,.2);color:var(--gold);font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;padding:4px 12px;border-radius:100px;margin-bottom:12px}
+.opp-title{font-family:'Playfair Display',serif;font-size:20px;font-weight:700;color:white;margin-bottom:5px;letter-spacing:-.3px}
+.opp-org{font-size:13px;color:rgba(255,255,255,.55);font-weight:300;margin-bottom:14px}
+.opp-score{display:flex;align-items:center;gap:12px}
+.score-circle{width:48px;height:48px;border-radius:50%;border:3px solid var(--gold);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.score-circle-n{font-family:'Playfair Display',serif;font-size:16px;font-weight:900;color:var(--gold)}
+.score-info{font-size:12px;color:rgba(255,255,255,.5);font-weight:300;line-height:1.6}
+
+/* WAVE */
+.wave{width:100%;height:60px;background:var(--ink);position:relative;margin-bottom:-2px}
+.wave svg{width:100%;height:100%}
+
+/* MAIN */
+.main{max-width:680px;margin:0 auto;padding:0 24px 80px}
+
+/* PAY IT FORWARD */
+.pay-section{background:white;border:1px solid #e8e4dc;border-radius:20px;padding:36px;margin-bottom:24px;text-align:center}
+.pay-eyebrow{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--green);letter-spacing:.15em;text-transform:uppercase;margin-bottom:12px;display:flex;align-items:center;justify-content:center;gap:8px}
+.pay-eyebrow::before,.pay-eyebrow::after{content:'';flex:1;height:1px;background:var(--green2)}
+.pay-title{font-family:'Playfair Display',serif;font-size:26px;font-weight:900;color:var(--ink);letter-spacing:-.5px;line-height:1.1;margin-bottom:12px}
+.pay-title em{font-style:italic;color:var(--green)}
+.pay-body{font-size:14px;color:var(--gray);line-height:1.8;font-weight:300;max-width:480px;margin:0 auto 28px}
+.pay-amount{font-family:'Playfair Display',serif;font-size:64px;font-weight:900;color:var(--ink);line-height:1;margin-bottom:6px}
+.pay-amount-sub{font-size:13px;color:var(--gray);font-weight:300;margin-bottom:28px}
+
+/* HOW TO PAY */
+.pay-how{background:#f5f3ee;border:1px solid #e8e4dc;border-radius:12px;padding:20px;margin-bottom:16px;text-align:left}
+.pay-how-title{font-size:13px;font-weight:600;color:var(--ink);margin-bottom:8px}
+.pay-how-body{font-size:13px;color:var(--gray);line-height:1.8;font-weight:300}
+.pay-how-body strong{color:var(--ink);font-weight:600}
+
+/* CONFIRM FORM */
+.confirm-form{display:none;background:#f5f3ee;border:1px solid #e8e4dc;border-radius:12px;padding:24px;margin-bottom:16px;text-align:left}
+.confirm-form.show{display:block}
+.cf-title{font-size:14px;font-weight:600;color:var(--ink);margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.cf-field{margin-bottom:14px}
+.cf-label{display:block;font-size:11px;font-weight:600;color:var(--ink);letter-spacing:.04em;text-transform:uppercase;margin-bottom:5px}
+.cf-inp{width:100%;padding:12px 14px;border:1.5px solid #e2e8f0;border-radius:8px;font-size:14px;font-family:'IBM Plex Sans',sans-serif;color:var(--ink);outline:none;background:white;transition:border-color .2s}
+.cf-inp:focus{border-color:var(--gold)}
+.cf-inp::placeholder{color:#94a3b8}
+.cf-hint{font-size:11px;color:var(--gray);margin-top:4px;font-weight:300}
+
+/* BUTTONS */
+.pay-btn{width:100%;padding:15px;border:none;border-radius:10px;font-family:'IBM Plex Sans',sans-serif;font-size:15px;font-weight:700;cursor:pointer;transition:all .2s;letter-spacing:.02em;margin-bottom:10px}
+.pay-btn-primary{background:var(--ink);color:white}
+.pay-btn-primary:hover{background:var(--ink2)}
+.pay-btn-secondary{background:var(--gold);color:var(--ink)}
+.pay-btn-secondary:hover{background:var(--gold2)}
+.pay-btn-skip{width:100%;padding:12px;border:none;background:transparent;color:var(--gray);font-family:'IBM Plex Sans',sans-serif;font-size:13px;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+.pay-btn-skip:hover{color:var(--ink)}
+.pay-note{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--lgray);margin-top:16px;font-style:italic}
+
+/* IMPACT */
+.impact-section{background:var(--ink);border-radius:16px;padding:32px;margin-bottom:24px;color:white}
+.impact-title{font-family:'Playfair Display',serif;font-size:20px;font-weight:700;letter-spacing:-.3px;margin-bottom:20px}
+.impact-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.impact-item{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:16px}
+.impact-icon{font-size:24px;margin-bottom:8px}
+.impact-n{font-family:'Playfair Display',serif;font-size:22px;font-weight:900;color:var(--gold);line-height:1;margin-bottom:4px}
+.impact-l{font-size:12px;color:rgba(255,255,255,.55);font-weight:300;line-height:1.5}
+
+/* SKIP STATE */
+.skip-section{display:none;text-align:center;padding:24px;background:white;border:1px solid #e8e4dc;border-radius:16px;margin-bottom:24px}
+.skip-section.show{display:block}
+.skip-title{font-size:15px;font-weight:600;color:var(--ink);margin-bottom:8px}
+.skip-body{font-size:13px;color:var(--gray);line-height:1.7;font-weight:300;margin-bottom:16px}
+
+/* SUCCESS */
+.success-state{display:none;text-align:center;padding:40px 20px}
+.success-state.show{display:block}
+.success-big{font-size:72px;margin-bottom:20px}
+.success-title-el{font-family:'Playfair Display',serif;font-size:28px;font-weight:900;color:var(--ink);letter-spacing:-.5px;margin-bottom:12px}
+.success-body{font-size:14px;color:var(--gray);line-height:1.8;font-weight:300;max-width:400px;margin:0 auto 24px}
+.success-tag{display:inline-flex;align-items:center;gap:6px;background:var(--green2);color:var(--green);padding:8px 18px;border-radius:100px;font-size:13px;font-weight:600;margin-bottom:20px}
+.share-btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.share-btn{padding:10px 20px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;border:none;font-family:'IBM Plex Sans',sans-serif;transition:all .2s;text-decoration:none;display:inline-flex;align-items:center;gap:6px}
+.share-linkedin{background:#0077b5;color:white}
+.share-whatsapp{background:#25d366;color:white}
+.share-copy{background:var(--off);color:var(--ink);border:1px solid #e8e4dc}
+
+@media(max-width:560px){
+  .impact-grid{grid-template-columns:1fr}
+  .pay-section{padding:24px 20px}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">Nafasi<span>.jobs</span></a>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <span class="confetti-emoji">🎉</span>
+  <div class="hero-eyebrow">You did it</div>
+  <h1 class="hero-title">You got the<br><em>opportunity.</em></h1>
+  <p class="hero-sub">Nafasi matched you. You applied. You succeeded. This is exactly what we built this for.</p>
+  <div class="opp-reveal">
+    <div class="opp-badge">✓ Placed through Nafasi</div>
+    <div class="opp-title" id="oppTitle">Opportunity</div>
+    <div class="opp-org" id="oppOrg">Organization</div>
+    <div class="opp-score">
+      <div class="score-circle"><div class="score-circle-n" id="oppScore">—</div></div>
+      <div class="score-info">Your match score when Nafasi first identified this opportunity for you.</div>
+    </div>
+  </div>
+</div>
+
+<div class="wave">
+  <svg viewBox="0 0 1440 60" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+    <path d="M0,30 C360,60 1080,0 1440,30 L1440,60 L0,60 Z" fill="#f5f3ee"/>
+  </svg>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+
+  <!-- PAY IT FORWARD -->
+  <div class="pay-section" id="paySection">
+    <div class="pay-eyebrow">Pay it forward</div>
+    <h2 class="pay-title">Nafasi is free.<br><em>Until it works.</em></h2>
+    <p class="pay-body">We never charge job seekers upfront. Nafasi is built on a simple promise — you only pay when we actually deliver value. Now that you have succeeded, a one-time $50 success fee keeps this platform free for the next person in your position.</p>
+    <div class="pay-amount">$50</div>
+    <div class="pay-amount-sub">One time · Pay now or when your first salary arrives · No pressure</div>
+
+    <!-- HOW TO PAY -->
+    <div class="pay-how">
+      <div class="pay-how-title">How to pay</div>
+      <div class="pay-how-body">
+        Simply reply to your Nafasi daily digest email — or email us directly at
+        <strong><a href="mailto:hellonafasijobs@gmail.com" style="color:var(--gold);text-decoration:none">hellonafasijobs@gmail.com</a></strong>
+        and let us know you got the opportunity. We will reach out with M-Pesa or PayPal details.
+        <br><br>
+        Or confirm here and we will contact you:
+      </div>
+    </div>
+
+    <!-- CONFIRM PAYMENT INTENT — saves to Supabase -->
+    <div class="confirm-form" id="confirmForm">
+      <div class="cf-title">📧 Confirm payment intent</div>
+      <div class="cf-field">
+        <label class="cf-label">Your email</label>
+        <input type="email" class="cf-inp" id="payEmail" placeholder="your@email.com">
+        <div class="cf-hint">We will contact you with payment details within 24 hours</div>
+      </div>
+      <div class="cf-field">
+        <label class="cf-label">The opportunity you got</label>
+        <input type="text" class="cf-inp" id="payOpp" placeholder="e.g. MEAL Officer at UNHCR">
+      </div>
+      <div class="cf-field">
+        <label class="cf-label">Payment method preference</label>
+        <select class="cf-inp" id="payMethod">
+          <option value="mpesa">M-Pesa (Kenya)</option>
+          <option value="paypal">PayPal</option>
+          <option value="bank">Bank transfer</option>
+          <option value="other">Other — we will figure it out</option>
+        </select>
+      </div>
+      <button class="pay-btn pay-btn-secondary" onclick="submitPaymentIntent()">Confirm — we will contact you →</button>
+      <button class="pay-btn pay-btn-skip" onclick="showSkip()">I will pay when my first salary arrives</button>
+    </div>
+
+    <button class="pay-btn pay-btn-primary" id="openConfirmBtn" onclick="openConfirmForm()">I want to pay →</button>
+    <button class="pay-btn-skip" onclick="showSkip()">I will pay when my first salary arrives →</button>
+    <div class="pay-note">The platform stays free for you regardless. There is no deadline and no consequence for not paying. We trust you.</div>
+  </div>
+
+  <!-- IMPACT -->
+  <div class="impact-section">
+    <div class="impact-title">What your $50 does</div>
+    <div class="impact-grid">
+      <div class="impact-item">
+        <div class="impact-icon">🤖</div>
+        <div class="impact-n">50</div>
+        <div class="impact-l">Daily matches for another job seeker — your $50 covers a month of matching for one user</div>
+      </div>
+      <div class="impact-item">
+        <div class="impact-icon">🌍</div>
+        <div class="impact-n">1</div>
+        <div class="impact-l">Person in the same position you were in — searching for the right opportunity</div>
+      </div>
+      <div class="impact-item">
+        <div class="impact-icon">📧</div>
+        <div class="impact-n">150+</div>
+        <div class="impact-l">Daily opportunity digests sent to job seekers across Africa and beyond</div>
+      </div>
+      <div class="impact-item">
+        <div class="impact-icon">📚</div>
+        <div class="impact-n">∞</div>
+        <div class="impact-l">Nafasi stays free for every job seeker who cannot afford to pay — because you paid</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SKIP STATE -->
+  <div class="skip-section" id="skipSection">
+    <div class="skip-title">No problem at all</div>
+    <p class="skip-body">We completely understand. When your first salary or scholarship disbursement arrives, come back and pay then. The platform remains fully free for you in the meantime.</p>
+    <button class="pay-btn pay-btn-primary" style="max-width:280px;margin:0 auto 12px;display:block" onclick="document.getElementById('skipSection').classList.remove('show');document.getElementById('paySection').style.display='block'">Pay now after all →</button>
+    <button class="pay-btn-skip" onclick="showSuccess('skipped')">Continue to dashboard →</button>
+  </div>
+
+  <!-- SUCCESS STATE -->
+  <div class="success-state" id="successState">
+    <div class="success-big" id="successEmoji">🌍</div>
+    <h2 class="success-title-el" id="successTitle">Thank you — genuinely.</h2>
+    <p class="success-body" id="successBody">Your payment keeps Nafasi free for the next job seeker. You were in their position not long ago. You just made their journey a little easier.</p>
+    <div class="success-tag" id="successTag">✓ Payment confirmed · Thank you</div>
+    <div style="margin:20px 0">
+      <a href="dashboard.html" style="display:inline-block;background:var(--ink);color:white;padding:13px 28px;border-radius:8px;font-size:14px;font-weight:600;text-decoration:none;margin-bottom:16px">Go to my dashboard →</a>
+    </div>
+    <div style="font-size:14px;color:var(--gray);margin-bottom:16px;font-weight:300">Share your success — it helps others find Nafasi</div>
+    <div class="share-btns">
+      <a class="share-btn share-linkedin" href="#" onclick="shareLinkedIn();return false">💼 Share on LinkedIn</a>
+      <a class="share-btn share-whatsapp" href="#" onclick="shareWhatsApp();return false">💬 Share on WhatsApp</a>
+      <button class="share-btn share-copy" onclick="copyLink()">🔗 Copy link</button>
+    </div>
+  </div>
+
+</div><!-- /main -->
+
+<script>
+const SB_URL = 'https://dzcizvjppaxtcqwopfkc.supabase.co';
+const SB_KEY = 'sb_publishable_L4MgYvPPGj5jrLux9Q29rw_oQrCDRXF';
+
+/* ── READ URL PARAMS ── */
+const params   = new URLSearchParams(window.location.search);
+const oppTitle = params.get('opp')   || 'Your matched opportunity';
+const oppOrg   = params.get('org')   || '';
+const oppScore = params.get('score') || '—';
+const oppType  = params.get('type')  || 'Opportunity';
+const userEmail = params.get('email') || localStorage.getItem('nafasi_email') || '';
+
+document.getElementById('oppTitle').textContent = oppTitle;
+document.getElementById('oppOrg').textContent   = oppOrg;
+document.getElementById('oppScore').textContent = oppScore;
+if (userEmail) document.getElementById('payEmail').value = userEmail;
+if (oppTitle && oppTitle !== 'Your matched opportunity') {
+  document.getElementById('payOpp').value = oppTitle + (oppOrg ? ' at ' + oppOrg : '');
+}
+
+/* ── CONFIRM FORM ── */
+function openConfirmForm() {
+  document.getElementById('confirmForm').classList.add('show');
+  document.getElementById('openConfirmBtn').style.display = 'none';
+  document.getElementById('confirmForm').scrollIntoView({ behavior:'smooth', block:'nearest' });
+}
+
+/* ── SUBMIT PAYMENT INTENT — saves to Supabase placements table ── */
+async function submitPaymentIntent() {
+  const email  = document.getElementById('payEmail').value.trim();
+  const opp    = document.getElementById('payOpp').value.trim();
+  const method = document.getElementById('payMethod').value;
+
+  if (!email || !email.includes('@')) { alert('Please enter your email address.'); return; }
+
+  try {
+    await fetch(`${SB_URL}/rest/v1/placements`, {
+      method:  'POST',
+      headers: {
+        apikey:         SB_KEY,
+        Authorization:  `Bearer ${SB_KEY}`,
+        'Content-Type': 'application/json',
+        Prefer:         'return=minimal'
+      },
+      body: JSON.stringify({
+        candidate_email:  email,
+        opportunity:      opp || oppTitle,
+        organization:     oppOrg,
+        match_score:      parseInt(oppScore) || 0,
+        payment_method:   method,
+        payment_status:   'intent',
+        amount_usd:       50,
+        date_flagged:     new Date().toISOString().slice(0,10)
+      })
+    });
+  } catch(e) { console.error('Supabase placement save error:', e); }
+
+  // Also update user record if we have their email
+  if (email) {
+    try {
+      await fetch(`${SB_URL}/rest/v1/users?email=eq.${encodeURIComponent(email)}`, {
+        method:  'PATCH',
+        headers: {
+          apikey:         SB_KEY,
+          Authorization:  `Bearer ${SB_KEY}`,
+          'Content-Type': 'application/json',
+          Prefer:         'return=minimal'
+        },
+        body: JSON.stringify({ placement_status: 'placed', placement_date: new Date().toISOString().slice(0,10) })
+      });
+    } catch(e) { /* non-critical */ }
+  }
+
+  showSuccess('confirmed');
+}
+
+/* ── SKIP ── */
+function showSkip() {
+  document.getElementById('paySection').style.display = 'none';
+  document.getElementById('skipSection').classList.add('show');
+  document.getElementById('skipSection').scrollIntoView({ behavior:'smooth' });
+}
+
+/* ── SUCCESS ── */
+function showSuccess(type) {
+  document.getElementById('paySection').style.display  = 'none';
+  document.getElementById('skipSection').classList.remove('show');
+  document.getElementById('successState').classList.add('show');
+  document.getElementById('successState').scrollIntoView({ behavior:'smooth' });
+
+  if (type === 'skipped') {
+    document.getElementById('successEmoji').textContent  = '🌱';
+    document.getElementById('successTitle').textContent  = 'Your journey continues.';
+    document.getElementById('successBody').textContent   = 'Your dashboard is ready. We have noted your intention to pay when your salary arrives. The platform stays free for you. Go build something great.';
+    document.getElementById('successTag').textContent    = '✓ Reminder noted · Dashboard ready';
+  }
+}
+
+/* ── SHARE ── */
+function shareLinkedIn() {
+  const text = encodeURIComponent(`I just landed a ${oppType} through Nafasi.jobs — a free AI career matching platform for humanitarian and development professionals. It scans 135+ sources daily and matched me to the right opportunity. Highly recommend: https://nafasi.jobs`);
+  window.open(`https://www.linkedin.com/sharing/share-offsite/?url=https://nafasi.jobs&summary=${text}`, '_blank');
+}
+
+function shareWhatsApp() {
+  const text = encodeURIComponent(`I got a ${oppType} through Nafasi.jobs 🎉 It is a free platform that matches humanitarian professionals to jobs, scholarships and fellowships from 135+ sources. Highly recommend: https://nafasi.jobs`);
+  window.open(`https://wa.me/?text=${text}`, '_blank');
+}
+
+function copyLink() {
+  navigator.clipboard.writeText('https://nafasi.jobs').then(() => {
+    alert('Link copied! Share it with colleagues who are job searching.');
+  }).catch(() => {
+    prompt('Copy this link:', 'https://nafasi.jobs');
+  });
+}
+</script>
+</body>
+</html>

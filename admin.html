@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nafasi.jobs — Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--ink:#0a0f1e;--ink2:#141929;--gold:#c9a84c;--gold2:#f0d68a;--white:#fff;--gray:#7a8194;--lgray:#b0b8cc;--green:#1a7a5e;--red:#dc2626;--border:rgba(201,168,76,0.15);--borderw:rgba(255,255,255,0.08);--sb:220px}
+body{font-family:'IBM Plex Sans',sans-serif;background:var(--ink2);color:var(--white);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+::-webkit-scrollbar{width:3px}::-webkit-scrollbar-thumb{background:var(--gold)}
+/* LOGIN */
+.login-gate{position:fixed;inset:0;background:var(--ink);display:flex;align-items:center;justify-content:center;z-index:999}
+.login-box{background:var(--ink2);border:1px solid var(--border);border-radius:16px;padding:40px;width:340px;text-align:center}
+.login-logo{font-family:'Playfair Display',serif;font-size:24px;font-weight:900;color:white;margin-bottom:6px}
+.login-logo span{color:var(--gold)}
+.login-sub{font-size:12px;color:var(--gray);margin-bottom:28px;font-weight:300}
+.login-inp{width:100%;padding:12px 14px;background:rgba(255,255,255,.05);border:1.5px solid var(--borderw);border-radius:8px;color:white;font-size:14px;font-family:'IBM Plex Sans',sans-serif;outline:none;margin-bottom:12px;transition:border-color .2s}
+.login-inp:focus{border-color:var(--gold)}
+.login-inp::placeholder{color:rgba(255,255,255,.2)}
+.login-btn{width:100%;background:var(--gold);color:var(--ink);border:none;padding:12px;border-radius:8px;font-family:'IBM Plex Sans',sans-serif;font-size:14px;font-weight:700;cursor:pointer}
+.login-btn:hover{background:var(--gold2)}
+.login-err{font-size:12px;color:#f87171;margin-top:8px;display:none}
+/* SIDEBAR */
+.sidebar{position:fixed;top:0;left:0;bottom:0;width:var(--sb);background:var(--ink);border-right:1px solid var(--border);display:flex;flex-direction:column;z-index:50;overflow-y:auto}
+.sb-logo{padding:20px 18px;border-bottom:1px solid var(--border)}
+.sb-logo-text{font-family:'Playfair Display',serif;font-size:17px;font-weight:900;color:white}
+.sb-logo-text span{color:var(--gold)}
+.sb-badge{display:inline-block;background:rgba(201,168,76,.15);border:1px solid rgba(201,168,76,.25);color:var(--gold);font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;padding:2px 8px;border-radius:100px;margin-top:4px}
+.sb-nav{flex:1;padding:12px 0}
+.sb-grp{font-family:'IBM Plex Mono',monospace;font-size:9px;color:rgba(255,255,255,.2);letter-spacing:.15em;text-transform:uppercase;padding:12px 18px 6px}
+.sb-item{display:flex;align-items:center;gap:10px;padding:9px 18px;font-size:13px;color:var(--lgray);cursor:pointer;transition:all .2s;border-left:2px solid transparent;position:relative}
+.sb-item:hover{color:white;background:rgba(255,255,255,.03);border-left-color:rgba(201,168,76,.3)}
+.sb-item.active{color:white;background:rgba(201,168,76,.07);border-left-color:var(--gold)}
+.sb-item .ico{font-size:14px;width:18px;text-align:center;flex-shrink:0}
+.sb-cnt{position:absolute;right:14px;background:var(--gold);color:var(--ink);font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:700;padding:1px 6px;border-radius:100px}
+.sb-footer{padding:14px 18px;border-top:1px solid var(--border)}
+.sb-out{font-size:11px;color:var(--gray);cursor:pointer;margin-top:4px;transition:color .2s;background:none;border:none;font-family:'IBM Plex Sans',sans-serif;padding:0}
+.sb-out:hover{color:var(--red)}
+/* MAIN */
+.main{margin-left:var(--sb);min-height:100vh;display:flex;flex-direction:column}
+.topbar{background:var(--ink);border-bottom:1px solid var(--border);padding:0 28px;height:52px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:40}
+.topbar-title{font-family:'Playfair Display',serif;font-size:15px;font-weight:700;color:white}
+.topbar-right{display:flex;align-items:center;gap:10px}
+.tb-btn{padding:6px 14px;border-radius:6px;font-size:12px;font-weight:600;cursor:pointer;font-family:'IBM Plex Sans',sans-serif;border:none;transition:all .2s}
+.tb-gold{background:var(--gold);color:var(--ink)}
+.tb-gold:hover{background:var(--gold2)}
+.tb-out{background:transparent;border:1px solid var(--borderw);color:var(--lgray)}
+.tb-out:hover{border-color:var(--gold);color:var(--gold)}
+.tb-date{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--gray)}
+.loading{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--gold);background:rgba(201,168,76,.1);border:1px solid rgba(201,168,76,.2);padding:3px 10px;border-radius:100px;display:none}
+.loading.show{display:inline-block}
+/* CONTENT */
+.content{flex:1;padding:24px 28px}
+.panel{display:none}.panel.active{display:block}
+/* STATS */
+.stats{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:22px}
+.stat{background:rgba(255,255,255,.04);border:1px solid var(--borderw);border-radius:10px;padding:16px 18px;position:relative;overflow:hidden}
+.stat::before{content:'';position:absolute;top:0;left:0;right:0;height:2px}
+.stat.gold::before{background:var(--gold)}.stat.green::before{background:var(--green)}.stat.blue::before{background:#5b9cf6}.stat.purple::before{background:#a78bfa}.stat.red::before{background:var(--red)}
+.stat-n{font-family:'Playfair Display',serif;font-size:30px;font-weight:900;color:white;line-height:1}
+.stat-l{font-size:11px;color:var(--gray);margin-top:4px;font-weight:300}
+.stat-s{font-family:'IBM Plex Mono',monospace;font-size:10px;margin-top:8px;color:var(--gray)}
+/* SECTION HEADER */
+.sec-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.sec-title{font-family:'Playfair Display',serif;font-size:16px;font-weight:700;color:white}
+.sec-sub{font-size:11px;color:var(--gray);margin-top:2px;font-weight:300}
+/* SEARCH */
+.search-bar{display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap}
+.search-inp{flex:1;min-width:200px;padding:9px 13px;background:rgba(255,255,255,.05);border:1px solid var(--borderw);border-radius:7px;color:white;font-size:13px;font-family:'IBM Plex Sans',sans-serif;outline:none;transition:border-color .2s}
+.search-inp:focus{border-color:var(--gold)}
+.search-inp::placeholder{color:rgba(255,255,255,.2)}
+.fsel{padding:9px 12px;background:rgba(255,255,255,.05);border:1px solid var(--borderw);border-radius:7px;color:var(--lgray);font-size:12px;font-family:'IBM Plex Sans',sans-serif;outline:none;cursor:pointer;appearance:none;padding-right:28px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%237a8194' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;background-color:rgba(255,255,255,.05)}
+/* TABLE */
+.tbl-wrap{background:rgba(255,255,255,.03);border:1px solid var(--borderw);border-radius:10px;overflow:hidden;margin-bottom:20px}
+.tbl{width:100%;border-collapse:collapse}
+.tbl th{padding:10px 14px;text-align:left;font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--gray);letter-spacing:.1em;text-transform:uppercase;border-bottom:1px solid var(--borderw);font-weight:400;white-space:nowrap}
+.tbl td{padding:11px 14px;font-size:12px;color:rgba(255,255,255,.8);border-bottom:1px solid rgba(255,255,255,.04);vertical-align:middle}
+.tbl tr:last-child td{border-bottom:none}
+.tbl tr:hover td{background:rgba(255,255,255,.02)}
+/* BADGES */
+.badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:100px;font-size:10px;font-weight:600;font-family:'IBM Plex Mono',monospace}
+.b-job{background:rgba(201,168,76,.15);color:var(--gold)}.b-sch{background:rgba(91,156,246,.15);color:#5b9cf6}.b-fel{background:rgba(52,211,153,.15);color:#34d399}.b-int{background:rgba(167,139,250,.15);color:#a78bfa}.b-con{background:rgba(249,115,22,.15);color:#fb923c}.b-res{background:rgba(236,72,153,.15);color:#f472b6}.b-yes{background:rgba(52,211,153,.12);color:#34d399}.b-no{background:rgba(255,255,255,.06);color:var(--gray)}
+/* SCORE */
+.mscore{display:flex;align-items:center;gap:8px}
+.mbar{width:60px;height:4px;background:rgba(255,255,255,.08);border-radius:2px;overflow:hidden;flex-shrink:0}
+.mfill{height:100%;border-radius:2px;background:linear-gradient(90deg,var(--green),var(--gold))}
+.mnum{font-family:'IBM Plex Mono',monospace;font-size:11px;color:white;font-weight:500}
+/* CHARTS */
+.chart-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:20px}
+.chart-box{background:rgba(255,255,255,.03);border:1px solid var(--borderw);border-radius:10px;padding:20px}
+.chart-title{font-size:13px;font-weight:600;color:white;margin-bottom:16px}
+.bar-chart{display:flex;flex-direction:column;gap:8px}
+.bar-row{display:flex;align-items:center;gap:10px}
+.bar-label{font-size:11px;color:var(--gray);width:140px;flex-shrink:0;font-weight:300}
+.bar-track{flex:1;height:8px;background:rgba(255,255,255,.06);border-radius:4px;overflow:hidden}
+.bar-fill{height:100%;border-radius:4px;background:linear-gradient(90deg,var(--green),var(--gold))}
+.bar-val{font-family:'IBM Plex Mono',monospace;font-size:11px;color:white;width:28px;text-align:right;flex-shrink:0}
+.empty{text-align:center;padding:40px 20px;color:var(--gray);font-size:13px}
+@media(max-width:900px){:root{--sb:0px}.sidebar{display:none}.stats{grid-template-columns:repeat(2,1fr)}.chart-row{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<div class="login-gate" id="loginGate">
+  <div class="login-box">
+    <div class="login-logo">Nafasi<span>.jobs</span></div>
+    <div class="login-sub">Admin Dashboard — Authorized access only</div>
+    <input type="text" class="login-inp" placeholder="Admin username" id="loginUser">
+    <input type="password" class="login-inp" placeholder="Password" id="loginPass" onkeypress="if(event.key==='Enter')doLogin()">
+    <button class="login-btn" onclick="doLogin()">Sign in →</button>
+    <div class="login-err" id="loginErr">Incorrect credentials</div>
+  </div>
+</div>
+
+<aside class="sidebar">
+  <div class="sb-logo">
+    <div class="sb-logo-text">Nafasi<span>.jobs</span></div>
+    <div class="sb-badge">Admin</div>
+  </div>
+  <nav class="sb-nav">
+    <div class="sb-grp">Overview</div>
+    <div class="sb-item active" onclick="show('overview',this)"><span class="ico">📊</span> Dashboard</div>
+    <div class="sb-item" onclick="show('scraper',this)"><span class="ico">🕷️</span> Scraper</div>
+    <div class="sb-grp">People</div>
+    <div class="sb-item" onclick="show('users',this)"><span class="ico">👥</span> Users <span class="sb-cnt" id="sbUsers">—</span></div>
+    <div class="sb-grp">Content</div>
+    <div class="sb-item" onclick="show('opportunities',this)"><span class="ico">🌍</span> Opportunities <span class="sb-cnt" id="sbOpps">—</span></div>
+    <div class="sb-item" onclick="show('matches',this)"><span class="ico">🎯</span> Matches <span class="sb-cnt" id="sbMatches">—</span></div>
+  </nav>
+  <div class="sb-footer">
+    <div style="font-size:12px;color:var(--gray);font-weight:300">Signed in as <strong style="color:var(--gold)" id="adminName">admin</strong></div>
+    <button class="sb-out" onclick="doLogout()">Sign out</button>
+    <a href="mailto:hellonafasijobs@gmail.com" style="font-size:10px;color:var(--gray);margin-top:6px;display:block">hellonafasijobs@gmail.com</a>
+  </div>
+</aside>
+
+<main class="main">
+  <div class="topbar">
+    <div style="display:flex;align-items:center;gap:12px">
+      <div class="topbar-title" id="topTitle">Dashboard</div>
+      <div class="loading" id="loadingPill">⟳ Loading...</div>
+    </div>
+    <div class="topbar-right">
+      <div class="tb-date" id="tbDate"></div>
+      <button class="tb-btn tb-out" onclick="loadAll()">↻ Refresh</button>
+      <button class="tb-btn tb-gold" onclick="exportAll()">↓ Export all</button>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <!-- OVERVIEW -->
+    <div class="panel active" id="panel-overview">
+      <div class="stats">
+        <div class="stat gold"><div class="stat-n" id="ovUsers">—</div><div class="stat-l">Total users</div><div class="stat-s" id="ovUsersSub">Loading...</div></div>
+        <div class="stat green"><div class="stat-n" id="ovOppsToday">—</div><div class="stat-l">Opportunities today</div><div class="stat-s">From 135 sources</div></div>
+        <div class="stat blue"><div class="stat-n" id="ovMatchesToday">—</div><div class="stat-l">Matches today</div><div class="stat-s" id="ovPending">— pending email</div></div>
+        <div class="stat purple"><div class="stat-n" id="ovTotalOpps">—</div><div class="stat-l">Total opportunities</div><div class="stat-s">All time</div></div>
+        <div class="stat gold"><div class="stat-n" id="ovTotalMatches">—</div><div class="stat-l">Total matches</div><div class="stat-s">All time</div></div>
+      </div>
+      <div class="chart-row">
+        <div class="chart-box"><div class="chart-title">Opportunities today — by type</div><div class="bar-chart" id="typeChart"><div class="empty">Loading...</div></div></div>
+        <div class="chart-box"><div class="chart-title">Users — by country</div><div class="bar-chart" id="countryChart"><div class="empty">Loading...</div></div></div>
+      </div>
+      <div class="chart-row">
+        <div class="chart-box"><div class="chart-title">Top matches today</div><div id="topMatchesDiv"><div class="empty">Loading...</div></div></div>
+        <div class="chart-box"><div class="chart-title">Most recent users</div><div id="recentUsersDiv"><div class="empty">Loading...</div></div></div>
+      </div>
+    </div>
+
+    <!-- SCRAPER -->
+    <div class="panel" id="panel-scraper">
+      <div class="sec-hd" style="margin-bottom:16px">
+        <div><div class="sec-title">Scraper status</div><div class="sec-sub" id="scraperSub">Loading...</div></div>
+      </div>
+      <div class="stats" style="grid-template-columns:repeat(3,1fr)">
+        <div class="stat green"><div class="stat-n" id="scToday">—</div><div class="stat-l">New today</div></div>
+        <div class="stat gold"><div class="stat-n" id="scTotal">—</div><div class="stat-l">Total in database</div></div>
+        <div class="stat blue"><div class="stat-n">135</div><div class="stat-l">Active sources</div></div>
+      </div>
+      <div class="chart-box"><div class="chart-title">Today's opportunities — by source</div><div id="sourceBreakdown" style="display:flex;flex-direction:column;gap:8px;margin-top:8px"><div class="empty">Loading...</div></div></div>
+    </div>
+
+    <!-- USERS -->
+    <div class="panel" id="panel-users">
+      <div class="sec-hd" style="margin-bottom:14px">
+        <div><div class="sec-title">All users</div><div class="sec-sub">Live from Supabase</div></div>
+        <button class="tb-btn tb-out" onclick="exportUsers()">↓ Export CSV</button>
+      </div>
+      <div class="search-bar">
+        <input class="search-inp" placeholder="Search name, email or country..." oninput="filterUsers(this.value)">
+        <select class="fsel" onchange="filterUsersByCountry(this.value)" id="countryFilter">
+          <option value="">All countries</option>
+        </select>
+      </div>
+      <div class="tbl-wrap">
+        <table class="tbl">
+          <thead><tr><th>Name</th><th>Email</th><th>Country</th><th>Skills</th><th>CV enriched</th><th>Looking for</th><th>Joined</th><th>Status</th></tr></thead>
+          <tbody id="usersBody"><tr><td colspan="8" class="empty">Loading users...</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- OPPORTUNITIES -->
+    <div class="panel" id="panel-opportunities">
+      <div class="sec-hd" style="margin-bottom:14px">
+        <div><div class="sec-title">All opportunities</div><div class="sec-sub" id="oppSubTitle">Live from Supabase</div></div>
+        <button class="tb-btn tb-out" onclick="exportOpps()">↓ Export CSV</button>
+      </div>
+      <div class="search-bar">
+        <input class="search-inp" placeholder="Search title, organization or source..." oninput="filterOpps(this.value)">
+        <select class="fsel" onchange="filterOppsByType(this.value)">
+          <option value="">All types</option>
+          <option>Job</option><option>Scholarship</option><option>Fellowship</option>
+          <option>Internship</option><option>Consultancy</option><option>Research Funding</option>
+        </select>
+        <select class="fsel" onchange="filterOppsByDate(this.value)" id="dateFilter">
+          <option value="">All dates</option>
+        </select>
+      </div>
+      <div class="tbl-wrap">
+        <table class="tbl">
+          <thead><tr><th>Title</th><th>Organization</th><th>Type</th><th>Location</th><th>Source</th><th>Scraped</th><th>Remote</th></tr></thead>
+          <tbody id="oppsBody"><tr><td colspan="7" class="empty">Loading opportunities...</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- MATCHES -->
+    <div class="panel" id="panel-matches">
+      <div class="sec-hd" style="margin-bottom:14px">
+        <div><div class="sec-title">Matches</div><div class="sec-sub">Live from Supabase</div></div>
+        <button class="tb-btn tb-out" onclick="exportMatches()">↓ Export CSV</button>
+      </div>
+      <div class="search-bar">
+        <input class="search-inp" placeholder="Search user or opportunity..." oninput="filterMatches(this.value)">
+        <select class="fsel" onchange="filterMatchesByDate(this.value)" id="matchDateFilter">
+          <option value="">All dates</option>
+        </select>
+      </div>
+      <div class="tbl-wrap">
+        <table class="tbl">
+          <thead><tr><th>User</th><th>Opportunity</th><th>Type</th><th>Score</th><th>Verdict</th><th>Email status</th><th>Date</th></tr></thead>
+          <tbody id="matchesBody"><tr><td colspan="7" class="empty">Loading matches...</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<script>
+const ADMIN_USER = 'nafasi_admin';
+const ADMIN_PASS = 'nafasi2026';
+const SB_URL     = 'https://dzcizvjppaxtcqwopfkc.supabase.co';
+const SB_KEY     = 'sb_publishable_L4MgYvPPGj5jrLux9Q29rw_oQrCDRXF';
+const TODAY      = new Date().toISOString().slice(0, 10);
+
+let allUsers = [], allOpps = [], allMatches = [];
+let filteredUsers = [], filteredOpps = [], filteredMatches = [];
+let typeFilter = '', dateFilter = '', matchDateFilter = '', countryFilter_ = '';
+
+async function sb(table, params = {}) {
+  const url = new URL(`${SB_URL}/rest/v1/${table}`);
+  Object.entries({ select: '*', limit: '5000', ...params }).forEach(([k, v]) => url.searchParams.set(k, v));
+  const r = await fetch(url, { headers: { apikey: SB_KEY, Authorization: `Bearer ${SB_KEY}` } });
+  if (!r.ok) throw new Error(`${table} ${r.status}`);
+  return r.json();
+}
+
+/* AUTH */
+function doLogin() {
+  const u = document.getElementById('loginUser').value;
+  const p = document.getElementById('loginPass').value;
+  if (u === ADMIN_USER && p === ADMIN_PASS) {
+    document.getElementById('loginGate').style.display = 'none';
+    document.getElementById('adminName').textContent = u;
+    document.getElementById('tbDate').textContent = new Date().toLocaleDateString('en-GB', { weekday:'short',day:'numeric',month:'short',year:'numeric' });
+    loadAll();
+  } else {
+    const e = document.getElementById('loginErr');
+    e.style.display = 'block';
+    setTimeout(() => e.style.display = 'none', 3000);
+  }
+}
+function doLogout() {
+  document.getElementById('loginGate').style.display = 'flex';
+  document.getElementById('loginUser').value = '';
+  document.getElementById('loginPass').value = '';
+}
+
+/* LOAD */
+async function loadAll() {
+  const pill = document.getElementById('loadingPill');
+  pill.classList.add('show');
+  try {
+    [allUsers, allOpps, allMatches] = await Promise.all([
+      sb('users', { order: 'date_joined.desc' }),
+      sb('opportunities', { order: 'date_scraped.desc' }),
+      sb('matches', { order: 'date_matched.desc' })
+    ]);
+    filteredUsers   = [...allUsers];
+    filteredOpps    = [...allOpps];
+    filteredMatches = [...allMatches];
+
+    // sidebar counts
+    document.getElementById('sbUsers').textContent   = allUsers.length;
+    document.getElementById('sbOpps').textContent    = allOpps.length;
+    document.getElementById('sbMatches').textContent = allMatches.length;
+
+    buildCountryFilter();
+    buildDateFilters();
+    renderOverview();
+    renderScraper();
+    renderUsers();
+    renderOpps();
+    renderMatches();
+  } catch (e) {
+    console.error('Load error:', e);
+  }
+  pill.classList.remove('show');
+}
+
+function buildCountryFilter() {
+  const countries = [...new Set(allUsers.map(u => u.country).filter(Boolean))].sort();
+  const sel = document.getElementById('countryFilter');
+  sel.innerHTML = '<option value="">All countries</option>' + countries.map(c => `<option>${c}</option>`).join('');
+}
+
+function buildDateFilters() {
+  const oppDates = [...new Set(allOpps.map(o => o.date_scraped).filter(Boolean))].sort().reverse().slice(0, 14);
+  const dSel = document.getElementById('dateFilter');
+  dSel.innerHTML = '<option value="">All dates</option>' + oppDates.map(d => `<option>${d}</option>`).join('');
+
+  const mDates = [...new Set(allMatches.map(m => m.date_matched).filter(Boolean))].sort().reverse().slice(0, 14);
+  const mSel = document.getElementById('matchDateFilter');
+  mSel.innerHTML = '<option value="">All dates</option>' + mDates.map(d => `<option>${d}</option>`).join('');
+}
+
+/* OVERVIEW */
+function renderOverview() {
+  const todayOpps    = allOpps.filter(o => o.date_scraped === TODAY);
+  const todayMatches = allMatches.filter(m => m.date_matched === TODAY);
+  const pending      = todayMatches.filter(m => m.email_status === 'pending').length;
+
+  document.getElementById('ovUsers').textContent       = allUsers.length;
+  document.getElementById('ovUsersSub').textContent    = `↑ ${allUsers.length} total registered`;
+  document.getElementById('ovOppsToday').textContent   = todayOpps.length;
+  document.getElementById('ovMatchesToday').textContent = todayMatches.length;
+  document.getElementById('ovPending').textContent     = `${pending} pending email`;
+  document.getElementById('ovTotalOpps').textContent   = allOpps.length;
+  document.getElementById('ovTotalMatches').textContent = allMatches.length;
+
+  // Type chart
+  const types = {};
+  todayOpps.forEach(o => { types[o.type] = (types[o.type] || 0) + 1; });
+  const maxT = Math.max(...Object.values(types), 1);
+  document.getElementById('typeChart').innerHTML = Object.entries(types).length
+    ? Object.entries(types).sort((a,b) => b[1]-a[1]).map(([t,n]) =>
+        `<div class="bar-row"><div class="bar-label">${t}</div><div class="bar-track"><div class="bar-fill" style="width:${(n/maxT)*100}%"></div></div><div class="bar-val">${n}</div></div>`
+      ).join('')
+    : '<div class="empty">No opportunities today yet</div>';
+
+  // Country chart
+  const countries = {};
+  allUsers.forEach(u => { if (u.country) countries[u.country] = (countries[u.country] || 0) + 1; });
+  const sorted = Object.entries(countries).sort((a,b) => b[1]-a[1]).slice(0, 7);
+  const maxC   = Math.max(...sorted.map(c => c[1]), 1);
+  document.getElementById('countryChart').innerHTML = sorted.length
+    ? sorted.map(([c,n]) =>
+        `<div class="bar-row"><div class="bar-label">${c}</div><div class="bar-track"><div class="bar-fill" style="width:${(n/maxC)*100}%"></div></div><div class="bar-val">${n}</div></div>`
+      ).join('')
+    : '<div class="empty">No users yet</div>';
+
+  // Top matches today
+  const topM = [...todayMatches].sort((a,b) => b.score - a.score).slice(0, 6);
+  document.getElementById('topMatchesDiv').innerHTML = topM.length
+    ? topM.map(m =>
+        `<div style="display:flex;align-items:center;justify-content:space-between;padding:9px 0;border-bottom:1px solid rgba(255,255,255,.05)">
+          <div><div style="font-size:12px;font-weight:500;color:white">${m.user_name || m.user_email}</div><div style="font-size:11px;color:var(--gray);font-weight:300">${(m.opportunity_title || '').slice(0,50)}</div></div>
+          <div class="mscore"><div class="mbar"><div class="mfill" style="width:${m.score}%"></div></div><div class="mnum">${m.score}</div></div>
+        </div>`
+      ).join('')
+    : '<div class="empty">No matches today yet</div>';
+
+  // Recent users
+  const recentU = allUsers.slice(0, 6);
+  document.getElementById('recentUsersDiv').innerHTML = recentU.length
+    ? recentU.map(u =>
+        `<div style="display:flex;align-items:center;justify-content:space-between;padding:9px 0;border-bottom:1px solid rgba(255,255,255,.05)">
+          <div><div style="font-size:12px;font-weight:500;color:white">${u.full_name || '—'}</div><div style="font-size:11px;color:var(--gray)">${u.country || '—'} · ${u.date_joined || '—'}</div></div>
+          <span class="badge b-yes">active</span>
+        </div>`
+      ).join('')
+    : '<div class="empty">No users yet</div>';
+}
+
+/* SCRAPER */
+function renderScraper() {
+  const todayOpps = allOpps.filter(o => o.date_scraped === TODAY);
+  document.getElementById('scToday').textContent = todayOpps.length;
+  document.getElementById('scTotal').textContent = allOpps.length;
+  if (allOpps.length > 0) {
+    document.getElementById('scraperSub').textContent = `Last run: ${allOpps[0].date_scraped} — ${todayOpps.length} new today`;
+  }
+  const sources = {};
+  todayOpps.forEach(o => { if (o.source) sources[o.source] = (sources[o.source] || 0) + 1; });
+  const sortedSrc = Object.entries(sources).sort((a,b) => b[1]-a[1]).slice(0, 25);
+  const maxS = Math.max(...sortedSrc.map(s => s[1]), 1);
+  document.getElementById('sourceBreakdown').innerHTML = sortedSrc.length
+    ? sortedSrc.map(([src, n]) =>
+        `<div class="bar-row"><div class="bar-label">${src}</div><div class="bar-track"><div class="bar-fill" style="width:${(n/maxS)*100}%"></div></div><div class="bar-val">${n}</div></div>`
+      ).join('')
+    : '<div class="empty">No data today yet</div>';
+}
+
+/* USERS TABLE */
+const TYPE_BADGE = { Job:'b-job', Scholarship:'b-sch', Fellowship:'b-fel', Internship:'b-int', Consultancy:'b-con', 'Research Funding':'b-res' };
+
+function renderUsers(list) {
+  list = list || filteredUsers;
+  if (!list.length) { document.getElementById('usersBody').innerHTML = '<tr><td colspan="8" class="empty">No users found</td></tr>'; return; }
+  document.getElementById('usersBody').innerHTML = list.slice(0, 300).map(u =>
+    `<tr>
+      <td><strong>${u.full_name || '—'}</strong></td>
+      <td style="color:var(--gray)">${u.email}</td>
+      <td>${u.country || '—'}</td>
+      <td style="color:var(--gray);font-size:11px;max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${(u.skills || '').slice(0, 60) || '—'}</td>
+      <td><span class="badge ${u.cv_enriched ? 'b-yes' : 'b-no'}">${u.cv_enriched ? 'yes' : 'no'}</span></td>
+      <td style="color:var(--gray);font-size:11px">${(u.looking_for || '—').slice(0, 40)}</td>
+      <td style="color:var(--gray)">${u.date_joined || '—'}</td>
+      <td><span class="badge ${(u.status || 'active') === 'active' ? 'b-yes' : 'b-no'}">${u.status || 'active'}</span></td>
+    </tr>`
+  ).join('');
+}
+
+function filterUsers(q) {
+  const ql = q.toLowerCase();
+  filteredUsers = allUsers.filter(u =>
+    (u.full_name || '').toLowerCase().includes(ql) ||
+    (u.email || '').toLowerCase().includes(ql) ||
+    (u.country || '').toLowerCase().includes(ql)
+  );
+  renderUsers();
+}
+function filterUsersByCountry(c) {
+  countryFilter_ = c;
+  filteredUsers = c ? allUsers.filter(u => u.country === c) : [...allUsers];
+  renderUsers();
+}
+
+/* OPPORTUNITIES TABLE */
+function renderOpps(list) {
+  list = list || filteredOpps;
+  document.getElementById('oppSubTitle').textContent = `${list.length} opportunities — live from Supabase`;
+  if (!list.length) { document.getElementById('oppsBody').innerHTML = '<tr><td colspan="7" class="empty">No opportunities found</td></tr>'; return; }
+  document.getElementById('oppsBody').innerHTML = list.slice(0, 300).map(o =>
+    `<tr>
+      <td><strong>${o.title || '—'}</strong></td>
+      <td>${o.organization || '—'}</td>
+      <td><span class="badge ${TYPE_BADGE[o.type] || 'b-job'}">${o.type || 'Job'}</span></td>
+      <td style="color:var(--gray)">${o.location || '—'}</td>
+      <td style="color:var(--gray);font-size:11px">${o.source || '—'}</td>
+      <td style="color:var(--gray)">${o.date_scraped || '—'}</td>
+      <td><span class="badge ${o.is_remote ? 'b-yes' : 'b-no'}">${o.is_remote ? 'Remote' : 'Onsite'}</span></td>
+    </tr>`
+  ).join('');
+}
+function filterOpps(q) {
+  const ql = q.toLowerCase();
+  filteredOpps = allOpps.filter(o =>
+    (o.title || '').toLowerCase().includes(ql) ||
+    (o.organization || '').toLowerCase().includes(ql) ||
+    (o.source || '').toLowerCase().includes(ql)
+  );
+  if (typeFilter) filteredOpps = filteredOpps.filter(o => o.type === typeFilter);
+  renderOpps();
+}
+function filterOppsByType(t) { typeFilter = t; filteredOpps = t ? allOpps.filter(o => o.type === t) : [...allOpps]; renderOpps(); }
+function filterOppsByDate(d) { filteredOpps = d ? allOpps.filter(o => o.date_scraped === d) : [...allOpps]; renderOpps(); }
+
+/* MATCHES TABLE */
+function renderMatches(list) {
+  list = list || filteredMatches;
+  if (!list.length) { document.getElementById('matchesBody').innerHTML = '<tr><td colspan="7" class="empty">No matches found</td></tr>'; return; }
+  document.getElementById('matchesBody').innerHTML = list.slice(0, 300).map(m =>
+    `<tr>
+      <td><strong>${m.user_name || m.user_email || '—'}</strong></td>
+      <td style="max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${m.opportunity_title || '—'}</td>
+      <td><span class="badge ${TYPE_BADGE[m.type] || 'b-job'}">${m.type || 'Job'}</span></td>
+      <td><div class="mscore"><div class="mbar"><div class="mfill" style="width:${m.score}%"></div></div><div class="mnum">${m.score}</div></div></td>
+      <td style="font-size:11px;color:var(--gray)">${m.verdict || '—'}</td>
+      <td><span class="badge ${m.email_status === 'sent' ? 'b-yes' : 'b-no'}">${m.email_status || 'pending'}</span></td>
+      <td style="color:var(--gray)">${m.date_matched || '—'}</td>
+    </tr>`
+  ).join('');
+}
+function filterMatches(q) {
+  const ql = q.toLowerCase();
+  filteredMatches = allMatches.filter(m =>
+    (m.user_name || '').toLowerCase().includes(ql) ||
+    (m.user_email || '').toLowerCase().includes(ql) ||
+    (m.opportunity_title || '').toLowerCase().includes(ql)
+  );
+  renderMatches();
+}
+function filterMatchesByDate(d) { filteredMatches = d ? allMatches.filter(m => m.date_matched === d) : [...allMatches]; renderMatches(); }
+
+/* EXPORT */
+function dl(filename, csv) {
+  const a = document.createElement('a');
+  a.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv);
+  a.download = filename; a.click();
+}
+function exportUsers()   { dl('nafasi_users.csv', 'Name,Email,Country,Skills,CV Enriched,Looking For,Joined\n' + filteredUsers.map(u => `"${u.full_name||''}","${u.email||''}","${u.country||''}","${(u.skills||'').replace(/"/g,'""')}","${u.cv_enriched?'yes':'no'}","${u.looking_for||''}","${u.date_joined||''}"`).join('\n')); }
+function exportOpps()    { dl('nafasi_opportunities.csv', 'Title,Org,Type,Location,Source,Date\n' + filteredOpps.slice(0,500).map(o => `"${o.title||''}","${o.organization||''}","${o.type||''}","${o.location||''}","${o.source||''}","${o.date_scraped||''}"`).join('\n')); }
+function exportMatches() { dl('nafasi_matches.csv', 'User,Email,Opportunity,Type,Score,Verdict,Status,Date\n' + filteredMatches.slice(0,500).map(m => `"${m.user_name||''}","${m.user_email||''}","${m.opportunity_title||''}","${m.type||''}",${m.score},"${m.verdict||''}","${m.email_status||''}","${m.date_matched||''}"`).join('\n')); }
+function exportAll()     { exportUsers(); exportOpps(); exportMatches(); }
+
+/* PANELS */
+const TITLES = { overview:'Dashboard', scraper:'Scraper Status', users:'Users', opportunities:'Opportunities', matches:'Matches' };
+function show(id, el) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.sb-item').forEach(i => i.classList.remove('active'));
+  document.getElementById('panel-' + id).classList.add('active');
+  if (el) el.classList.add('active');
+  document.getElementById('topTitle').textContent = TITLES[id] || id;
+}
+</script>
+</body>
+</html>

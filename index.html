@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nafasi.jobs — Find your next opportunity</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --ink:#08090d;--ink2:#111318;--ink3:#1a1d26;
+  --gold:#c8a84b;--gold2:#e8c96a;--gold-dim:rgba(200,168,75,0.12);
+  --white:#fff;--muted:rgba(255,255,255,0.45);--muted2:rgba(255,255,255,0.22);
+  --green:#22c55e;--green-dim:rgba(34,197,94,0.1);
+  --border:rgba(255,255,255,0.07);--border-gold:rgba(200,168,75,0.2);
+}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;background:var(--ink);color:var(--white);min-height:100vh;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+::-webkit-scrollbar{width:3px}::-webkit-scrollbar-thumb{background:var(--gold)}
+.banner{background:var(--gold);padding:10px 48px;display:flex;align-items:center;justify-content:center;position:relative}
+.banner-text{font-size:12px;font-weight:600;color:var(--ink);letter-spacing:.04em}
+.banner-close{position:absolute;right:16px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:var(--ink);font-size:14px;opacity:.5;padding:4px}
+.banner-close:hover{opacity:1}
+nav{padding:0 48px;height:60px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;background:rgba(8,9,13,.95);backdrop-filter:blur(16px)}
+.logo{font-family:'Playfair Display',serif;font-size:18px;font-weight:900;color:var(--white);text-decoration:none;letter-spacing:-.5px}
+.logo span{color:var(--gold)}
+.nav-btn{font-size:13px;font-weight:500;color:var(--muted);background:none;border:1px solid var(--border);padding:8px 18px;border-radius:4px;cursor:pointer;transition:all .2s;font-family:'Inter',sans-serif}
+.nav-btn:hover{color:var(--white);border-color:rgba(255,255,255,.2)}
+.hero{min-height:calc(100vh - 100px);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:80px 24px;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-size:60px 60px;pointer-events:none}
+.hero::after{content:'';position:absolute;top:20%;left:50%;transform:translateX(-50%);width:600px;height:400px;background:radial-gradient(ellipse,rgba(200,168,75,.08) 0%,transparent 70%);pointer-events:none}
+.hero-inner{position:relative;z-index:1;max-width:860px;width:100%}
+.hero-label{display:inline-flex;align-items:center;gap:8px;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--gold);letter-spacing:.12em;text-transform:uppercase;margin-bottom:28px;padding:6px 14px;border:1px solid var(--border-gold);border-radius:2px;background:var(--gold-dim)}
+.label-dot{width:5px;height:5px;background:var(--green);border-radius:50%;animation:blink 2s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+h1{font-family:'Playfair Display',serif;font-size:clamp(48px,8vw,96px);font-weight:900;line-height:.96;letter-spacing:-4px;margin-bottom:28px}
+h1 em{font-style:italic;color:var(--gold);display:block}
+.hero-desc{font-size:clamp(15px,1.8vw,17px);color:var(--muted);line-height:1.85;max-width:580px;margin:0 auto 52px;font-weight:300}
+.hero-desc strong{color:rgba(255,255,255,.85);font-weight:500}
+.two-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.btn-outline{font-size:14px;font-weight:500;color:var(--muted);background:transparent;border:1px solid var(--border);padding:14px 32px;border-radius:4px;cursor:pointer;transition:all .25s;font-family:'Inter',sans-serif}
+.btn-outline:hover,.btn-outline.on{color:var(--white);border-color:rgba(255,255,255,.3)}
+.btn-gold{font-size:14px;font-weight:600;color:var(--ink);background:var(--gold);border:none;padding:14px 32px;border-radius:4px;cursor:pointer;transition:all .25s;font-family:'Inter',sans-serif}
+.btn-gold:hover{background:var(--gold2);transform:translateY(-1px);box-shadow:0 8px 32px rgba(200,168,75,.25)}
+.panel{display:none;max-width:780px;margin:52px auto 0;animation:rise .3s ease both}
+.panel.show{display:block}
+@keyframes rise{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+/* HOW */
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);border:1px solid var(--border);margin-bottom:20px}
+.step{background:var(--ink2);padding:28px 24px}
+.step-num{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--gold);letter-spacing:.1em;margin-bottom:14px;opacity:.7}
+.step-title{font-size:14px;font-weight:600;color:var(--white);margin-bottom:10px;line-height:1.3}
+.step-desc{font-size:12px;color:var(--muted);line-height:1.75;font-weight:300}
+.free-note{background:var(--ink2);border:1px solid var(--border-gold);padding:16px 20px;font-size:13px;color:var(--muted);line-height:1.75;text-align:center;margin-bottom:20px}
+.free-note strong{color:var(--gold)}
+/* TICKER */
+.ticker-wrap{overflow:hidden;border-top:1px solid var(--border);padding-top:16px}
+.ticker-lbl{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted2);letter-spacing:.15em;text-transform:uppercase;text-align:center;margin-bottom:12px}
+.t-track{overflow:hidden;margin-bottom:8px}
+.ticker{display:flex;gap:6px;animation:scroll 45s linear infinite;width:max-content}
+.ticker.rev{animation-direction:reverse}
+@keyframes scroll{to{transform:translateX(-50%)}}
+.chip{background:var(--ink3);border:1px solid var(--border);padding:6px 12px;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);white-space:nowrap;display:flex;align-items:center;gap:6px}
+.cdot{width:4px;height:4px;border-radius:50%;flex-shrink:0}
+/* SIGNUP */
+.signup-card{background:var(--ink2);border:1px solid var(--border);padding:36px}
+.sc-title{font-family:'Playfair Display',serif;font-size:22px;font-weight:700;color:var(--white);letter-spacing:-.5px;margin-bottom:4px}
+.sc-sub{font-size:13px;color:var(--muted);font-weight:300;margin-bottom:28px}
+.fg{margin-bottom:14px}
+.fl{display:block;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:500;color:var(--muted2);letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px}
+.fi{width:100%;padding:11px 13px;background:rgba(255,255,255,.05);border:1px solid var(--border);color:var(--white);font-size:14px;font-family:'Inter',sans-serif;outline:none;transition:border-color .2s}
+.fi:focus{border-color:var(--gold);background:rgba(255,255,255,.07)}
+.fi::placeholder{color:var(--muted2)}
+.fi-sel{appearance:none;cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23555' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 13px center;padding-right:36px;background-color:rgba(255,255,255,.05)}
+.fi-sel option{background:var(--ink2);color:var(--white)}
+.region-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.region-hint{font-size:11px;color:var(--green)}
+.regions{display:flex;flex-wrap:wrap;gap:6px}
+.reg{padding:6px 12px;border:1px solid var(--border);font-size:12px;color:var(--muted);cursor:pointer;transition:all .2s;user-select:none;font-family:'Inter',sans-serif}
+.reg:hover{border-color:rgba(255,255,255,.25);color:var(--white)}
+.reg.on{border-color:var(--gold);background:var(--gold-dim);color:var(--white)}
+.reg.locked{border-color:rgba(34,197,94,.35);background:var(--green-dim);color:var(--green);cursor:default;font-size:11px}
+.submit-btn{width:100%;background:var(--gold);color:var(--ink);border:none;padding:14px;font-family:'Inter',sans-serif;font-size:14px;font-weight:600;cursor:pointer;transition:background .2s;margin-top:6px;letter-spacing:.02em}
+.submit-btn:hover{background:var(--gold2)}
+.submit-btn:disabled{opacity:.6;cursor:not-allowed}
+.form-note{font-size:11px;color:var(--muted2);margin-top:12px;text-align:center;line-height:1.65}
+.form-note a{color:var(--gold);text-decoration:none}
+.err-msg{font-size:12px;color:#f87171;margin-top:8px;display:none;text-align:center}
+.err-msg.show{display:block}
+/* CV UPLOAD */
+.cv-zone{border:2px dashed rgba(255,255,255,0.2);padding:28px;text-align:center;cursor:pointer;transition:all .25s;position:relative;margin-bottom:14px;background:rgba(255,255,255,0.03)}
+.cv-zone:hover{border-color:var(--gold);background:rgba(200,168,75,0.06)}
+.cv-zone input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.cv-zone-icon{font-size:28px;margin-bottom:8px}
+.cv-zone-label{font-size:14px;font-weight:500;color:rgba(255,255,255,0.7);margin-bottom:4px}
+.cv-zone-sub{font-size:11px;color:var(--muted2)}
+.cv-loaded{display:none;align-items:center;gap:10px;background:rgba(34,197,94,0.1);border:1px solid rgba(34,197,94,0.25);padding:10px 14px;margin-bottom:14px}
+.cv-loaded.show{display:flex}
+.cv-fn{font-size:13px;font-weight:500;color:#22c55e;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cv-reading{display:none;text-align:center;padding:10px;font-size:12px;color:var(--muted);margin-bottom:12px}
+.cv-reading.show{display:block}
+.cv-spin{display:inline-block;width:11px;height:11px;border:2px solid rgba(200,168,75,0.2);border-top-color:var(--gold);border-radius:50%;animation:cvspin .7s linear infinite;margin-right:5px;vertical-align:middle}
+@keyframes cvspin{to{transform:rotate(360deg)}}
+.cv-extracted{display:none;background:rgba(34,197,94,0.06);border:1px solid rgba(34,197,94,0.2);border-left:3px solid #22c55e;padding:12px 14px;margin-bottom:14px}
+.cv-extracted.show{display:block}
+.cv-ext-label{font-family:'JetBrains Mono',monospace;font-size:10px;color:#22c55e;letter-spacing:.08em;text-transform:uppercase;margin-bottom:8px}
+.cv-ext-row{font-size:12px;color:var(--muted);margin-bottom:4px;line-height:1.5}
+.cv-ext-row b{color:rgba(255,255,255,0.8);font-weight:500}
+.success-wrap{display:none;text-align:center;padding:20px 0}
+.success-wrap.show{display:block}
+.s-icon{font-size:48px;margin-bottom:16px}
+.s-title{font-family:'Playfair Display',serif;font-size:24px;font-weight:700;color:var(--white);margin-bottom:10px}
+.s-body{font-size:13px;color:var(--muted);line-height:1.8;font-weight:300;max-width:360px;margin:0 auto}
+.s-badge{display:inline-flex;align-items:center;gap:6px;margin-top:16px;background:var(--green-dim);border:1px solid rgba(34,197,94,.25);color:var(--green);padding:7px 16px;font-size:12px;font-weight:500;font-family:'JetBrains Mono',monospace}
+footer{border-top:1px solid var(--border);padding:24px 48px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-top:80px}
+.f-logo{font-family:'Playfair Display',serif;font-size:16px;font-weight:900;color:var(--white)}
+.f-logo span{color:var(--gold)}
+.f-note{font-size:11px;color:var(--muted2)}
+.f-note a{color:var(--gold);text-decoration:none}
+@media(max-width:700px){
+  nav{padding:0 20px}
+  h1{letter-spacing:-2px}
+  .steps{grid-template-columns:1fr}
+  .two-btns{flex-direction:column;align-items:center}
+  .btn-outline,.btn-gold{width:100%;max-width:320px}
+  .signup-card{padding:24px 18px}
+  footer{flex-direction:column;text-align:center;padding:20px}
+}
+</style>
+</head>
+<body>
+
+<div id="banner" class="banner">
+  <div class="banner-text">⚡ Apply today — not tomorrow. Deadlines close without warning.</div>
+  <button class="banner-close" onclick="document.getElementById('banner').style.display='none'">✕</button>
+</div>
+
+<nav>
+  <a href="/" class="logo">nafasi<span>.jobs</span></a>
+  <button class="nav-btn" onclick="openPanel('signup')">Create free account</button>
+</nav>
+
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-label"><span class="label-dot"></span>AI-powered career matching</div>
+    <h1>Your next opportunity<em>is already out there.</em></h1>
+    <p class="hero-desc">Nafasi scans <strong>135+ sources</strong> every day — jobs, scholarships, fellowships, and consultancies — and matches you to only the ones you actually qualify for. <strong>No noise. Just your next move.</strong></p>
+    <div class="two-btns">
+      <button class="btn-outline" id="howBtn" onclick="toggle('how','howBtn')">How it works</button>
+      <button class="btn-gold" onclick="openPanel('signup')">Create free account</button>
+    </div>
+
+    <!-- HOW IT WORKS -->
+    <div class="panel" id="panel-how">
+      <div style="font-size:14px;color:var(--muted);line-height:1.85;text-align:center;margin-bottom:32px;font-weight:300;max-width:480px;margin-left:auto;margin-right:auto">Three steps. Every morning your matches arrive — scored, ranked and ready to apply.</div>
+      <div class="steps">
+        <div class="step"><div class="step-num">// 01</div><div class="step-title">Create your profile</div><div class="step-desc">Upload your CV. Nafasi reads it and fills your profile automatically — education, skills, experience, languages. Two minutes.</div></div>
+        <div class="step"><div class="step-num">// 02</div><div class="step-title">AI finds your matches</div><div class="step-desc">Every morning Nafasi reads 135+ sources and scores each new opportunity against your profile. Only what you qualify for reaches you.</div></div>
+        <div class="step"><div class="step-num">// 03</div><div class="step-title">Apply on the original platform</div><div class="step-desc">Your digest arrives by email every morning. Click any match to apply directly on ReliefWeb, UNHCR or wherever it was posted.</div></div>
+      </div>
+      <div class="free-note"><strong>Completely free.</strong> No subscription. No premium tier. No credit card ever. Your first matches arrive tomorrow morning.</div>
+      <div class="ticker-wrap">
+        <div class="ticker-lbl">135+ sources scanned every morning</div>
+        <div class="t-track"><div class="ticker">
+          <div class="chip"><span class="cdot" style="background:#c8a84b"></span>ReliefWeb</div><div class="chip"><span class="cdot" style="background:#5b9cf6"></span>DevEx</div><div class="chip"><span class="cdot" style="background:#22c55e"></span>UN Global Careers</div><div class="chip"><span class="cdot" style="background:#a78bfa"></span>Opportunity Desk</div><div class="chip"><span class="cdot" style="background:#c8a84b"></span>Scholars4Dev</div><div class="chip"><span class="cdot" style="background:#5b9cf6"></span>Impactpool</div><div class="chip"><span class="cdot" style="background:#22c55e"></span>UNDP Jobs</div><div class="chip"><span class="cdot" style="background:#f97316"></span>UNHCR Jobs</div><div class="chip"><span class="cdot" style="background:#c8a84b"></span>IOM Careers</div><div class="chip"><span class="cdot" style="background:#5b9cf6"></span>Oxfam Jobs</div><div class="chip"><span class="cdot" style="background:#22c55e"></span>ReliefWeb Africa</div><div class="chip"><span class="cdot" style="background:#a78bfa"></span>ReliefWeb Asia</div><div class="chip"><span class="cdot" style="background:#f97316"></span>ReliefWeb MENA</div><div class="chip"><span class="cdot" style="background:#c8a84b"></span>Tony Elumelu</div><div class="chip"><span class="cdot" style="background:#5b9cf6"></span>Youth Opportunities</div><div class="chip"><span class="cdot" style="background:#22c55e"></span>SomaliJobs</div><div class="chip"><span class="cdot" style="background:#a78bfa"></span>World Bank</div><div class="chip"><span class="cdot" style="background:#f97316"></span>Fuzu</div><div class="chip"><span class="cdot" style="background:#c8a84b"></span>IRC Careers</div><div class="chip"><span class="cdot" style="background:#5b9cf6"></span>Chevening</div>
+          <!-- duplicate for seamless scroll -->
+          <div class="chip"><span class="cdot" style="background:#c8a84b"></span>ReliefWeb</div><div class="chip"><span class="cdot" style="background:#5b9cf6"></span>DevEx</div><div class="chip"><span class="cdot" style="background:#22c55e"></span>UN Global Careers</div><div class="chip"><span class="cdot" style="background:#a78bfa"></span>Opportunity Desk</div><div class="chip"><span class="cdot" style="background:#c8a84b"></span>Scholars4Dev</div><div class="chip"><span class="cdot" style="background:#5b9cf6"></span>Impactpool</div><div class="chip"><span class="cdot" style="background:#22c55e"></span>UNDP Jobs</div><div class="chip"><span class="cdot" style="background:#f97316"></span>UNHCR Jobs</div><div class="chip"><span class="cdot" style="background:#c8a84b"></span>IOM Careers</div><div class="chip"><span class="cdot" style="background:#5b9cf6"></span>Oxfam Jobs</div>
+        </div></div>
+        <div class="t-track"><div class="ticker rev">
+          <div class="chip"><span class="cdot" style="background:#22c55e"></span>Save the Children</div><div class="chip"><span class="cdot" style="background:#c8a84b"></span>Mercy Corps</div><div class="chip"><span class="cdot" style="background:#5b9cf6"></span>NRC Jobs</div><div class="chip"><span class="cdot" style="background:#a78bfa"></span>Obama Foundation</div><div class="chip"><span class="cdot" style="background:#f97316"></span>Fulbright</div><div class="chip"><span class="cdot" style="background:#c8a84b"></span>MSF Careers</div><div class="chip"><span class="cdot" style="background:#5b9cf6"></span>GlobalJobs</div><div class="chip"><span class="cdot" style="background:#22c55e"></span>DAI Global</div><div class="chip"><span class="cdot" style="background:#a78bfa"></span>Chemonics</div><div class="chip"><span class="cdot" style="background:#f97316"></span>IDRC Canada</div><div class="chip"><span class="cdot" style="background:#c8a84b"></span>Wellcome Trust</div><div class="chip"><span class="cdot" style="background:#5b9cf6"></span>African Union</div><div class="chip"><span class="cdot" style="background:#22c55e"></span>BrighterMonday</div><div class="chip"><span class="cdot" style="background:#a78bfa"></span>Plan International</div><div class="chip"><span class="cdot" style="background:#f97316"></span>UNICEF Jobs</div><div class="chip"><span class="cdot" style="background:#22c55e"></span>Gates Cambridge</div><div class="chip"><span class="cdot" style="background:#c8a84b"></span>Hubert Humphrey</div><div class="chip"><span class="cdot" style="background:#5b9cf6"></span>Mandela Washington</div>
+          <div class="chip"><span class="cdot" style="background:#22c55e"></span>Save the Children</div><div class="chip"><span class="cdot" style="background:#c8a84b"></span>Mercy Corps</div><div class="chip"><span class="cdot" style="background:#5b9cf6"></span>NRC Jobs</div><div class="chip"><span class="cdot" style="background:#a78bfa"></span>Obama Foundation</div><div class="chip"><span class="cdot" style="background:#f97316"></span>Fulbright</div><div class="chip"><span class="cdot" style="background:#c8a84b"></span>MSF Careers</div>
+        </div></div>
+      </div>
+    </div>
+
+    <!-- SIGNUP -->
+    <div class="panel" id="panel-signup">
+      <div class="signup-card">
+        <div id="formWrap">
+          <div class="sc-title">Create your free account</div>
+          <p class="sc-sub">Upload your CV first — Nafasi fills your details automatically.</p>
+
+          <!-- ── STEP 1: CV UPLOAD (first) ── -->
+          <div class="cv-zone" id="cvZone">
+            <input type="file" id="cvFile" accept=".pdf,.doc,.docx" onchange="handleCV(this)">
+            <div class="cv-zone-icon">📄</div>
+            <div class="cv-zone-label">Upload your CV — PDF or Word</div>
+            <div class="cv-zone-sub">Nafasi reads it and fills your profile automatically · Private and secure</div>
+          </div>
+          <div class="cv-loaded" id="cvLoaded">
+            <span style="font-size:18px">📄</span>
+            <span class="cv-fn" id="cvFn"></span>
+            <button onclick="removeCV()" style="background:none;border:none;cursor:pointer;color:#94a3b8;font-size:16px;padding:0;margin-left:auto">✕</button>
+          </div>
+          <div class="cv-reading" id="cvReading">
+            <span class="cv-spin"></span> Reading your CV...
+          </div>
+          <div class="cv-extracted" id="cvExtracted">
+            <div class="cv-ext-label">✓ Details extracted from your CV — review and confirm</div>
+            <div id="cvExtRows"></div>
+          </div>
+
+          <!-- ── STEP 2: PERSONAL DETAILS (auto-filled from CV) ── -->
+          <div id="formFields" style="display:none">
+            <div class="fg">
+              <label class="fl">Full name</label>
+              <input type="text" class="fi" id="f_name" placeholder="Your full name">
+            </div>
+            <div class="fg">
+              <label class="fl">Email address</label>
+              <input type="email" class="fi" id="f_email" placeholder="your@email.com">
+            </div>
+            <div class="fg">
+              <label class="fl">Country</label>
+              <select class="fi fi-sel" id="f_country">
+                <option value="">Select your country</option>
+                <optgroup label="Africa"><option>Kenya</option><option>Nigeria</option><option>Ghana</option><option>Uganda</option><option>Tanzania</option><option>Ethiopia</option><option>Somalia</option><option>Rwanda</option><option>South Africa</option><option>Egypt</option><option>Morocco</option><option>Senegal</option><option>Zimbabwe</option><option>DRC</option><option>Sudan</option><option>South Sudan</option><option>Cameroon</option><option>Zambia</option></optgroup>
+                <optgroup label="Asia"><option>India</option><option>Bangladesh</option><option>Pakistan</option><option>Nepal</option><option>Philippines</option><option>Myanmar</option><option>Afghanistan</option><option>Yemen</option></optgroup>
+                <optgroup label="Middle East"><option>Jordan</option><option>Lebanon</option><option>Iraq</option><option>Syria</option><option>Palestine</option></optgroup>
+                <optgroup label="Latin America"><option>Brazil</option><option>Colombia</option><option>Haiti</option><option>Venezuela</option><option>Peru</option></optgroup>
+                <optgroup label="Europe & Other"><option>United Kingdom</option><option>Ireland</option><option>France</option><option>Germany</option><option>United States</option><option>Canada</option><option>Australia</option><option>Other</option></optgroup>
+              </select>
+            </div>
+            <div class="fg">
+              <label class="fl">I am looking for</label>
+              <select class="fi fi-sel" id="f_looking">
+                <option value="Jobs, Scholarships, Fellowships, Internships, Consultancies">Everything — all types</option>
+                <option value="Jobs">Jobs only</option>
+                <option value="Jobs, Consultancies">Jobs and consultancies</option>
+                <option value="Scholarships, Fellowships">Scholarships and fellowships</option>
+                <option value="Jobs, Internships">Jobs and internships</option>
+              </select>
+            </div>
+            <div class="fg">
+              <div class="region-row">
+                <label class="fl" style="margin-bottom:0">Preferred locations</label>
+                <span class="region-hint">🌐 Remote always included</span>
+              </div>
+              <div class="regions" style="margin-top:8px">
+                <div class="reg locked">🌐 Remote worldwide</div>
+                <div class="reg" onclick="this.classList.toggle('on')">East Africa</div>
+                <div class="reg" onclick="this.classList.toggle('on')">Horn of Africa</div>
+                <div class="reg" onclick="this.classList.toggle('on')">West Africa</div>
+                <div class="reg" onclick="this.classList.toggle('on')">Southern Africa</div>
+                <div class="reg" onclick="this.classList.toggle('on')">Central Africa</div>
+                <div class="reg" onclick="this.classList.toggle('on')">Middle East & North Africa</div>
+                <div class="reg" onclick="this.classList.toggle('on')">South Asia</div>
+                <div class="reg" onclick="this.classList.toggle('on')">Southeast Asia</div>
+                <div class="reg" onclick="this.classList.toggle('on')">Latin America</div>
+                <div class="reg" onclick="this.classList.toggle('on')">Europe</div>
+                <div class="reg" onclick="this.classList.toggle('on')">North America</div>
+                <div class="reg" onclick="this.classList.toggle('on')">Anywhere worldwide</div>
+              </div>
+            </div>
+            <div class="err-msg" id="errMsg"></div>
+            <button class="submit-btn" id="submitBtn" onclick="submitSignup()">Start receiving matches →</button>
+            <p class="form-note">Completely free. No subscription ever.<br>
+              Questions? <a href="mailto:hellonafasijobs@gmail.com">hellonafasijobs@gmail.com</a></p>
+          </div>
+
+
+
+        </div>
+        <div class="success-wrap" id="successWrap">
+          <div class="s-icon">🌍</div>
+          <div class="s-title">You are on Nafasi.</div>
+          <p class="s-body">Your first matches arrive tomorrow morning — scored, ranked and ready to apply. Completely free.</p>
+          <div class="s-badge">✓ account created · matches incoming</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="f-logo">nafasi<span>.jobs</span></div>
+  <div class="f-note">Free for every job seeker · <a href="mailto:hellonafasijobs@gmail.com">hellonafasijobs@gmail.com</a></div>
+</footer>
+
+<script>
+const SB_URL = 'https://dzcizvjppaxtcqwopfkc.supabase.co';
+const SB_KEY = 'sb_publishable_L4MgYvPPGj5jrLux9Q29rw_oQrCDRXF';
+
+/* extracted CV data stored here */
+let cvData = { skills:'', education:'', languages:'', cv_summary:'', experience_years:'' };
+
+/* ── PANELS ── */
+function toggle(panelId, btnId) {
+  const panel  = document.getElementById('panel-' + panelId);
+  const btn    = document.getElementById(btnId);
+  const isOpen = panel.classList.contains('show');
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('show'));
+  document.querySelectorAll('.btn-outline').forEach(b => b.classList.remove('on'));
+  if (!isOpen) { panel.classList.add('show'); btn && btn.classList.add('on'); }
+  if (!isOpen) setTimeout(() => panel.scrollIntoView({ behavior:'smooth', block:'nearest' }), 60);
+}
+
+function openPanel(id) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('show'));
+  document.querySelectorAll('.btn-outline').forEach(b => b.classList.remove('on'));
+  const el = document.getElementById('panel-' + id);
+  el.classList.add('show');
+  setTimeout(() => el.scrollIntoView({ behavior:'smooth', block:'nearest' }), 60);
+}
+
+/* ── CV UPLOAD ── */
+function handleCV(input) {
+  const file = input.files[0];
+  if (!file) return;
+  if (file.size > 5 * 1024 * 1024) { alert('File too large. Maximum 5MB.'); return; }
+
+  document.getElementById('cvFn').textContent = file.name;
+  document.getElementById('cvLoaded').classList.add('show');
+  document.getElementById('cvZone').style.display = 'none';
+  document.getElementById('cvReading').classList.add('show');
+  document.getElementById('cvExtracted').classList.remove('show');
+
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    /* Store file as base64 for backend — actual extraction done by cv_enricher.py */
+    /* Browser-side: do basic text extraction to pre-fill the form */
+    extractFromFile(file, e.target.result);
+  };
+  reader.readAsText(file, 'utf-8');
+}
+
+function extractFromFile(file, textContent) {
+  /* Basic keyword extraction from raw text — works for text-based PDFs and Word docs */
+  /* Full extraction happens overnight via pdfplumber in cv_enricher.py */
+  const text = textContent || '';
+  const lower = text.toLowerCase();
+
+  /* Try to find name — usually first non-empty line */
+  let detectedName = '';
+  const lines = text.split('\n').map(l => l.trim()).filter(l => l.length > 2);
+  if (lines.length > 0) {
+    /* First line that looks like a name (2 words, no special chars, not all caps label) */
+    for (const line of lines.slice(0, 6)) {
+      if (/^[A-Z][a-z]+ [A-Z][a-z]+/.test(line) && line.split(' ').length <= 5) {
+        detectedName = line; break;
+      }
+    }
+  }
+
+  /* Country detection */
+  const countries = ['kenya','nigeria','ghana','uganda','tanzania','ethiopia','somalia',
+    'rwanda','south africa','egypt','morocco','senegal','zimbabwe','zambia','cameroon',
+    'india','bangladesh','pakistan','nepal','philippines','myanmar','jordan','lebanon',
+    'iraq','syria','palestine','brazil','colombia','haiti','venezuela','peru',
+    'united kingdom','ireland','france','germany','united states','canada','australia'];
+  let detectedCountry = '';
+  for (const c of countries) {
+    if (lower.includes(c)) { detectedCountry = c.split(' ').map(w=>w[0].toUpperCase()+w.slice(1)).join(' '); break; }
+  }
+
+  /* Education detection */
+  const eduPatterns = [
+    /(?:phd|ph\.d\.?|doctorate)[^\n,]{0,60}/i,
+    /(?:master[s']?|msc|mba|mph|mpa|llm)[^\n,]{0,60}/i,
+    /(?:bachelor[s']?|bsc|bba|llb|bcom|beng)[^\n,]{0,60}/i,
+    /(?:diploma|certificate)[^\n,]{0,60}/i,
+  ];
+  let detectedEdu = '';
+  for (const p of eduPatterns) {
+    const m = text.match(p);
+    if (m) { detectedEdu = m[0].trim().slice(0,80); break; }
+  }
+
+  /* Skills detection */
+  const skillKeywords = ['project management','monitoring','evaluation','meal','data analysis',
+    'community development','protection','wash','logistics','procurement','finance',
+    'communications','advocacy','research','gis','excel','kobo','spss','python','sql',
+    'report writing','capacity building','training','leadership','stakeholder engagement'];
+  const foundSkills = skillKeywords.filter(s => lower.includes(s));
+
+  /* Languages */
+  const langList = ['english','french','arabic','swahili','somali','amharic','spanish',
+    'portuguese','hausa','yoruba','kinyarwanda','luganda','shona'];
+  const foundLangs = langList.filter(l => lower.includes(l))
+    .map(l => l.charAt(0).toUpperCase() + l.slice(1));
+
+  cvData = {
+    skills:           foundSkills.map(s => s.split(' ').map(w=>w[0].toUpperCase()+w.slice(1)).join(' ')).join(', '),
+    education:        detectedEdu,
+    languages:        foundLangs.join(', '),
+    cv_summary:       '',
+    experience_years: ''
+  };
+
+  /* Show extracted info */
+  setTimeout(() => {
+    document.getElementById('cvReading').classList.remove('show');
+
+    /* Auto-fill form fields */
+    if (detectedName) document.getElementById('f_name').value = detectedName;
+    if (detectedCountry) {
+      const sel = document.getElementById('f_country');
+      for (const opt of sel.options) {
+        if (opt.text.toLowerCase() === detectedCountry.toLowerCase()) { sel.value = opt.value; break; }
+      }
+    }
+
+    /* Show extracted summary */
+    const rows = [];
+    if (detectedName)         rows.push(`<div class="cv-ext-row"><b>Name</b> — ${detectedName}</div>`);
+    if (detectedEdu)          rows.push(`<div class="cv-ext-row"><b>Education</b> — ${detectedEdu}</div>`);
+    if (cvData.skills)        rows.push(`<div class="cv-ext-row"><b>Skills detected</b> — ${cvData.skills.slice(0,100)}${cvData.skills.length>100?'...':''}</div>`);
+    if (foundLangs.length)    rows.push(`<div class="cv-ext-row"><b>Languages</b> — ${foundLangs.join(', ')}</div>`);
+    if (!rows.length)         rows.push(`<div class="cv-ext-row">CV uploaded — full extraction runs tonight when your profile is processed</div>`);
+
+    document.getElementById('cvExtRows').innerHTML = rows.join('');
+    document.getElementById('cvExtracted').classList.add('show');
+
+    /* Show the rest of the form */
+    document.getElementById('formFields').style.display = 'block';
+  }, 900);
+}
+
+function removeCV() {
+  cvData = { skills:'', education:'', languages:'', cv_summary:'', experience_years:'' };
+  document.getElementById('cvFile').value = '';
+  document.getElementById('cvLoaded').classList.remove('show');
+  document.getElementById('cvZone').style.display = 'block';
+  document.getElementById('cvExtracted').classList.remove('show');
+  document.getElementById('cvReading').classList.remove('show');
+  document.getElementById('formFields').style.display = 'none';
+}
+
+/* ── HELPERS ── */
+function getLocations() {
+  return [...document.querySelectorAll('.reg.on, .reg.locked')]
+    .map(el => el.textContent.trim()).join(', ');
+}
+
+function showErr(msg) {
+  const el = document.getElementById('errMsg');
+  el.textContent = msg;
+  el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), 4000);
+}
+
+/* ── SUBMIT — Supabase only ── */
+async function submitSignup() {
+  const name    = document.getElementById('f_name').value.trim();
+  const email   = document.getElementById('f_email').value.trim();
+  const country = document.getElementById('f_country').value;
+  const looking = document.getElementById('f_looking').value;
+
+  if (!name)                          return showErr('Please enter your full name.');
+  if (!email || !email.includes('@')) return showErr('Please enter a valid email address.');
+  if (!country)                       return showErr('Please select your country.');
+
+  const btn = document.getElementById('submitBtn');
+  btn.textContent = 'Saving...';
+  btn.disabled    = true;
+
+  /* Duplicate check */
+  try {
+    const chk = await fetch(`${SB_URL}/rest/v1/users?email=eq.${encodeURIComponent(email)}&select=email`, {
+      headers: { apikey: SB_KEY, Authorization: `Bearer ${SB_KEY}` }
+    });
+    const existing = await chk.json();
+    if (existing && existing.length > 0) {
+      showErr('This email is already registered. Check your inbox for your daily matches!');
+      btn.textContent = 'Start receiving matches →';
+      btn.disabled    = false;
+      return;
+    }
+  } catch (e) { /* continue */ }
+
+  const payload = {
+    full_name:        name,
+    email:            email,
+    country:          country,
+    locations:        getLocations(),
+    looking_for:      looking,
+    skills:           cvData.skills        || '',
+    education:        cvData.education     || '',
+    languages:        cvData.languages     || '',
+    cv_summary:       cvData.cv_summary    || '',
+    experience_years: cvData.experience_years || '',
+    cv_enriched:      false,
+    min_score:        60,
+    status:           'active',
+    total_matches:    0,
+    date_joined:      new Date().toISOString().slice(0, 10)
+  };
+
+  try {
+    const r = await fetch(`${SB_URL}/rest/v1/users`, {
+      method:  'POST',
+      headers: { apikey: SB_KEY, Authorization: `Bearer ${SB_KEY}`, 'Content-Type': 'application/json', Prefer: 'return=minimal' },
+      body:    JSON.stringify(payload)
+    });
+
+    if (r.status === 201 || r.status === 200 || r.status === 204) {
+      localStorage.setItem('nafasi_email', email);
+      document.getElementById('formWrap').style.display = 'none';
+      document.getElementById('successWrap').classList.add('show');
+    } else {
+      const err = await r.text();
+      console.error('Supabase error:', r.status, err);
+      showErr('Something went wrong. Please try again or email hellonafasijobs@gmail.com');
+      btn.textContent = 'Start receiving matches →';
+      btn.disabled    = false;
+    }
+  } catch (e) {
+    console.error(e);
+    showErr('Network error. Please check your connection and try again.');
+    btn.textContent = 'Start receiving matches →';
+    btn.disabled    = false;
+  }
+}
+</script>
+</body>
+</html>
