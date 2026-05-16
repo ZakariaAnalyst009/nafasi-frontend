@@ -354,17 +354,49 @@ async function extractPDF(file){
 function processText(text){
   const lower=text.toLowerCase();
 
+  /* ── NAME: smarter detection ── */
   let detectedName='';
   const lines=text.split(/[\n\r]+/).map(l=>l.trim()).filter(l=>l.length>1&&l.length<80);
-  for(const line of lines.slice(0,12)){
-    if(/curriculum vitae|resume|cv|profile|summary|objective|personal|contact|phone|email|address|www\.|http|linkedin|@/i.test(line))continue;
+  for(const line of lines.slice(0,20)){
+    /* skip obvious non-name lines */
+    if(/curriculum vitae|resume|cv |profile|summary|objective|personal|contact|phone|email|address|www\.|http|linkedin|@|tel:|mob:|fax:|nationality|date of birth|dob|skills|experience|education|language|reference|certif|award|volunteer/i.test(line))continue;
     if(/^\d/.test(line))continue;
-    if(/^[A-Z][a-zA-Z'-]{1,20}(\s+[A-Z][a-zA-Z'-]{1,20}){1,3}$/.test(line.trim())){detectedName=line.trim();break;}
+    if(line.split(' ').length>6)continue; /* too many words */
+    /* match 2-4 words, each starting with capital or ALL CAPS */
+    const words=line.trim().split(/\s+/);
+    if(words.length>=2&&words.length<=4){
+      /* accept if ALL CAPS name (e.g. ZAKARIA ABDI IBRAHIM) or Title Case */
+      const allCaps=words.every(w=>/^[A-Z][A-Z'-]+$/.test(w));
+      const titleCase=words.every(w=>/^[A-Z][a-zA-Z'-]{0,20}$/.test(w));
+      if((allCaps||titleCase)&&words.every(w=>w.length>=2)){
+        /* convert ALL CAPS to Title Case */
+        detectedName=words.map(w=>w.charAt(0).toUpperCase()+w.slice(1).toLowerCase()).join(' ');
+        break;
+      }
+    }
   }
 
+  /* ── EMAIL: pick the OWNER's email, not referee's ── */
+  /* Strategy: find all emails, pick the one appearing FIRST and HIGHEST in the doc */
+  /* Exclude common referee/org domains if owner's email appears earlier */
   let detectedEmail='';
-  const em=text.match(/[\w.+-]+@[\w-]+\.[a-z]{2,}/i);
-  if(em)detectedEmail=em[0].toLowerCase();
+  const allEmails=[];
+  const emailRe=/[\w.+-]+@[\w-]+\.[a-z]{2,}/gi;
+  let emMatch;
+  while((emMatch=emailRe.exec(text))!==null){
+    allEmails.push({email:emMatch[0].toLowerCase(),pos:emMatch.index});
+  }
+  if(allEmails.length>0){
+    /* Take the first email that appears — likely the CV owner's */
+    /* But skip emails that appear after keywords like "referee", "reference", "contact:" near them */
+    let picked=allEmails[0].email;
+    for(const {email,pos} of allEmails){
+      const surrounding=text.slice(Math.max(0,pos-80),pos+40).toLowerCase();
+      if(/referee|reference|supervisor|manager|employer|recommender|director/.test(surrounding))continue;
+      picked=email; break;
+    }
+    detectedEmail=picked;
+  }
 
   const countries=['kenya','nigeria','ghana','uganda','tanzania','ethiopia','somalia','rwanda','south africa','egypt','morocco','senegal','zimbabwe','zambia','cameroon','drc','sudan','south sudan','india','bangladesh','pakistan','nepal','philippines','myanmar','afghanistan','jordan','lebanon','iraq','syria','palestine','yemen','brazil','colombia','haiti','venezuela','peru','united kingdom','ireland','france','germany','united states','canada','australia'];
   let detectedCountry='';
