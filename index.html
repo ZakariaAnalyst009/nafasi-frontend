@@ -345,6 +345,10 @@ async function extractPDF(file){
       const content=await page.getTextContent();
       txt+=content.items.map(it=>it.str).join(' ')+'\n';
     }
+    console.log('=== RAW PDF TEXT (first 800 chars) ===');
+    console.log(txt.slice(0,800));
+    console.log('=== LINES (first 20) ===');
+    txt.split(/[\n\r]+/).map(l=>l.trim()).filter(l=>l.length>1).slice(0,20).forEach((l,i)=>console.log(i,JSON.stringify(l)));
     processText(txt);
   }catch(e){
     const r=new FileReader();r.onload=ev=>processText(ev.target.result||'');r.onerror=()=>processText('');r.readAsText(file,'utf-8');
@@ -475,7 +479,7 @@ async function submitSignup(){
     const existing=await chk.json();
     if(existing&&existing.length>0){showErr('This email is already registered. Check your inbox for your daily matches!');btn.textContent='Start receiving matches →';btn.disabled=false;return;}
   }catch(e){}
-  const payload={full_name:name,email,country,locations:getLocations(),looking_for:looking,skills:cvData.skills||'',education:cvData.education||'',languages:cvData.languages||'',cv_summary:cvData.cv_summary||'',experience_years:cvData.experience_years||'',cv_enriched:false,min_score:60,status:'active',total_matches:0,date_joined:new Date().toISOString().slice(0,10)};
+  const payload={full_name:name,email,country,locations:getLocations(),looking_for:looking,skills:cvData.skills||'',education:cvData.education||'',languages:cvData.languages||'',cv_summary:cvData.cv_summary||'',experience_years:cvData.experience_years?parseInt(cvData.experience_years):null,cv_enriched:false,min_score:60,status:'active',total_matches:0,date_joined:new Date().toISOString().slice(0,10)};
   try{
     const r=await fetch(`${SB_URL}/rest/v1/users`,{method:'POST',headers:{apikey:SB_KEY,Authorization:`Bearer ${SB_KEY}`,'Content-Type':'application/json',Prefer:'return=minimal'},body:JSON.stringify(payload)});
     if([200,201,204].includes(r.status)){localStorage.setItem('nafasi_email',email);document.getElementById('formWrap').style.display='none';document.getElementById('successWrap').classList.add('show');}
