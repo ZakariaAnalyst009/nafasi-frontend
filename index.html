@@ -196,7 +196,7 @@ footer{border-top:1px solid var(--border);padding:24px 48px;display:flex;align-i
   <a href="/" class="logo">nafasi<span>.jobs</span></a>
   <div class="nav-right">
     <a href="#how" class="nav-link">How it works</a>
-    <button class="nav-btn" onclick="document.getElementById('panel-signup').scrollIntoView({behavior:'smooth',block:'center'})">Create free account</button>
+    <button class="nav-btn" onclick="scrollToSignup()">Create free account</button>
   </div>
 </nav>
 
@@ -436,6 +436,24 @@ const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJ
 
 let cvData = { skills:'', education:'', languages:'', cv_summary:'', experience_years:'' };
 
+/* Scroll to and highlight the signup form */
+function scrollToSignup() {
+  const card = document.querySelector('.signup-card');
+  const col  = document.getElementById('panel-signup');
+  col.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  /* Brief highlight pulse so user knows where to look */
+  card.style.transition = 'box-shadow .2s';
+  card.style.boxShadow  = '0 0 0 3px rgba(184,134,11,.5), 0 4px 24px rgba(184,134,11,.15)';
+  setTimeout(() => { card.style.boxShadow = ''; }, 1800);
+  /* Focus the CV upload zone or name field */
+  setTimeout(() => {
+    const cvZone = document.getElementById('cvZone');
+    const nameField = document.getElementById('f_name');
+    if (cvZone && cvZone.style.display !== 'none') cvZone.focus && cvZone.focus();
+    else if (nameField) nameField.focus();
+  }, 600);
+}
+
 /* ── CV UPLOAD HANDLER ── */
 async function handleCV(input) {
   const file = input.files[0];
@@ -521,16 +539,29 @@ function processExtractedText(text, filename) {
     }
   }
 
-  /* ── EMAIL: handle PDFs that insert spaces into email addresses ── */
+  /* ── EMAIL: use first email found in the top ~40% of the document.
+     References sections at the bottom often have other people's emails
+     which get picked up first if the CV is flattened into one string.
+     We search the first portion of the text only.
+  */
   let detectedEmail = '';
-  /* First try clean match */
-  const emailMatch = text.match(/[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}/);
-  if (emailMatch) {
-    detectedEmail = emailMatch[0];
+  const topText  = text.slice(0, Math.max(600, Math.floor(text.length * 0.35)));
+  const fullText = text;
+
+  /* Try clean email in top portion first */
+  const emailMatchTop = topText.match(/[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}/);
+  if (emailMatchTop) {
+    detectedEmail = emailMatchTop[0];
   } else {
-    /* PDF sometimes inserts a space before @: "user name @gmail.com" */
-    const spacedEmail = text.match(/([a-zA-Z0-9._%+\-]+)\s+@\s*([a-zA-Z0-9.\-]+\.[a-zA-Z]{2,})/);
-    if (spacedEmail) detectedEmail = spacedEmail[1] + '@' + spacedEmail[2];
+    /* PDF sometimes inserts a space before @: "zakariabdi40 @gmail.com" */
+    const spacedTop = topText.match(/([a-zA-Z0-9._%+\-]+)\s+@\s*([a-zA-Z0-9.\-]+\.[a-zA-Z]{2,})/);
+    if (spacedTop) {
+      detectedEmail = spacedTop[1] + '@' + spacedTop[2];
+    } else {
+      /* Fall back to full text clean match */
+      const emailMatchFull = fullText.match(/[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}/);
+      if (emailMatchFull) detectedEmail = emailMatchFull[0];
+    }
   }
 
   /* ── PHONE ── */
