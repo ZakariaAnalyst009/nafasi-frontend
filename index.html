@@ -327,14 +327,14 @@ footer{border-top:1px solid var(--border);padding:24px 48px;display:flex;align-i
     <div id="formWrap">
       <div class="sc-eyebrow">Get started — free forever</div>
       <div class="sc-title">Create your account</div>
-      <p class="sc-sub">Upload your CV and Nafasi fills your details automatically — or fill them in yourself.</p>
+      <p class="sc-sub">Upload your CV first — Nafasi reads it to match you to the right opportunities. <strong>CV required.</strong></p>
 
       <!-- CV UPLOAD -->
       <div class="cv-zone" id="cvZone">
         <input type="file" id="cvFile" accept=".pdf,.doc,.docx" onchange="handleCV(this)">
         <div class="cv-zone-icon">📄</div>
-        <div class="cv-zone-label">Upload CV to auto-fill your profile</div>
-        <div class="cv-zone-sub">PDF or Word · Max 5MB · Private and secure</div>
+        <div class="cv-zone-label">Upload your CV <span style="color:var(--gold);font-size:13px">(required)</span></div>
+        <div class="cv-zone-sub">PDF or Word · Max 5MB · Private and secure · Used for matching only</div>
       </div>
       <div class="cv-loaded" id="cvLoaded">
         <span style="font-size:18px">📄</span>
@@ -518,6 +518,7 @@ function showFallbackMsg() {
   document.getElementById('cvReading').classList.remove('show');
   document.getElementById('cvExtRows').innerHTML = '<div class="cv-ext-row">CV uploaded ✓ — please fill in your details below.</div>';
   document.getElementById('cvExtracted').classList.add('show');
+  cvUploaded = true;
 }
 
 function parseAndFill(text) {
@@ -652,11 +653,13 @@ function parseAndFill(text) {
 
     document.getElementById('cvExtRows').innerHTML = rows.join('');
     document.getElementById('cvExtracted').classList.add('show');
+    cvUploaded = true;  /* CV processed — unlock submit */
   }, 800);
 }
 
 function removeCV() {
-  cvData = { skills:'', education:'', languages:'', cv_summary:'', experience_years: null };
+  cvData     = { skills:'', education:'', languages:'', cv_summary:'', experience_years: null };
+  cvUploaded = false;
   document.getElementById('cvFile').value = '';
   document.getElementById('cvLoaded').classList.remove('show');
   document.getElementById('cvZone').style.display = 'block';
@@ -679,12 +682,15 @@ function showErr(msg) {
 }
 
 /* ── SUBMIT ── */
+let cvUploaded = false;  /* set to true once a CV file has been processed */
+
 async function submitSignup() {
   const name    = document.getElementById('f_name').value.trim();
   const email   = document.getElementById('f_email').value.trim();
   const country = document.getElementById('f_country').value;
   const looking = document.getElementById('f_looking').value;
 
+  if (!cvUploaded)                    return showErr('Please upload your CV — it\'s required for matching.');
   if (!name)                          return showErr('Please enter your full name.');
   if (!email || !email.includes('@')) return showErr('Please enter a valid email address.');
   if (!country)                       return showErr('Please select your country.');
